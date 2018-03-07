@@ -1,7 +1,6 @@
 package net.orekyuu.moco.feeling;
 
-import net.orekyuu.moco.feeling.attributes.Attribute;
-import net.orekyuu.moco.feeling.attributes.IntAttribute;
+import net.orekyuu.moco.feeling.attributes.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,8 +15,33 @@ public class TableBuilder {
         this.tableName = Objects.requireNonNull(tableName);
     }
 
-    public TableBuilder integer(String name) {
+    public TableBuilder _integer(String name) {
         attrs.add(new IntAttribute(tableName, name));
+        return this;
+    }
+
+    public TableBuilder _string(String name) {
+        attrs.add(new StringAttribute(tableName, name));
+        return this;
+    }
+
+    public TableBuilder _datetime(String name) {
+        attrs.add(new TimeAttribute(tableName, name));
+        return this;
+    }
+
+    public TableBuilder _boolean(String name) {
+        attrs.add(new BooleanAttribute(tableName, name));
+        return this;
+    }
+
+    public TableBuilder _decimal(String name) {
+        attrs.add(new DecimalAttribute(tableName, name));
+        return this;
+    }
+
+    public TableBuilder _float(String name) {
+        attrs.add(new StringAttribute(tableName, name));
         return this;
     }
 

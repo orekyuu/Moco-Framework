@@ -1,5 +1,10 @@
 package net.orekyuu.moco.feeling;
 
+import net.orekyuu.moco.feeling.node.FromClause;
+import net.orekyuu.moco.feeling.node.SqlJoinClause;
+import net.orekyuu.moco.feeling.node.SqlLiteral;
+import net.orekyuu.moco.feeling.node.WhereClause;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +22,11 @@ public class Select {
     }
 
     public Select from(Table table) {
-        fromClause = new FromClause(table);
+        return from(new SqlJoinClause(new SqlLiteral(table.getTableName())));
+    }
+
+    public Select from(SqlJoinClause joinClause) {
+        fromClause = new FromClause(joinClause);
         return this;
     }
 

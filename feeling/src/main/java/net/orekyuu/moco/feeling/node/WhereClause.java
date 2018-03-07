@@ -1,6 +1,6 @@
-package net.orekyuu.moco.feeling;
+package net.orekyuu.moco.feeling.node;
 
-import net.orekyuu.moco.feeling.node.SqlNodeExpression;
+import net.orekyuu.moco.feeling.SqlContext;
 
 public class WhereClause {
 
