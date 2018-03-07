@@ -21,12 +21,8 @@ public class Select {
         return this;
     }
 
-    public Select where(Predicate ... predicates) {
-        where(Arrays.asList(predicates));
-        return this;
-    }
-
-    public Select where(List<Predicate> predicates) {
+    public Select where(WhereClause whereClause) {
+        this.whereClause = whereClause;
         return this;
     }
 

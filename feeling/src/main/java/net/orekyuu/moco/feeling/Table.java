@@ -1,21 +1,23 @@
 package net.orekyuu.moco.feeling;
 
+import net.orekyuu.moco.feeling.attributes.Attribute;
+
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
-public class Table {
+public class Table implements ColumnFindable {
     private final String tableName;
-    private final Set<Column<?>> columns;
-    private final HashMap<ClassColumnPair, Column> columnMap = new HashMap<>();
+    private final Set<Attribute> columns;
+    private final HashMap<ClassColumnPair, Attribute> columnMap = new HashMap<>();
 
 
-    Table(String tableName, Set<Column<?>> columns) {
+    Table(String tableName, Set<Attribute> columns) {
         this.tableName = tableName;
         this.columns = columns;
 
-        for (Column<?> column : columns) {
-            ClassColumnPair pair = new ClassColumnPair(column.getClass(), column.name());
+        for (Attribute column : columns) {
+            ClassColumnPair pair = new ClassColumnPair(column.getClass(), column.getName());
             columnMap.put(pair, column);
         }
     }
@@ -24,18 +26,13 @@ public class Table {
         return tableName;
     }
 
-    public Select select() {
-        Select select = new Select();
-        select.select(columns).from(this);
-        return select;
-    }
-
-    public IntColumn intCol(String name) {
-        return findColumn(IntColumn.class, name);
-    }
-
-    private <T extends Column<?>> T findColumn(Class<T> clazz, String name) {
+    @Override
+    public <T extends Attribute> T findColumn(Class<T> clazz, String name) {
         return (T) columnMap.get(new ClassColumnPair(clazz, name));
+    }
+
+    public Select select() {
+        return new Select().from(this);
     }
 
     private static class ClassColumnPair {

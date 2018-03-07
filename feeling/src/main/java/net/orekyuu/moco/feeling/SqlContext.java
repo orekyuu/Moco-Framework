@@ -1,7 +1,13 @@
 package net.orekyuu.moco.feeling;
 
+import net.orekyuu.moco.feeling.node.SqlBindParam;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SqlContext {
     private StringBuilder builder = new StringBuilder();
+    private List<SqlBindParam> bindParams = new ArrayList<>();
 
     public SqlContext append(String str) {
         builder.append(str);
@@ -10,6 +16,12 @@ public class SqlContext {
 
     public SqlContext append(int integer) {
         builder.append(integer);
+        return this;
+    }
+
+    public SqlContext appendParams(SqlBindParam param) {
+        append("?");
+        bindParams.add(param);
         return this;
     }
 
