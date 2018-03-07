@@ -5,21 +5,17 @@ import net.orekyuu.moco.feeling.node.SqlJoinClause;
 import net.orekyuu.moco.feeling.node.SqlLiteral;
 import net.orekyuu.moco.feeling.node.WhereClause;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.OptionalInt;
 
 public class Select {
 
-    private Set<Column<?>> selectFields = new HashSet<>();
     private FromClause fromClause;
     private WhereClause whereClause;
     private OptionalInt limit = OptionalInt.empty();
     private OptionalInt offset = OptionalInt.empty();
-
-    public Select select(Set<Column<?>> fields) {
-        selectFields = fields;
-        return this;
-    }
 
     public Select from(Table table) {
         return from(new SqlJoinClause(new SqlLiteral(table.getTableName())));
@@ -38,8 +34,6 @@ public class Select {
     public SqlContext prepareQuery() {
         SqlContext context = new SqlContext();
         context.append("select");
-        String fields = selectFields.stream().map(Column::fullColumnName).collect(Collectors.joining(", ", " ", " "));
-        context.append(fields);
 
         context.append("from ");
         fromClause.generateSql(context);
