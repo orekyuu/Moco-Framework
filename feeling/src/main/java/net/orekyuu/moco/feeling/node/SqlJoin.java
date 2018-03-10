@@ -13,8 +13,8 @@ public class SqlJoin extends SqlBinary {
         visitor.visit(this, context);
     }
 
-    public SqlNode table() {
-        return left();
+    public SqlLiteral table() {
+        return (SqlLiteral) left();
     }
 
     public SqlNode expression() {

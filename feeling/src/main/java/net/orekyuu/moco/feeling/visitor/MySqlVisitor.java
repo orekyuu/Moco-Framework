@@ -10,32 +10,32 @@ import java.util.Iterator;
 public class MySqlVisitor extends SqlVisitor {
     @Override
     public void visit(BooleanAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
     public void visit(DecimalAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
     public void visit(FloatAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
     public void visit(IntAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
     public void visit(StringAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
     public void visit(TimeAttribute node, SqlContext context) {
-        context.append(escape(node.getRelation())).append(".").append(escape(node.getName()));
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }
 
     @Override
@@ -142,7 +142,9 @@ public class MySqlVisitor extends SqlVisitor {
     @Override
     public void visit(SqlJoin node, SqlContext context) {
         context.append("join ");
-        node.table().accept(this, context);
+        context.append("`");
+        context.append(node.table().getText());
+        context.append("` ");
         node.expression().accept(this, context);
     }
 

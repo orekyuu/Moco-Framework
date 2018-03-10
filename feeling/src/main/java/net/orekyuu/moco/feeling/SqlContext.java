@@ -26,6 +26,6 @@ public class SqlContext {
     }
 
     public String sql() {
-        return builder.toString();
+        return builder.toString().trim();
     }
 }
