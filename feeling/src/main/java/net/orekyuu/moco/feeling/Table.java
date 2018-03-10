@@ -3,6 +3,7 @@ package net.orekyuu.moco.feeling;
 import net.orekyuu.moco.feeling.attributes.Attribute;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,6 +30,10 @@ public class Table implements ColumnFindable {
     @Override
     public <T extends Attribute> T findColumn(Class<T> clazz, String name) {
         return (T) columnMap.get(new ClassColumnPair(clazz, name));
+    }
+
+    public Set<Attribute> getColumns() {
+        return new HashSet<>(columns);
     }
 
     public Select select() {

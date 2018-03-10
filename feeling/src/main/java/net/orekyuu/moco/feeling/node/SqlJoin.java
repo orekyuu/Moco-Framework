@@ -1,11 +1,15 @@
 package net.orekyuu.moco.feeling.node;
 
 import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlJoin extends SqlBinary {
-    public SqlJoin(SqlLiteral table, SqlNodeExpression expression) {
-        super(table, new SqlOn(expression));
+    private final Table table;
+
+    public SqlJoin(Table table, SqlNodeExpression expression) {
+        super(new SqlLiteral(table.getTableName()), new SqlOn(expression));
+        this.table = table;
     }
 
     @Override
@@ -13,11 +17,15 @@ public class SqlJoin extends SqlBinary {
         visitor.visit(this, context);
     }
 
-    public SqlLiteral table() {
+    public SqlLiteral tableLiteral() {
         return (SqlLiteral) left();
     }
 
     public SqlNode expression() {
         return right();
+    }
+
+    public Table table() {
+        return table;
     }
 }

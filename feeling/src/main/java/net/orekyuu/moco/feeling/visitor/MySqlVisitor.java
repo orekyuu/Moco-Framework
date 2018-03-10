@@ -133,7 +133,7 @@ public class MySqlVisitor extends SqlVisitor {
 
     @Override
     public void visit(SqlJoinClause node, SqlContext context) {
-        node.getSingleSource().accept(this, context);
+        node.getSingleSourceNode().accept(this, context);
         for (SqlJoin join : node.getJoins()) {
             join.accept(this, context);
         }
@@ -143,7 +143,7 @@ public class MySqlVisitor extends SqlVisitor {
     public void visit(SqlJoin node, SqlContext context) {
         context.append("join ");
         context.append("`");
-        context.append(node.table().getText());
+        context.append(node.tableLiteral().getText());
         context.append("` ");
         node.expression().accept(this, context);
     }
@@ -151,14 +151,14 @@ public class MySqlVisitor extends SqlVisitor {
     @Override
     public void visit(SqlInnerJoin node, SqlContext context) {
         context.append("inner join ");
-        node.table().accept(this, context);
+        node.tableLiteral().accept(this, context);
         node.expression().accept(this, context);
     }
 
     @Override
     public void visit(SqlOuterJoin node, SqlContext context) {
         context.append("outer join ");
-        node.table().accept(this, context);
+        node.tableLiteral().accept(this, context);
         node.expression().accept(this, context);
     }
 
@@ -170,7 +170,7 @@ public class MySqlVisitor extends SqlVisitor {
             sqlNode.accept(this, context);
 
             if (iterator.hasNext()) {
-                context.append(",");
+                context.append(", ");
             }
         }
     }
@@ -179,10 +179,18 @@ public class MySqlVisitor extends SqlVisitor {
     public void visit(Select select, SqlContext context) {
         context.append("select ");
 
-        //TODO
-        context.append("* ");
+        Iterator<Attribute> resultColumns = select.getResultColumn().iterator();
+        while (resultColumns.hasNext()) {
+            Attribute attribute = resultColumns.next();
+            attribute.accept(this, context);
+
+            if (resultColumns.hasNext()) {
+                context.append(", ");
+            }
+        }
 
         select.getFromClause().accept(this, context);
+
         WhereClause whereClause = select.getWhereClause();
         if (whereClause != null) {
             whereClause.accept(this, context);

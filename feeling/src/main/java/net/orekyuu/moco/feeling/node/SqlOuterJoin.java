@@ -1,10 +1,11 @@
 package net.orekyuu.moco.feeling.node;
 
 import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlOuterJoin extends SqlJoin {
-    public SqlOuterJoin(SqlLiteral table, SqlNodeExpression table2) {
+    public SqlOuterJoin(Table table, SqlNodeExpression table2) {
         super(table, table2);
     }
 

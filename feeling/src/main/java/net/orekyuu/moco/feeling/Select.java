@@ -1,8 +1,9 @@
 package net.orekyuu.moco.feeling;
 
+import net.orekyuu.moco.feeling.attributes.Attribute;
 import net.orekyuu.moco.feeling.node.FromClause;
+import net.orekyuu.moco.feeling.node.SqlJoin;
 import net.orekyuu.moco.feeling.node.SqlJoinClause;
-import net.orekyuu.moco.feeling.node.SqlLiteral;
 import net.orekyuu.moco.feeling.node.WhereClause;
 import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
@@ -18,12 +19,19 @@ public class Select {
     private WhereClause whereClause;
     private OptionalInt limit = OptionalInt.empty();
     private OptionalInt offset = OptionalInt.empty();
+    private List<Attribute> resultColumn = new ArrayList<>();
 
     public Select from(Table table) {
-        return from(new SqlJoinClause(new SqlLiteral(table.getTableName())));
+        return from(new SqlJoinClause(table));
     }
 
     public Select from(SqlJoinClause joinClause) {
+        resultColumn.clear();
+        addResultColumn(joinClause.getTable());
+        joinClause.getJoins().stream()
+                .map(SqlJoin::table)
+                .forEach(this::addResultColumn);
+
         fromClause = new FromClause(joinClause);
         return this;
     }
@@ -31,6 +39,14 @@ public class Select {
     public Select where(WhereClause whereClause) {
         this.whereClause = whereClause;
         return this;
+    }
+
+    public void addResultColumn(Attribute attribute) {
+        resultColumn.add(attribute);
+    }
+
+    public void addResultColumn(Table table) {
+        table.getColumns().forEach(this::addResultColumn);
     }
 
     public SqlContext prepareQuery() {
@@ -54,5 +70,9 @@ public class Select {
 
     public WhereClause getWhereClause() {
         return whereClause;
+    }
+
+    public List<Attribute> getResultColumn() {
+        return resultColumn;
     }
 }
