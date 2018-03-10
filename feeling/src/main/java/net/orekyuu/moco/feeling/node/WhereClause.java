@@ -1,8 +1,9 @@
 package net.orekyuu.moco.feeling.node;
 
 import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
-public class WhereClause {
+public class WhereClause implements SqlNode {
 
     private SqlNodeExpression expression;
 
@@ -14,7 +15,8 @@ public class WhereClause {
         return expression;
     }
 
-    public void generateSql(SqlContext context) {
-
+    @Override
+    public void accept(SqlVisitor visitor, SqlContext context) {
+        visitor.visit(this, context);
     }
 }

@@ -4,6 +4,8 @@ import net.orekyuu.moco.feeling.node.FromClause;
 import net.orekyuu.moco.feeling.node.SqlJoinClause;
 import net.orekyuu.moco.feeling.node.SqlLiteral;
 import net.orekyuu.moco.feeling.node.WhereClause;
+import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
+import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +35,24 @@ public class Select {
 
     public SqlContext prepareQuery() {
         SqlContext context = new SqlContext();
-        context.append("select");
-
-        context.append("from ");
-        fromClause.generateSql(context);
-
-        if (whereClause != null) {
-            context.append("where ");
-            whereClause.generateSql(context);
-        }
-
-        offset.ifPresent(i -> context.append("offset ").append(i).append(" "));
-        limit.ifPresent(i -> context.append("limit ").append(i).append(" "));
+        SqlVisitor visitor = new MySqlVisitor();
+        accept(visitor, context);
         return context;
     }
 
     public List<Map<String, Object>> executeQuery() {
         return new ArrayList<>();
+    }
+
+    private void accept(SqlVisitor visitor, SqlContext context) {
+        visitor.visit(this, context);
+    }
+
+    public FromClause getFromClause() {
+        return fromClause;
+    }
+
+    public WhereClause getWhereClause() {
+        return whereClause;
     }
 }

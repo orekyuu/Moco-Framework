@@ -1,5 +1,8 @@
 package net.orekyuu.moco.feeling.node;
 
+import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.visitor.SqlVisitor;
+
 public class SqlBindParam implements SqlNode {
     private final Class<?> clazz;
     private final Object value;
@@ -23,5 +26,10 @@ public class SqlBindParam implements SqlNode {
 
     public Class<?> getClazz() {
         return clazz;
+    }
+
+    @Override
+    public void accept(SqlVisitor visitor, SqlContext context) {
+        visitor.visit(this, context);
     }
 }

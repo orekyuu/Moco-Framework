@@ -1,6 +1,6 @@
 package net.orekyuu.moco.feeling.node;
 
-public class SqlNodeExpression implements SqlNode, Predicatable {
+public abstract class SqlNodeExpression implements SqlNode, Predicatable {
 
     public SqlNodeExpression and(SqlNodeExpression right) {
         return new SqlAnd(this, right);

@@ -2,7 +2,7 @@ package net.orekyuu.moco.feeling.attributes;
 
 import net.orekyuu.moco.feeling.node.Predicatable;
 
-public class Attribute implements Predicatable {
+public abstract class Attribute implements Predicatable {
     private String relation;
     private String name;
 

@@ -1,4 +1,5 @@
 import net.orekyuu.moco.feeling.Select;
+import net.orekyuu.moco.feeling.SqlContext;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
 import net.orekyuu.moco.feeling.node.*;
@@ -15,6 +16,7 @@ public class Main {
         ));
         WhereClause isActive = new WhereClause(usersTable.booleanCol("active").eq(new SqlBindParam(true, Boolean.class)));
         Select select = usersTable.select().from(joinClause).where(isActive);
-        System.out.println(select);
+        SqlContext context = select.prepareQuery();
+        System.out.println(context.sql());
     }
 }

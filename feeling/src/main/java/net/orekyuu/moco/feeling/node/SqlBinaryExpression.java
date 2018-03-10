@@ -1,6 +1,6 @@
 package net.orekyuu.moco.feeling.node;
 
-public class SqlBinaryExpression extends SqlNodeExpression {
+public abstract class SqlBinaryExpression extends SqlNodeExpression {
 
     protected SqlNode left;
     protected SqlNode right;
