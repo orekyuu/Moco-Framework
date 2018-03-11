@@ -5,9 +5,11 @@ import net.orekyuu.moco.feeling.node.SqlNodeArray;
 import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Insert {
     private Table table;
@@ -45,8 +47,11 @@ public class Insert {
         return context;
     }
 
-    public List<Map<String, Object>> executeQuery() {
-        return new ArrayList<>();
+    public int executeQuery(Connection connection) throws SQLException {
+        SqlContext context = prepareQuery();
+        try (PreparedStatement statement = context.createStatement(connection)) {
+            return statement.executeUpdate();
+        }
     }
 
     private void accept(SqlVisitor visitor, SqlContext context) {
