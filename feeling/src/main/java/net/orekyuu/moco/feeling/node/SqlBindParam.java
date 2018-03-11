@@ -32,4 +32,13 @@ public class SqlBindParam implements SqlNode {
     public void accept(SqlVisitor visitor, SqlContext context) {
         visitor.visit(this, context);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SqlBindParam{");
+        sb.append("clazz=").append(clazz);
+        sb.append(", value=").append(value);
+        sb.append('}');
+        return sb.toString();
+    }
 }

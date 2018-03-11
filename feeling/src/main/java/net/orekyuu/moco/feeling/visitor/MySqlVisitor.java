@@ -1,5 +1,6 @@
 package net.orekyuu.moco.feeling.visitor;
 
+import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.SqlContext;
 import net.orekyuu.moco.feeling.attributes.*;
@@ -180,20 +181,39 @@ public class MySqlVisitor extends SqlVisitor {
         context.append("select ");
 
         Iterator<Attribute> resultColumns = select.getResultColumn().iterator();
-        while (resultColumns.hasNext()) {
-            Attribute attribute = resultColumns.next();
-            attribute.accept(this, context);
-
-            if (resultColumns.hasNext()) {
-                context.append(", ");
-            }
-        }
+        appendAttributArray(context, resultColumns);
 
         select.getFromClause().accept(this, context);
 
         WhereClause whereClause = select.getWhereClause();
         if (whereClause != null) {
             whereClause.accept(this, context);
+        }
+    }
+
+    @Override
+    public void visit(Insert insert, SqlContext context) {
+        context.append("insert into ");
+        context.append(insert.getTable().getTableName());
+        context.append("(");
+        Iterator<Attribute> attributeIterator = insert.getAttributes().iterator();
+        appendAttributArray(context, attributeIterator);
+        context.append(") ");
+        context.append("values ");
+
+        context.append("(");
+        insert.getValues().accept(this, context);
+        context.append(")");
+    }
+
+    private void appendAttributArray(SqlContext context, Iterator<Attribute> attributeIterator) {
+        while (attributeIterator.hasNext()) {
+            Attribute attribute = attributeIterator.next();
+            attribute.accept(this, context);
+
+            if (attributeIterator.hasNext()) {
+                context.append(", ");
+            }
         }
     }
 }

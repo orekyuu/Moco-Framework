@@ -28,4 +28,13 @@ public class SqlContext {
     public String sql() {
         return builder.toString().trim();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SqlContext{");
+        sb.append("builder=").append(builder);
+        sb.append(", bindParams=").append(bindParams);
+        sb.append('}');
+        return sb.toString();
+    }
 }
