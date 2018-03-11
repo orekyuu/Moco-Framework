@@ -63,18 +63,20 @@ public class Select {
         void onResult(ResultSet resultSet) throws SQLException;
     }
 
-    public void executeQueryWithResultListener(Connection connection, QueryResultListener listener) throws SQLException {
+    public void executeQueryWithResultListener(Connection connection, QueryResultListener listener) {
         SqlContext context = prepareQuery();
         try (PreparedStatement statement = context.createStatement(connection)) {
             ResultSet resultSet = statement.executeQuery();
             listener.onResult(resultSet);
+        } catch (SQLException e) {
+            throw new UncheckedSQLException(e);
         }
     }
 
     public interface QueryResultMapper<R> {
         R mapping(ResultSet resultSet) throws SQLException;
     }
-    public <R> List<R> executeQuery(Connection connection, QueryResultMapper<R> mapper) throws SQLException {
+    public <R> List<R> executeQuery(Connection connection, QueryResultMapper<R> mapper) {
         ArrayList<R> list = new ArrayList<>();
         executeQueryWithResultListener(connection, resultSet -> {
             while (resultSet.next()) {

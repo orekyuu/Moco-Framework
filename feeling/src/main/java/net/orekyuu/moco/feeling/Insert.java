@@ -47,10 +47,12 @@ public class Insert {
         return context;
     }
 
-    public int executeQuery(Connection connection) throws SQLException {
+    public int executeQuery(Connection connection) throws UncheckedSQLException {
         SqlContext context = prepareQuery();
         try (PreparedStatement statement = context.createStatement(connection)) {
             return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new UncheckedSQLException(e);
         }
     }
 

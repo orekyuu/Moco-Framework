@@ -15,6 +15,10 @@ public class WhereClause implements SqlNode {
         return expression;
     }
 
+    public void setExpression(SqlNodeExpression expression) {
+        this.expression = expression;
+    }
+
     @Override
     public void accept(SqlVisitor visitor, SqlContext context) {
         visitor.visit(this, context);
