@@ -1,13 +1,53 @@
 package net.orekyuu.moco.core.attribute;
 
-public abstract class Attribute {
-    protected net.orekyuu.moco.feeling.attributes.Attribute attribute;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-    public Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
+public abstract class Attribute {
+    net.orekyuu.moco.feeling.attributes.Attribute attribute;
+
+    Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
         this.attribute = attribute;
     }
 
     public net.orekyuu.moco.feeling.attributes.Attribute ast() {
         return attribute;
+    }
+
+    public Predicate eq(Attribute value) {
+        return new Predicate(attribute.eq(value.ast()));
+    }
+
+    public Predicate in(Attribute value) {
+        return eq(value);
+    }
+
+    public Predicate in(Attribute ... value) {
+        List<net.orekyuu.moco.feeling.attributes.Attribute> paramList = Stream.of(value)
+                .distinct()
+                .map(Attribute::ast)
+                .collect(Collectors.toList());
+        return new Predicate(attribute.in(paramList));
+    }
+
+    public Predicate not(Attribute value) {
+        return new Predicate(attribute.noteq(value.ast()));
+    }
+
+    public Predicate gt(Attribute value) {
+        return new Predicate(attribute.gt(value.ast()));
+    }
+
+    public Predicate gteq(Attribute value) {
+        return new Predicate(attribute.gteq(value.ast()));
+    }
+
+    public Predicate lt(Attribute value) {
+        return new Predicate(attribute.lt(value.ast()));
+    }
+
+    public Predicate lteq(Attribute value) {
+        return new Predicate(attribute.lteq(value.ast()));
     }
 }

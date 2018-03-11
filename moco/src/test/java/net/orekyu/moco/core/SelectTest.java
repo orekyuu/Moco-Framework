@@ -107,4 +107,15 @@ public class SelectTest extends DatabaseTest {
         Assertions.assertEquals(users.get(0).getName(), "foo");
         Assertions.assertEquals(users.get(0).isActive(), true);
     }
+
+    @Test
+    void findAttributeEq() {
+        Users.create(new User(-1, "bar", true));
+        Users.create(new User(-1, "foo", false));
+        Users.create(new User(-1, "foo", true));
+
+        List<User> users = Users.all().where(Users.NAME.eq(Users.NAME)).toList();
+        Assertions.assertEquals(users.size(), 3);
+
+    }
 }
