@@ -1,15 +1,21 @@
 package net.orekyuu.moco.core;
 
 import net.orekyuu.moco.core.attribute.Predicate;
+import net.orekyuu.moco.core.relation.Preloader;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.node.SqlNodeExpression;
 import net.orekyuu.moco.feeling.node.WhereClause;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public abstract class EntityList<T extends EntityList<T>> {
+public abstract class EntityList<T extends EntityList<T, E>, E> {
 
     protected Select select;
+    private List<Relation<E>> preloadRelations = new ArrayList<>();
+
     public EntityList(Select select) {
         this.select = select;
     }
@@ -29,4 +35,18 @@ public abstract class EntityList<T extends EntityList<T>> {
         }
         return (T)this;
     }
+
+    public T preload(Relation<E> relation) {
+        preloadRelations.add(relation);
+        return (T)this;
+    }
+
+    public List<E> toList() {
+        List<E> records = select.executeQuery(ConnectionManager.getConnection(), getMapper());
+        Preloader<E> preloader = new Preloader<>();
+        preloader.preload(records, preloadRelations);
+        return records;
+    }
+
+    public abstract Select.QueryResultMapper<E> getMapper();
 }

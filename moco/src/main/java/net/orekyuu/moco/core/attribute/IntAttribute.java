@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class IntAttribute extends Attribute {
-    public IntAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
-        super(attribute);
+public class IntAttribute<OWNER> extends Attribute<OWNER> {
+    public IntAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
+        super(attribute, accessor);
     }
 
     public Predicate eq(int value) {

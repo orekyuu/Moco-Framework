@@ -29,7 +29,8 @@ public class Table implements ColumnFindable {
 
     @Override
     public <T extends Attribute> T findColumn(Class<T> clazz, String name) {
-        return (T) columnMap.get(new ClassColumnPair(clazz, name));
+        Attribute attribute = columnMap.get(new ClassColumnPair(clazz, name));
+        return (T) Objects.requireNonNull(attribute, name + " not found.");
     }
 
     public Set<Attribute> getColumns() {

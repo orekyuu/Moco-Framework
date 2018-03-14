@@ -54,6 +54,7 @@ public class SqlContext {
     }
 
     public PreparedStatement createStatement(Connection connection) throws SQLException {
+        System.out.println(sql());
         PreparedStatement statement = connection.prepareStatement(sql());
         int index = 1;
         for (SqlBindParam bindParam : bindParams) {

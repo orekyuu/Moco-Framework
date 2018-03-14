@@ -9,10 +9,12 @@ import java.util.Set;
 public class TableBuilder {
 
     private final String tableName;
+    private final Select.QueryResultMapper mapper;
     private final Set<Attribute> attrs = new HashSet<>();
 
-    public TableBuilder(String tableName) {
+    public TableBuilder(String tableName, Select.QueryResultMapper mapper) {
         this.tableName = Objects.requireNonNull(tableName);
+        this.mapper = mapper;
     }
 
     public TableBuilder _integer(String name) {

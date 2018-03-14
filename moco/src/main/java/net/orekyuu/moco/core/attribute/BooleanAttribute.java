@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BooleanAttribute extends Attribute {
-    public BooleanAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
-        super(attribute);
+public class BooleanAttribute<OWNER> extends Attribute<OWNER> {
+    public BooleanAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
+        super(attribute, accessor);
     }
 
     public Predicate eq(boolean value) {

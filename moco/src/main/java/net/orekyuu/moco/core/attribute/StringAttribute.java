@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringAttribute extends Attribute {
-    public StringAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
-        super(attribute);
+public class StringAttribute<OWNER> extends Attribute<OWNER> {
+    public StringAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
+        super(attribute, accessor);
     }
 
     public Predicate eq(String value) {
