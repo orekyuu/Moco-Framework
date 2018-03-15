@@ -5,6 +5,7 @@ import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.RecordNotFoundException;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
+import net.orekyuu.moco.core.relation.BelongsRelation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -26,6 +27,9 @@ public class Posts {
     public static final IntAttribute<Post> ID = new IntAttribute<>(TABLE.intCol("id"), Post::getId);
     public static final IntAttribute<Post> USER_ID = new IntAttribute<>(TABLE.intCol("user_id"), Post::getUserId);
     public static final StringAttribute<Post> TITLE = new StringAttribute<>(TABLE.stringCol("title"), Post::getTitle);
+
+    public static final BelongsRelation<Post, User> USERS = new BelongsRelation<>(TABLE, USER_ID, Users.TABLE, Users.ID, Users.MAPPER);
+
 
     // create
     public static void create(Post post) {

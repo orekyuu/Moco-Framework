@@ -1,7 +1,5 @@
 package net.orekyuu.moco.sample;
 
-import net.orekyuu.moco.core.relation.HasManyRelation;
-
 import java.util.List;
 
 public class PreloadSample extends SampleBase {
@@ -17,13 +15,7 @@ public class PreloadSample extends SampleBase {
                 Posts.create(new Post(-1, user.getId(), "post3"));
             }
 
-            // リレーション
-            HasManyRelation<User, Post> posts = Users.POSTS;
-            UserList userList = Users.all() // User全部持ってくる
-                    .preload(posts); // 紐付いているPostも即時フェッチ
-            // toListするとここで始めてクエリが実行される
-            List<User> users = userList.toList();
-            System.out.println(users);
+            List<Post> toList = Posts.all().preload(Posts.USERS).toList();
         });
     }
 }
