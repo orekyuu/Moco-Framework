@@ -17,16 +17,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Users {
-    // table
-    public static final Table TABLE = new TableBuilder("users")._integer("id")._string("name")._boolean("active").build();
-
-    // columns
-    public static final IntAttribute ID = new IntAttribute(TABLE.intCol("id"));
-    public static final StringAttribute NAME = new StringAttribute(TABLE.stringCol("name"));
-    public static final BooleanAttribute ACTIVE = new BooleanAttribute(TABLE.booleanCol("active"));
-
     // mapper
     public static final Select.QueryResultMapper<User> MAPPER = resultSet -> new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBoolean("active"));
+
+    // table
+    public static final Table TABLE = new TableBuilder("users", MAPPER)._integer("id")._string("name")._boolean("active").build();
+
+    // columns
+    public static final IntAttribute<User> ID = new IntAttribute<>(TABLE.intCol("id"), User::getId);
+    public static final StringAttribute<User> NAME = new StringAttribute<>(TABLE.stringCol("name"), User::getName);
+    public static final BooleanAttribute<User> ACTIVE = new BooleanAttribute<>(TABLE.booleanCol("active"), User::isActive);
 
     // create
     public static void create(User user) {

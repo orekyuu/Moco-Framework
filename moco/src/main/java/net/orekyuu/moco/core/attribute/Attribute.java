@@ -4,15 +4,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Attribute {
+public abstract class Attribute<OWNER> {
     net.orekyuu.moco.feeling.attributes.Attribute attribute;
+    private AttributeValueAccessor<OWNER> accessor;
 
-    Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute) {
+    Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         this.attribute = attribute;
+        this.accessor = accessor;
     }
 
     public net.orekyuu.moco.feeling.attributes.Attribute ast() {
         return attribute;
+    }
+
+    public AttributeValueAccessor<OWNER> getAccessor() {
+        return accessor;
     }
 
     public Predicate eq(Attribute value) {
