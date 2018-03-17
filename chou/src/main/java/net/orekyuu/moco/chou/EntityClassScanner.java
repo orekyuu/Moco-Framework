@@ -12,13 +12,13 @@ import javax.lang.model.util.Elements;
 import java.util.Arrays;
 import java.util.List;
 
-public class TableClassScanner extends ElementScanner8<Void, Void> {
+public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     private final Messager messager;
     private final Elements elementUtils;
     private OriginalEntity.Builder originalEntityBuilder = new OriginalEntity.Builder();
 
-    public TableClassScanner(Table table, Elements elementUtils, Messager messager) {
+    public EntityClassScanner(Table table, Elements elementUtils, Messager messager) {
         originalEntityBuilder.table(table);
         this.elementUtils = elementUtils;
         this.messager = messager;

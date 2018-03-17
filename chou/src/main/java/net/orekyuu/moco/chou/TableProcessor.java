@@ -31,9 +31,9 @@ public class TableProcessor extends AbstractProcessor {
                 Filer filer = super.processingEnv.getFiler();
                 try {
                     Elements elementUtils = processingEnv.getElementUtils();
-                    TableClassScanner tableClassScanner = new TableClassScanner(table, elementUtils, processingEnv.getMessager());
-                    tableClassScanner.scan(element);
-                    List<JavaFile> javaFile = tableClassScanner.generatedFiles();
+                    EntityClassScanner entityClassScanner = new EntityClassScanner(table, elementUtils, processingEnv.getMessager());
+                    entityClassScanner.scan(element);
+                    List<JavaFile> javaFile = entityClassScanner.generatedFiles();
                     for (JavaFile file : javaFile) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, file.toString());
                         file.writeTo(filer);
