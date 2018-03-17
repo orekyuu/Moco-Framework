@@ -11,6 +11,11 @@ public class IntAttribute<OWNER> extends Attribute<OWNER> {
         super(attribute, accessor);
     }
 
+    @Override
+    public Class<?> bindType() {
+        return Integer.class;
+    }
+
     public Predicate eq(int value) {
         return new Predicate(attribute.eq(new SqlBindParam(value, Integer.class)));
     }

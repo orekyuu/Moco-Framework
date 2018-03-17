@@ -3,34 +3,32 @@ package net.orekyuu.moco.chou;
 import com.squareup.javapoet.JavaFile;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.Table;
-import net.orekyuu.moco.feeling.util.Pair;
 
 import javax.annotation.processing.Messager;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.ElementScanner8;
-import java.util.ArrayList;
+import javax.lang.model.util.Elements;
 import java.util.Arrays;
 import java.util.List;
 
 public class TableClassScanner extends ElementScanner8<Void, Void> {
 
-    private final Table table;
     private final Messager messager;
-    private PackageElement packageElement;
-    private TypeElement originalType;
-    private List<Pair<Column, VariableElement>> columnVariablePairs = new ArrayList<>();
+    private final Elements elementUtils;
+    private OriginalEntity.Builder originalEntityBuilder = new OriginalEntity.Builder();
 
-    public TableClassScanner(Table table, Messager messager) {
-        this.table = table;
+    public TableClassScanner(Table table, Elements elementUtils, Messager messager) {
+        originalEntityBuilder.table(table);
+        this.elementUtils = elementUtils;
         this.messager = messager;
     }
 
     @Override
     public Void visitType(TypeElement e, Void aVoid) {
         if (e.getAnnotation(Table.class) != null) {
-            originalType = e;
+            originalEntityBuilder.originalType(e);
+            originalEntityBuilder.packageElement(elementUtils.getPackageOf(e));
         }
         return super.visitType(e, aVoid);
     }
@@ -39,13 +37,16 @@ public class TableClassScanner extends ElementScanner8<Void, Void> {
     public Void visitVariable(VariableElement e, Void aVoid) {
         Column column = e.getAnnotation(Column.class);
         if (column != null) {
-            columnVariablePairs.add(Pair.of(column, e));
+            originalEntityBuilder.addColumnField(new ColumnField(column, e));
         }
 
         return super.visitVariable(e, aVoid);
     }
 
     public List<JavaFile> generatedFiles() {
-        return Arrays.asList();
+        OriginalEntity originalEntity = originalEntityBuilder.build();
+        return Arrays.asList(
+                new TableClassFactory(originalEntity).createJavaFile(messager)
+        );
     }
 }

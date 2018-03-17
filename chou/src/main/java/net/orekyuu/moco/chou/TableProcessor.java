@@ -7,6 +7,8 @@ import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -23,12 +25,17 @@ public class TableProcessor extends AbstractProcessor {
         for (TypeElement typeElement : typeElements) {
             for (Element element : roundEnv.getElementsAnnotatedWith(typeElement)) {
                 Table table = element.getAnnotation(Table.class);
+                if (table == null) {
+                    continue;
+                }
                 Filer filer = super.processingEnv.getFiler();
                 try {
-                    TableClassScanner tableClassScanner = new TableClassScanner(table, processingEnv.getMessager());
+                    Elements elementUtils = processingEnv.getElementUtils();
+                    TableClassScanner tableClassScanner = new TableClassScanner(table, elementUtils, processingEnv.getMessager());
                     tableClassScanner.scan(element);
                     List<JavaFile> javaFile = tableClassScanner.generatedFiles();
                     for (JavaFile file : javaFile) {
+                        processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, file.toString());
                         file.writeTo(filer);
                     }
                 } catch (IOException e) {
@@ -36,6 +43,7 @@ public class TableProcessor extends AbstractProcessor {
                 }
             }
         }
-        return false;
+
+        return true;
     }
 }

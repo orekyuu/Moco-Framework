@@ -43,7 +43,7 @@ public class TableBuilder {
     }
 
     public TableBuilder _float(String name) {
-        attrs.add(new StringAttribute(tableName, name));
+        attrs.add(new FloatAttribute(tableName, name));
         return this;
     }
 

@@ -13,6 +13,8 @@ public abstract class Attribute<OWNER> {
         this.accessor = accessor;
     }
 
+    public abstract Class<?> bindType();
+
     public net.orekyuu.moco.feeling.attributes.Attribute ast() {
         return attribute;
     }
@@ -56,4 +58,6 @@ public abstract class Attribute<OWNER> {
     public Predicate lteq(Attribute value) {
         return new Predicate(attribute.lteq(value.ast()));
     }
+
+
 }

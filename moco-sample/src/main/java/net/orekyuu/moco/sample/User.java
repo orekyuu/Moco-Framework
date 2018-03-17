@@ -5,14 +5,17 @@ import net.orekyuu.moco.core.annotations.Table;
 
 @Table(name = "users", immutable = true)
 public class User {
+    @Column(name = "id", generatedValue = true)
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "active")
     private boolean active;
 
-    public User(
-            @Column(name = "id", generatedValue = true) int id,
-            @Column(name = "name") String name,
-            @Column(name = "active") boolean active) {
+    public User() {
+    }
+
+    public User(int id, String name, boolean active) {
         this.id = id;
         this.name = name;
         this.active = active;
