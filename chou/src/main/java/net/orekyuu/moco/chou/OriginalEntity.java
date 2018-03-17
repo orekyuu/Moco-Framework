@@ -44,8 +44,14 @@ public class OriginalEntity {
     }
 
     public ClassName toTableClassName() {
-        String packageName = packageElement.getSimpleName().toString();
+        String packageName = packageElement.getQualifiedName().toString();
         String simpleName = NamingUtils.multipleName(originalType.getSimpleName().toString());
+        return ClassName.get(packageName, simpleName);
+    }
+
+    public ClassName toEntityListClassName() {
+        String packageName = packageElement.getQualifiedName().toString();
+        String simpleName = originalType.getSimpleName().toString() + "List";
         return ClassName.get(packageName, simpleName);
     }
 

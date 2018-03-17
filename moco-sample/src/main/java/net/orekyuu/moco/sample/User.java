@@ -5,7 +5,7 @@ import net.orekyuu.moco.core.annotations.Table;
 
 @Table(name = "users", immutable = true)
 public class User {
-    @Column(name = "id", generatedValue = true)
+    @Column(name = "id", generatedValue = true, unique = true)
     private int id;
     @Column(name = "name")
     private String name;

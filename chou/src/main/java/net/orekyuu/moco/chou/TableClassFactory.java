@@ -24,6 +24,15 @@ public class TableClassFactory {
             classBuilder.addField(TableClassFields.columnField(originalEntity, field));
         }
         classBuilder.addMethod(TableClassMethods.createMethod(originalEntity));
+        classBuilder.addMethod(TableClassMethods.allMethod(originalEntity));
+        classBuilder.addMethod(TableClassMethods.firstMethod(originalEntity));
+        classBuilder.addMethod(TableClassMethods.firstOrNullMethod(originalEntity));
+        for (ColumnField field : originalEntity.getColumnFields()) {
+            if (field.isUnique()) {
+                classBuilder.addMethod(TableClassMethods.findMethod(originalEntity, field));
+                classBuilder.addMethod(TableClassMethods.findOrNullMethod(originalEntity, field));
+            }
+        }
         return JavaFile.builder(originalEntity.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
     }

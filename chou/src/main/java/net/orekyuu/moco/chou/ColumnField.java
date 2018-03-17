@@ -41,6 +41,14 @@ public class ColumnField {
         return "get" + name;
     }
 
+    public boolean isUnique() {
+        return column.unique();
+    }
+
+    public boolean isGeneratedValue() {
+        return column.generatedValue();
+    }
+
     public String tableClassColumnName() {
         String fieldName = column.variableName();
         if (fieldName.isEmpty()) {

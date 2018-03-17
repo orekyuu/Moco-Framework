@@ -8,6 +8,7 @@ import net.orekyuu.moco.feeling.TableBuilder;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -20,7 +21,11 @@ public class TableClassFields {
     public static FieldSpec mapper(OriginalEntity originalEntity) {
         ParameterizedTypeName mapperType = ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), originalEntity.originalClassName());
 
-        MethodSpec.Builder method = MethodSpec.methodBuilder("mapping")
+
+        TypeSpec.Builder mapperClass = TypeSpec.anonymousClassBuilder("")
+                .addSuperinterface(mapperType);
+
+        MethodSpec.Builder mappingMethod = MethodSpec.methodBuilder("mapping")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(originalEntity.originalClassName())
@@ -28,20 +33,32 @@ public class TableClassFields {
                 .addException(ClassName.get(SQLException.class))
                 .addException(ClassName.get(ReflectiveOperationException.class));
 
-        method.addStatement("$T record = new $T()", originalEntity.getOriginalType(), originalEntity.getOriginalType());
+        mappingMethod.addStatement("$T record = new $T()", originalEntity.getOriginalType(), originalEntity.getOriginalType());
+        CodeBlock.Builder initializer = CodeBlock.builder();
+        initializer.beginControlFlow("try");
         for (ColumnField columnField : originalEntity.getColumnFields()) {
             Column column = columnField.getColumn();
             String fieldName = columnField.getVariableElement().getSimpleName().toString();
             String columnName = column.name();
-            // FIXME: 毎回field検索されるので遅い。キャッシュする
-            // FIXME: setAccessible(true)しないとpublic以外アクセスできない
-            method.addStatement("$T.class.getField($S).set(record, resultSet.getObject($S));", originalEntity.originalClassName(), fieldName, columnName);
-        }
-        method.addStatement("return record");
 
-        TypeSpec anonymous = TypeSpec.anonymousClassBuilder("")
-                .addSuperinterface(mapperType)
-                .addMethod(method.build()).build();
+            // add field
+            mapperClass.addField(FieldSpec.builder(ClassName.get(Field.class), fieldName).addModifiers(Modifier.PRIVATE).build());
+            // initialize field
+            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, originalEntity.originalClassName(), fieldName);
+            initializer.addStatement("$L.setAccessible(true)", fieldName);
+            // mapper
+            mappingMethod.addStatement("$L.set(record, resultSet.getObject($S));", fieldName, columnName);
+        }
+        mappingMethod.addStatement("return record");
+        // end constructor
+        initializer.nextControlFlow("catch ($T e)", ReflectiveOperationException.class)
+                .addStatement("throw new $T(e)", RuntimeException.class)
+                .endControlFlow();
+
+        mapperClass.addInitializerBlock(initializer.build());
+        mapperClass.addMethod(mappingMethod.build());
+
+        TypeSpec anonymous = mapperClass.build();
 
         return FieldSpec.builder(mapperType, "MAPPER", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$L", anonymous)
