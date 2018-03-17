@@ -1,4 +1,4 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.JavaFile;
 import net.orekyuu.moco.core.annotations.Table;

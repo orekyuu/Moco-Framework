@@ -1,4 +1,4 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
 import net.orekyuu.moco.core.EntityList;
@@ -11,18 +11,18 @@ import javax.lang.model.element.Modifier;
 
 public class EntityListClassFactory {
 
-    private final OriginalEntity originalEntity;
+    private final EntityClass entityClass;
 
-    public EntityListClassFactory(OriginalEntity originalEntity) {
-        this.originalEntity = originalEntity;
+    public EntityListClassFactory(EntityClass entityClass) {
+        this.entityClass = entityClass;
     }
 
     @Nullable
     public JavaFile createJavaFile(Messager messager) {
-        ClassName listClassName = originalEntity.toEntityListClassName();
+        ClassName listClassName = entityClass.getEntityListClassName();
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(listClassName)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        ParameterizedTypeName superclass = ParameterizedTypeName.get(ClassName.get(EntityList.class), listClassName, originalEntity.originalClassName());
+        ParameterizedTypeName superclass = ParameterizedTypeName.get(ClassName.get(EntityList.class), listClassName, entityClass.entityClassName());
         classBuilder.superclass(superclass);
         classBuilder
                 .addMethod(MethodSpec.constructorBuilder()
@@ -33,11 +33,11 @@ public class EntityListClassFactory {
                         .addAnnotation(Nonnull.class)
                         .addAnnotation(Override.class)
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.MAPPER", originalEntity.toTableClassName())
-                        .returns(ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), originalEntity.originalClassName()))
+                        .addStatement("return $T.MAPPER", entityClass.getTableClassName())
+                        .returns(ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), entityClass.entityClassName()))
                         .build());
 
-        return JavaFile.builder(originalEntity.getPackageElement().getQualifiedName().toString(), classBuilder.build())
+        return JavaFile.builder(entityClass.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
     }
 }

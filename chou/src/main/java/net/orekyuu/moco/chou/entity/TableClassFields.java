@@ -1,6 +1,7 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
+import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -18,8 +19,8 @@ public class TableClassFields {
         throw new UnsupportedOperationException();
     }
 
-    public static FieldSpec mapper(OriginalEntity originalEntity) {
-        ParameterizedTypeName mapperType = ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), originalEntity.originalClassName());
+    public static FieldSpec mapper(EntityClass entityClass) {
+        ParameterizedTypeName mapperType = ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), entityClass.entityClassName());
 
 
         TypeSpec.Builder mapperClass = TypeSpec.anonymousClassBuilder("")
@@ -28,23 +29,23 @@ public class TableClassFields {
         MethodSpec.Builder mappingMethod = MethodSpec.methodBuilder("mapping")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .returns(originalEntity.originalClassName())
+                .returns(entityClass.entityClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(ResultSet.class), "resultSet").build())
                 .addException(ClassName.get(SQLException.class))
                 .addException(ClassName.get(ReflectiveOperationException.class));
 
-        mappingMethod.addStatement("$T record = new $T()", originalEntity.getOriginalType(), originalEntity.getOriginalType());
+        mappingMethod.addStatement("$T record = new $T()", entityClass.getEntityType(), entityClass.getEntityType());
         CodeBlock.Builder initializer = CodeBlock.builder();
         initializer.beginControlFlow("try");
-        for (ColumnField columnField : originalEntity.getColumnFields()) {
-            Column column = columnField.getColumn();
-            String fieldName = columnField.getVariableElement().getSimpleName().toString();
+        for (AttributeField attributeField : entityClass.getAttributeFields()) {
+            Column column = attributeField.getColumn();
+            String fieldName = attributeField.getVariableElement().getSimpleName().toString();
             String columnName = column.name();
 
             // add field
             mapperClass.addField(FieldSpec.builder(ClassName.get(Field.class), fieldName).addModifiers(Modifier.PRIVATE).build());
             // initialize field
-            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, originalEntity.originalClassName(), fieldName);
+            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.entityClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
             mappingMethod.addStatement("$L.set(record, resultSet.getObject($S));", fieldName, columnName);
@@ -65,9 +66,9 @@ public class TableClassFields {
                 .build();
     }
 
-    public static FieldSpec tableField(OriginalEntity originalEntity) {
-        CodeBlock.Builder block = CodeBlock.builder().add("new $T($S, MAPPER)", TableBuilder.class, originalEntity.getTable().name());
-        for (ColumnField field : originalEntity.getColumnFields()) {
+    public static FieldSpec tableField(EntityClass entityClass) {
+        CodeBlock.Builder block = CodeBlock.builder().add("new $T($S, MAPPER)", TableBuilder.class, entityClass.getTable().name());
+        for (AttributeField field : entityClass.getAttributeFields()) {
             VariableElement element = field.getVariableElement();
             Optional<DatabaseColumnType> type = DatabaseColumnType.findSupportedType(element);
             DatabaseColumnType databaseColumnType = type.orElseThrow(RuntimeException::new);
@@ -79,15 +80,15 @@ public class TableClassFields {
                 .build();
     }
 
-    public static FieldSpec columnField(OriginalEntity originalEntity, ColumnField field) {
+    public static FieldSpec columnField(EntityClass entityClass, AttributeField field) {
         String fieldName = field.tableClassColumnName();
 
         ClassName attributeClass = field.getAttributeClass();
         CodeBlock.Builder builder = CodeBlock.builder().add("new $T<>(TABLE.$L($S), $T::$L)",
-                attributeClass, field.getFeelingTableMethod(), field.getColumn().name(), originalEntity.originalClassName(), field.entityGetterMethod());
+                attributeClass, field.getFeelingTableMethod(), field.getColumn().name(), entityClass.entityClassName(), field.entityGetterMethod());
 
         return FieldSpec.builder(
-                ParameterizedTypeName.get(attributeClass, originalEntity.originalClassName()),
+                ParameterizedTypeName.get(attributeClass, entityClass.entityClassName()),
                 fieldName,
                 Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer(builder.build())

@@ -17,10 +17,6 @@ public class NamingUtils {
         return word + "s";
     }
 
-    public static String columnFieldName(String word) {
-        return toUpperName(word).toUpperCase() + "_CO";
-    }
-
     public static String toUpperName(String word) {
         StringBuilder builder = new StringBuilder();
         word.chars().mapToObj(c -> {

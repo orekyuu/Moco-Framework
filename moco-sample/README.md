@@ -6,4 +6,4 @@ Mocoの使い方を示すためのサンプルプロジェクトです。
 |クラス名|解説|
 |--|--|
 |InsertSample|インサートに関する操作のサンプルです|
-|InsertSample|基本的なSelectに関する操作のサンプルです|
+|SimpleSelectSample|基本的なSelectに関する操作のサンプルです|
