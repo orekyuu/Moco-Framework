@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Modifier;
 
+import static net.orekyuu.moco.chou.CodeGenerateOperation.*;
+
 public class TableClassFactory {
     private OriginalEntity originalEntity;
 
@@ -18,19 +20,19 @@ public class TableClassFactory {
     public JavaFile createJavaFile(Messager messager) {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(originalEntity.toTableClassName())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        classBuilder.addField(TableClassFields.mapper(originalEntity));
-        classBuilder.addField(TableClassFields.tableField(originalEntity));
+        run(messager, () -> classBuilder.addField(TableClassFields.mapper(originalEntity)));
+        run(messager, () -> classBuilder.addField(TableClassFields.tableField(originalEntity)));
         for (ColumnField field : originalEntity.getColumnFields()) {
-            classBuilder.addField(TableClassFields.columnField(originalEntity, field));
+            run(messager, () -> classBuilder.addField(TableClassFields.columnField(originalEntity, field)));
         }
-        classBuilder.addMethod(TableClassMethods.createMethod(originalEntity));
-        classBuilder.addMethod(TableClassMethods.allMethod(originalEntity));
-        classBuilder.addMethod(TableClassMethods.firstMethod(originalEntity));
-        classBuilder.addMethod(TableClassMethods.firstOrNullMethod(originalEntity));
+        run(messager, () -> classBuilder.addMethod(TableClassMethods.createMethod(originalEntity)));
+        run(messager, () -> classBuilder.addMethod(TableClassMethods.allMethod(originalEntity)));
+        run(messager, () -> classBuilder.addMethod(TableClassMethods.firstMethod(originalEntity)));
+        run(messager, () -> classBuilder.addMethod(TableClassMethods.firstOrNullMethod(originalEntity)));
         for (ColumnField field : originalEntity.getColumnFields()) {
             if (field.isUnique()) {
-                classBuilder.addMethod(TableClassMethods.findMethod(originalEntity, field));
-                classBuilder.addMethod(TableClassMethods.findOrNullMethod(originalEntity, field));
+                run(messager, () -> classBuilder.addMethod(TableClassMethods.findMethod(originalEntity, field)));
+                run(messager, () -> classBuilder.addMethod(TableClassMethods.findOrNullMethod(originalEntity, field)));
             }
         }
         return JavaFile.builder(originalEntity.getPackageElement().getQualifiedName().toString(), classBuilder.build())
