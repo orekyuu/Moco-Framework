@@ -11,6 +11,11 @@ public class StringAttribute<OWNER> extends Attribute<OWNER> {
         super(attribute, accessor);
     }
 
+    @Override
+    public Class<?> bindType() {
+        return String.class;
+    }
+
     public Predicate eq(String value) {
         return new Predicate(attribute.eq(new SqlBindParam(value, String.class)));
     }

@@ -2,4 +2,5 @@ rootProject.name = 'moco-framework'
 include 'feeling'
 include 'moco'
 include 'moco-sample'
+include 'chou'
 

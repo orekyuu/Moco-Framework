@@ -60,7 +60,7 @@ public class Select {
     }
 
     public interface QueryResultListener {
-        void onResult(ResultSet resultSet) throws SQLException;
+        void onResult(ResultSet resultSet) throws SQLException, ReflectiveOperationException;
     }
 
     public void executeQueryWithResultListener(Connection connection, QueryResultListener listener) {
@@ -70,11 +70,13 @@ public class Select {
             listener.onResult(resultSet);
         } catch (SQLException e) {
             throw new UncheckedSQLException(e);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public interface QueryResultMapper<R> {
-        R mapping(ResultSet resultSet) throws SQLException;
+        R mapping(ResultSet resultSet) throws SQLException, ReflectiveOperationException;
     }
     public <R> List<R> executeQuery(Connection connection, QueryResultMapper<R> mapper) {
         ArrayList<R> list = new ArrayList<>();

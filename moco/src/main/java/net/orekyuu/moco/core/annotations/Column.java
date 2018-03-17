@@ -16,4 +16,10 @@ public @interface Column {
      * trueになっている場合、insertの対象になりません
      */
     boolean generatedValue() default false;
+
+    /**
+     * ユニークインデックスが入っているか
+     * uniqueがtrueの場合、テーブルクラスにfind系メソッドが生成されます
+     */
+    boolean unique() default false;
 }

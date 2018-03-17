@@ -11,6 +11,11 @@ public class BooleanAttribute<OWNER> extends Attribute<OWNER> {
         super(attribute, accessor);
     }
 
+    @Override
+    public Class<?> bindType() {
+        return Boolean.class;
+    }
+
     public Predicate eq(boolean value) {
         return new Predicate(attribute.eq(new SqlBindParam(value, Boolean.class)));
     }

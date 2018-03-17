@@ -30,17 +30,12 @@ public class Users {
     public static final StringAttribute<User> NAME = new StringAttribute<>(TABLE.stringCol("name"), User::getName);
     public static final BooleanAttribute<User> ACTIVE = new BooleanAttribute<>(TABLE.booleanCol("active"), User::isActive);
 
-    // relation
-    public static final HasManyRelation<User, Post> POSTS = new HasManyRelation<>(TABLE, ID, Posts.TABLE, Posts.USER_ID, Posts.MAPPER);
 
     // create
     public static void create(User user) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(NAME.ast(), ACTIVE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(
-                new SqlBindParam(user.getName(), String.class),
-                new SqlBindParam(user.isActive(), Boolean.class)
-        )));
+        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(NAME.getAccessor().get(user), NAME.bindType()), new SqlBindParam(user.isActive(), Boolean.class))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

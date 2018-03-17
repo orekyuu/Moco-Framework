@@ -9,7 +9,7 @@ public class SimpleSelectSample extends SampleBase {
             Users.create(new User(-1, "piyo", false));
 
             // find first user
-            User first = Users.first();
+            User first = Users.firstOrNull();
             System.out.println(first);
             // find by id
             assert first != null;
@@ -22,7 +22,6 @@ public class SimpleSelectSample extends SampleBase {
             System.out.println(Users.all().where(Users.NAME.eq("hoge")).toList());
             // find fuga and activated
             System.out.println(Users.all().where(Users.NAME.eq("fuga"), Users.ACTIVE.isTrue()).toList());
-
         });
     }
 }
