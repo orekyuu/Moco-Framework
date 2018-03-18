@@ -47,9 +47,11 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
     public List<JavaFile> generatedFiles() {
         EntityClass entityClass = originalEntityBuilder.build();
         TableClass tableClass = new TableClass(entityClass);
+        EntityListClass entityListClass = new EntityListClass(entityClass);
+
         return Arrays.asList(
                 tableClass.createJavaFile(messager),
-                new EntityListClassFactory(entityClass).createJavaFile(messager)
+                entityListClass.createJavaFile(messager, tableClass)
         );
     }
 }

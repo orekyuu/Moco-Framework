@@ -20,7 +20,7 @@ public class TableClassFields {
     }
 
     public static FieldSpec mapper(EntityClass entityClass) {
-        ParameterizedTypeName mapperType = ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), entityClass.entityClassName());
+        ParameterizedTypeName mapperType = ParameterizedTypeName.get(ClassName.get(Select.QueryResultMapper.class), entityClass.getClassName());
 
 
         TypeSpec.Builder mapperClass = TypeSpec.anonymousClassBuilder("")
@@ -29,7 +29,7 @@ public class TableClassFields {
         MethodSpec.Builder mappingMethod = MethodSpec.methodBuilder("mapping")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .returns(entityClass.entityClassName())
+                .returns(entityClass.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(ResultSet.class), "resultSet").build())
                 .addException(ClassName.get(SQLException.class))
                 .addException(ClassName.get(ReflectiveOperationException.class));
@@ -45,7 +45,7 @@ public class TableClassFields {
             // add field
             mapperClass.addField(FieldSpec.builder(ClassName.get(Field.class), fieldName).addModifiers(Modifier.PRIVATE).build());
             // initialize field
-            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.entityClassName(), fieldName);
+            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
             mappingMethod.addStatement("$L.set(record, resultSet.getObject($S));", fieldName, columnName);
@@ -85,10 +85,10 @@ public class TableClassFields {
 
         ClassName attributeClass = field.getAttributeClass();
         CodeBlock.Builder builder = CodeBlock.builder().add("new $T<>(TABLE.$L($S), $T::$L)",
-                attributeClass, field.getFeelingTableMethod(), field.getColumn().name(), entityClass.entityClassName(), field.entityGetterMethod());
+                attributeClass, field.getFeelingTableMethod(), field.getColumn().name(), entityClass.getClassName(), field.entityGetterMethod());
 
         return FieldSpec.builder(
-                ParameterizedTypeName.get(attributeClass, entityClass.entityClassName()),
+                ParameterizedTypeName.get(attributeClass, entityClass.getClassName()),
                 fieldName,
                 Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer(builder.build())

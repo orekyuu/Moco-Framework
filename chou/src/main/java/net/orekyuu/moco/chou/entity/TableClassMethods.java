@@ -59,9 +59,6 @@ public class TableClassMethods {
         return builder.build();
     }
 
-//    public static UserList all() {
-//        return new UserList(TABLE.select());
-//    }
     public static MethodSpec allMethod(EntityClass entity) {
         return MethodSpec.methodBuilder("all")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
@@ -75,7 +72,7 @@ public class TableClassMethods {
         return MethodSpec.methodBuilder("first")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
-                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.entityClassName()))
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 // TODO: LIMIT作ったら直す
                 .addStatement("return all().toList().stream().findFirst()", entity.getEntityListClassName())
                 .build();
@@ -85,7 +82,7 @@ public class TableClassMethods {
         return MethodSpec.methodBuilder("firstOrNull")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nullable.class)
-                .returns(entity.entityClassName())
+                .returns(entity.getClassName())
                 .addStatement("return first().orElse(null)", entity.getEntityListClassName())
                 .build();
     }
@@ -96,7 +93,7 @@ public class TableClassMethods {
         return MethodSpec.methodBuilder("findBy" + fieldName)
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
-                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.entityClassName()))
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addStatement("return all().where($L.eq(key)).toList().stream().findFirst()", field.tableClassColumnName())
                 .build();
@@ -108,7 +105,7 @@ public class TableClassMethods {
         return MethodSpec.methodBuilder("findOrNullBy" + fieldName)
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nullable.class)
-                .returns(entity.entityClassName())
+                .returns(entity.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addStatement("return all().where($L.eq(key)).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
                 .build();

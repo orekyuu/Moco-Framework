@@ -2,8 +2,6 @@ package net.orekyuu.moco.chou.entity;
 
 
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.MethodSpec;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.core.annotations.Table;
@@ -39,7 +37,7 @@ public class EntityClass {
         return entityType;
     }
 
-    public ClassName entityClassName() {
+    public ClassName getClassName() {
         return ClassName.get(entityType);
     }
 

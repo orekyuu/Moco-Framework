@@ -1,9 +1,6 @@
 package net.orekyuu.moco.chou.entity;
 
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.AttributeField;
 
 import javax.annotation.processing.Messager;
@@ -55,8 +52,12 @@ public class TableClass {
         return TableClassFields.columnField(entityClass, attributeField);
     }
 
+    public ClassName getClassName() {
+        return entityClass.getTableClassName();
+    }
+
     public JavaFile createJavaFile(Messager messager) {
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(entityClass.getTableClassName())
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(getClassName())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         run(messager, () -> classBuilder.addField(mapperField()));
         run(messager, () -> classBuilder.addField(tableField()));
