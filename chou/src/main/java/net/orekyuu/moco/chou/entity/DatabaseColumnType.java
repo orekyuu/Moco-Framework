@@ -1,4 +1,4 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.CodeBlock;
 import net.orekyuu.moco.core.attribute.Attribute;

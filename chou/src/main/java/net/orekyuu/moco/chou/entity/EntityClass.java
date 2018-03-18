@@ -1,7 +1,9 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 
 import com.squareup.javapoet.ClassName;
+import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.core.annotations.Table;
 
 import javax.lang.model.element.PackageElement;
@@ -10,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class OriginalEntity {
+public class EntityClass {
     private Table table;
     private PackageElement packageElement;
-    private TypeElement originalType;
-    private List<ColumnField> columnFields;
+    private TypeElement entityType;
+    private List<AttributeField> attributeFields;
 
-    private OriginalEntity(Table table, PackageElement packageElement, TypeElement originalType, List<ColumnField> columnFields) {
+    private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields) {
         this.table = Objects.requireNonNull(table);
         this.packageElement = Objects.requireNonNull(packageElement);
-        this.originalType = Objects.requireNonNull(originalType);
-        this.columnFields = Objects.requireNonNull(columnFields);
+        this.entityType = Objects.requireNonNull(entityType);
+        this.attributeFields = Objects.requireNonNull(attributeFields);
     }
 
     public Table getTable() {
@@ -31,37 +33,37 @@ public class OriginalEntity {
         return packageElement;
     }
 
-    public TypeElement getOriginalType() {
-        return originalType;
+    public TypeElement getEntityType() {
+        return entityType;
     }
 
-    public ClassName originalClassName() {
-        return ClassName.get(originalType);
+    public ClassName getClassName() {
+        return ClassName.get(entityType);
     }
 
-    public List<ColumnField> getColumnFields() {
-        return columnFields;
+    public List<AttributeField> getAttributeFields() {
+        return attributeFields;
     }
 
-    public ClassName toTableClassName() {
+    public ClassName getTableClassName() {
         String packageName = packageElement.getQualifiedName().toString();
-        String simpleName = NamingUtils.multipleName(originalType.getSimpleName().toString());
+        String simpleName = NamingUtils.multipleName(entityType.getSimpleName().toString());
         return ClassName.get(packageName, simpleName);
     }
 
-    public ClassName toEntityListClassName() {
+    public ClassName getEntityListClassName() {
         String packageName = packageElement.getQualifiedName().toString();
-        String simpleName = originalType.getSimpleName().toString() + "List";
+        String simpleName = entityType.getSimpleName().toString() + "List";
         return ClassName.get(packageName, simpleName);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("OriginalEntity{");
+        final StringBuilder sb = new StringBuilder("EntityClass{");
         sb.append("table=").append(table);
         sb.append(", packageElement=").append(packageElement);
-        sb.append(", originalType=").append(originalType);
-        sb.append(", columnFields=").append(columnFields);
+        sb.append(", entityType=").append(entityType);
+        sb.append(", attributeField=").append(attributeFields);
         sb.append('}');
         return sb.toString();
     }
@@ -70,7 +72,7 @@ public class OriginalEntity {
         private Table table;
         private PackageElement packageElement;
         private TypeElement originalType;
-        private List<ColumnField> columnFields = new ArrayList<>();
+        private List<AttributeField> attributeFields = new ArrayList<>();
 
         public Builder table(Table table) {
             this.table = table;
@@ -87,13 +89,13 @@ public class OriginalEntity {
             return this;
         }
 
-        public Builder addColumnField(ColumnField columnField) {
-            this.columnFields.add(columnField);
+        public Builder addColumnField(AttributeField attributeField) {
+            this.attributeFields.add(attributeField);
             return this;
         }
 
-        public OriginalEntity build() {
-            return new OriginalEntity(table, packageElement, originalType, columnFields);
+        public EntityClass build() {
+            return new EntityClass(table, packageElement, originalType, attributeFields);
         }
     }
 }

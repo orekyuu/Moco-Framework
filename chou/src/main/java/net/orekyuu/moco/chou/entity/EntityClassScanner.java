@@ -1,6 +1,7 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.JavaFile;
+import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.Table;
 
@@ -16,7 +17,7 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     private final Messager messager;
     private final Elements elementUtils;
-    private OriginalEntity.Builder originalEntityBuilder = new OriginalEntity.Builder();
+    private EntityClass.Builder originalEntityBuilder = new EntityClass.Builder();
 
     public EntityClassScanner(Table table, Elements elementUtils, Messager messager) {
         originalEntityBuilder.table(table);
@@ -37,17 +38,20 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
     public Void visitVariable(VariableElement e, Void aVoid) {
         Column column = e.getAnnotation(Column.class);
         if (column != null) {
-            originalEntityBuilder.addColumnField(new ColumnField(column, e));
+            originalEntityBuilder.addColumnField(new AttributeField(column, e));
         }
 
         return super.visitVariable(e, aVoid);
     }
 
     public List<JavaFile> generatedFiles() {
-        OriginalEntity originalEntity = originalEntityBuilder.build();
+        EntityClass entityClass = originalEntityBuilder.build();
+        TableClass tableClass = new TableClass(entityClass);
+        EntityListClass entityListClass = new EntityListClass(entityClass);
+
         return Arrays.asList(
-                new TableClassFactory(originalEntity).createJavaFile(messager),
-                new EntityListClassFactory(originalEntity).createJavaFile(messager)
+                tableClass.createJavaFile(messager),
+                entityListClass.createJavaFile(messager, tableClass)
         );
     }
 }

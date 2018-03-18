@@ -1,6 +1,8 @@
-package net.orekyuu.moco.chou;
+package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
+import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
@@ -21,32 +23,32 @@ public class TableClassMethods {
         throw new UnsupportedOperationException();
     }
 
-    public static MethodSpec createMethod(OriginalEntity entity) {
+    public static MethodSpec createMethod(EntityClass entity) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("create")
                 .returns(TypeName.VOID)
                 .addParameter(
-                        ParameterSpec.builder(TypeName.get(entity.getOriginalType().asType()), "entity")
+                        ParameterSpec.builder(TypeName.get(entity.getEntityType().asType()), "entity")
                                 .addAnnotation(AnnotationSpec.builder(Nonnull.class).build())
                                 .build())
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addStatement("$T insert = new $T(TABLE)", Insert.class, Insert.class);
 
-        String attrs = entity.getColumnFields().stream()
+        String attrs = entity.getAttributeFields().stream()
                 .filter(f -> !f.isGeneratedValue())
-                .map(ColumnField::tableClassColumnName)
+                .map(AttributeField::tableClassColumnName)
                 .map(str -> str + ".ast()")
                 .collect(Collectors.joining(", "));
         builder.addStatement("insert.setAttributes(Arrays.asList($L))", attrs);
 
         CodeBlock.Builder codeBlock = CodeBlock.builder();
         codeBlock.add("insert.setValues(new $T($T.asList(", SqlNodeArray.class, Arrays.class);
-        Iterator<ColumnField> columnFieldIterator = entity.getColumnFields().iterator();
+        Iterator<AttributeField> columnFieldIterator = entity.getAttributeFields().iterator();
         while (columnFieldIterator.hasNext()) {
-            ColumnField columnField = columnFieldIterator.next();
-            if (columnField.getColumn().generatedValue()) {
+            AttributeField attributeField = columnFieldIterator.next();
+            if (attributeField.getColumn().generatedValue()) {
                 continue;
             }
-            codeBlock.add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, columnField.tableClassColumnName(), columnField.tableClassColumnName());
+            codeBlock.add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
             if (columnFieldIterator.hasNext()) {
                 codeBlock.add(", ");
             }
@@ -57,56 +59,53 @@ public class TableClassMethods {
         return builder.build();
     }
 
-//    public static UserList all() {
-//        return new UserList(TABLE.select());
-//    }
-    public static MethodSpec allMethod(OriginalEntity entity) {
+    public static MethodSpec allMethod(EntityClass entity) {
         return MethodSpec.methodBuilder("all")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
-                .returns(entity.toEntityListClassName())
-                .addStatement("return new $T(TABLE.select())", entity.toEntityListClassName())
+                .returns(entity.getEntityListClassName())
+                .addStatement("return new $T(TABLE.select())", entity.getEntityListClassName())
                 .build();
     }
 
-    public static MethodSpec firstMethod(OriginalEntity entity) {
+    public static MethodSpec firstMethod(EntityClass entity) {
         return MethodSpec.methodBuilder("first")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
-                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.originalClassName()))
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 // TODO: LIMIT作ったら直す
-                .addStatement("return all().toList().stream().findFirst()", entity.toEntityListClassName())
+                .addStatement("return all().toList().stream().findFirst()", entity.getEntityListClassName())
                 .build();
     }
 
-    public static MethodSpec firstOrNullMethod(OriginalEntity entity) {
+    public static MethodSpec firstOrNullMethod(EntityClass entity) {
         return MethodSpec.methodBuilder("firstOrNull")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nullable.class)
-                .returns(entity.originalClassName())
-                .addStatement("return first().orElse(null)", entity.toEntityListClassName())
+                .returns(entity.getClassName())
+                .addStatement("return first().orElse(null)", entity.getEntityListClassName())
                 .build();
     }
 
-    public static MethodSpec findMethod(OriginalEntity entity, ColumnField field) {
+    public static MethodSpec findMethod(EntityClass entity, AttributeField field) {
         VariableElement variableElement = field.getVariableElement();
         String fieldName = NamingUtils.toUpperFirst(variableElement.getSimpleName().toString());
         return MethodSpec.methodBuilder("findBy" + fieldName)
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
-                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.originalClassName()))
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addStatement("return all().where($L.eq(key)).toList().stream().findFirst()", field.tableClassColumnName())
                 .build();
     }
 
-    public static MethodSpec findOrNullMethod(OriginalEntity entity, ColumnField field) {
+    public static MethodSpec findOrNullMethod(EntityClass entity, AttributeField field) {
         VariableElement variableElement = field.getVariableElement();
         String fieldName = NamingUtils.toUpperFirst(variableElement.getSimpleName().toString());
         return MethodSpec.methodBuilder("findOrNullBy" + fieldName)
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nullable.class)
-                .returns(entity.originalClassName())
+                .returns(entity.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addStatement("return all().where($L.eq(key)).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
                 .build();

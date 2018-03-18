@@ -1,16 +1,17 @@
 package net.orekyuu.moco.chou;
 
 import com.squareup.javapoet.ClassName;
+import net.orekyuu.moco.chou.entity.DatabaseColumnType;
 import net.orekyuu.moco.core.annotations.Column;
 
 import javax.lang.model.element.VariableElement;
 
-public class ColumnField {
+public class AttributeField {
     private final DatabaseColumnType columnType;
     private Column column;
     private VariableElement variableElement;
 
-    public ColumnField(Column column, VariableElement variableElement) {
+    public AttributeField(Column column, VariableElement variableElement) {
         this.column = column;
         this.variableElement = variableElement;
         columnType = DatabaseColumnType.findSupportedType(variableElement).orElseThrow(RuntimeException::new);
