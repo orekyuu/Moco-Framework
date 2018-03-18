@@ -2,6 +2,8 @@ package net.orekyuu.moco.chou.entity;
 
 
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.MethodSpec;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.core.annotations.Table;
@@ -63,7 +65,7 @@ public class EntityClass {
         sb.append("table=").append(table);
         sb.append(", packageElement=").append(packageElement);
         sb.append(", entityType=").append(entityType);
-        sb.append(", attributeFields=").append(attributeFields);
+        sb.append(", attributeField=").append(attributeFields);
         sb.append('}');
         return sb.toString();
     }
