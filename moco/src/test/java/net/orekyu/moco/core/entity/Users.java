@@ -1,15 +1,5 @@
 package net.orekyu.moco.core.entity;
 
-import java.lang.Override;
-import java.lang.ReflectiveOperationException;
-import java.lang.RuntimeException;
-import java.lang.reflect.Field;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.BooleanAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
@@ -20,6 +10,14 @@ import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Optional;
 
 public final class Users {
   public static final Select.QueryResultMapper<User> MAPPER = new Select.QueryResultMapper<User>() {
@@ -74,7 +72,7 @@ public final class Users {
 
   @Nonnull
   public static Optional<User> first() {
-    return all().toList().stream().findFirst();
+    return all().limit(1).toList().stream().findFirst();
   }
 
   @Nullable
@@ -84,11 +82,11 @@ public final class Users {
 
   @Nonnull
   public static Optional<User> findById(@Nonnull int key) {
-    return all().where(ID.eq(key)).toList().stream().findFirst();
+    return all().where(ID.eq(key)).limit(1).toList().stream().findFirst();
   }
 
   @Nullable
   public static User findOrNullById(@Nonnull int key) {
-    return all().where(ID.eq(key)).toList().stream().findFirst().orElse(null);
+    return all().where(ID.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
   }
 }

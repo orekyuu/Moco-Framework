@@ -1,9 +1,9 @@
 package net.orekyu.moco.core.entity;
 
-import java.lang.Override;
-import javax.annotation.Nonnull;
 import net.orekyuu.moco.core.EntityList;
 import net.orekyuu.moco.feeling.Select;
+
+import javax.annotation.Nonnull;
 
 public final class UserList extends EntityList<UserList, User> {
   UserList(Select select) {
