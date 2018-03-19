@@ -84,6 +84,8 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
                         .limit(new SqlLimit(new SqlLiteral(String.valueOf(batchSize))))
                         .offset(new SqlOffset(new SqlLiteral(String.valueOf(currentPage * batchSize))))
                         .executeQuery(ConnectionManager.getConnection(), getMapper());
+                Preloader<E> preloader = new Preloader<>();
+                preloader.preload(records, preloadRelations);
                 currentPage++;
                 return records;
             }
