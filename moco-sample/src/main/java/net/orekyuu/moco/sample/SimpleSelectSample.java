@@ -1,6 +1,6 @@
 package net.orekyuu.moco.sample;
 
-import java.util.stream.Collectors;
+import java.util.IntSummaryStatistics;
 
 public class SimpleSelectSample extends SampleBase {
     public static void main(String[] args) {
@@ -26,12 +26,17 @@ public class SimpleSelectSample extends SampleBase {
             System.out.println(Users.all().where(Users.NAME.eq("fuga"), Users.ACTIVE.isTrue()).toList());
             // stream fetch
             for (int i = 0; i < 100; i++) {
-                Users.create(new User(-1, "dummy", false));
+                Users.create(new User(-1, String.valueOf(i), false));
             }
-            String dummy = Users.all().where(Users.NAME.eq("dummy")).stream(10)
+            IntSummaryStatistics statistics = Users.all().where(Users.ACTIVE.isFalse()).stream(10)
                     .map(User::getName)
-                    .collect(Collectors.joining(","));
-            System.out.println(dummy);
+                    .filter(str -> str.matches("\\d+"))
+                    .mapToInt(Integer::valueOf).summaryStatistics();
+            System.out.println(statistics.getAverage());
+            System.out.println(statistics.getCount());
+            System.out.println(statistics.getMax());
+            System.out.println(statistics.getMin());
+            System.out.println(statistics.getSum());
         });
     }
 }
