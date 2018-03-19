@@ -13,6 +13,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 dependencies {
     compile project(":feeling")
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     testCompile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0'

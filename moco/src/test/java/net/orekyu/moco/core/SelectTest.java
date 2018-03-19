@@ -31,20 +31,21 @@ public class SelectTest extends DatabaseTest {
         Users.create(new User(-1, "foo", false));
         Users.create(new User(-1, "bar", false));
 
-        User first = Users.first();
+        User first = Users.firstOrNull();
         Assertions.assertEquals(first.getName(), "foo");
     }
 
     @Test
     void firstNotFound() {
-        Assertions.assertNull(Users.first());
+        Assertions.assertNull(Users.firstOrNull());
+        Assertions.assertFalse(Users.first().isPresent());
     }
 
     @Test
     void findById() {
         Users.create(new User(-1, "foo", true));
-        User first = Users.first();
-        User byId = Users.findById(first.getId());
+        User first = Users.firstOrNull();
+        User byId = Users.findOrNullById(first.getId());
         Assertions.assertEquals(byId.getId(), first.getId());
         Assertions.assertEquals(byId.getName(), first.getName());
         Assertions.assertEquals(byId.isActive(), first.isActive());
@@ -52,7 +53,8 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findByIdNotFound() {
-        Assertions.assertThrows(RecordNotFoundException.class, () -> Users.findById(1));
+        Assertions.assertEquals(Users.findOrNullById(1), null);
+        Assertions.assertFalse(Users.findById(1).isPresent());
     }
 
     @Test
@@ -116,6 +118,26 @@ public class SelectTest extends DatabaseTest {
 
         List<User> users = Users.all().where(Users.NAME.eq(Users.NAME)).toList();
         Assertions.assertEquals(users.size(), 3);
+    }
 
+    @Test
+    void limitAndOffset() {
+        Users.create(new User(-1, "user1", true));
+        Users.create(new User(-1, "user2", true));
+        Users.create(new User(-1, "user3", true));
+        List<User> users = Users.all().limitAndOffset(1, 1).toList();
+        Assertions.assertEquals(users.size(), 1);
+        Assertions.assertEquals(users.get(0).getName(), "user2");
+    }
+
+    @Test
+    void limitOnly() {
+        Users.create(new User(-1, "user1", true));
+        Users.create(new User(-1, "user2", true));
+        Users.create(new User(-1, "user3", true));
+        List<User> users = Users.all().limit(2).toList();
+        Assertions.assertEquals(users.size(), 2);
+        Assertions.assertEquals(users.get(0).getName(), "user1");
+        Assertions.assertEquals(users.get(1).getName(), "user2");
     }
 }

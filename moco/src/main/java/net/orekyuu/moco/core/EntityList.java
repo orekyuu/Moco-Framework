@@ -4,8 +4,7 @@ import net.orekyuu.moco.core.attribute.Predicate;
 import net.orekyuu.moco.core.relation.Preloader;
 import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Select;
-import net.orekyuu.moco.feeling.node.SqlNodeExpression;
-import net.orekyuu.moco.feeling.node.WhereClause;
+import net.orekyuu.moco.feeling.node.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +25,24 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     }
 
     public T where(Predicate predicate) {
-        WhereClause whereClause = select.getWhereClause();
+        WhereClause whereClause = select.getWhereClause().orElse(null);
         if (whereClause == null) {
             select.where(new WhereClause(predicate.getExpression()));
         } else {
             SqlNodeExpression expression = whereClause.getExpression().and(predicate.getExpression());
             whereClause.setExpression(expression);
         }
+        return (T)this;
+    }
+
+    public T limit(int limit) {
+        select.limit(new SqlLimit(new SqlBindParam(limit, Integer.class)));
+        return (T)this;
+    }
+
+    public T limitAndOffset(int limit, int offset) {
+        limit(limit);
+        select.offset(new SqlOffset(new SqlBindParam(offset, Integer.class)));
         return (T)this;
     }
 

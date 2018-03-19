@@ -9,8 +9,9 @@ import java.sql.SQLException;
 public class SampleBase {
     public static void setup() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setURL("jdbc:mysql://localhost:3306/moco_development");
-        dataSource.setUser("root");
+        dataSource.setURL("jdbc:mysql://localhost:3306/moco_sample");
+        dataSource.setUser("moco");
+        dataSource.setPassword("moco");
         ConnectionManager.initialize(dataSource);
     }
 

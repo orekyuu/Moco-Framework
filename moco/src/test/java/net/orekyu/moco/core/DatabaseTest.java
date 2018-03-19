@@ -13,7 +13,8 @@ public abstract class DatabaseTest {
     public void before() throws SQLException {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setURL("jdbc:mysql://localhost:3306/moco_test");
-        dataSource.setUser("root");
+        dataSource.setUser("moco");
+        dataSource.setPassword("moco");
         ConnectionManager.initialize(dataSource);
         ConnectionManager.getConnection().setAutoCommit(false);
     }

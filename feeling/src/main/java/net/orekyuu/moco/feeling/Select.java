@@ -1,10 +1,7 @@
 package net.orekyuu.moco.feeling;
 
 import net.orekyuu.moco.feeling.attributes.Attribute;
-import net.orekyuu.moco.feeling.node.FromClause;
-import net.orekyuu.moco.feeling.node.SqlJoin;
-import net.orekyuu.moco.feeling.node.SqlJoinClause;
-import net.orekyuu.moco.feeling.node.WhereClause;
+import net.orekyuu.moco.feeling.node.*;
 import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
@@ -14,14 +11,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 public class Select {
 
     private FromClause fromClause;
     private WhereClause whereClause;
-    private OptionalInt limit = OptionalInt.empty();
-    private OptionalInt offset = OptionalInt.empty();
+    private SqlLimit limit = null;
+    private SqlOffset offset = null;
     private List<Attribute> resultColumn = new ArrayList<>();
 
     public Select from(Table table) {
@@ -41,6 +39,16 @@ public class Select {
 
     public Select where(WhereClause whereClause) {
         this.whereClause = whereClause;
+        return this;
+    }
+
+    public Select offset(SqlOffset offset) {
+        this.offset = offset;
+        return this;
+    }
+
+    public Select limit(SqlLimit limit) {
+        this.limit = limit;
         return this;
     }
 
@@ -97,11 +105,19 @@ public class Select {
         return fromClause;
     }
 
-    public WhereClause getWhereClause() {
-        return whereClause;
+    public Optional<WhereClause> getWhereClause() {
+        return Optional.ofNullable(whereClause);
     }
 
     public List<Attribute> getResultColumn() {
         return resultColumn;
+    }
+
+    public Optional<SqlLimit> getLimit() {
+        return Optional.ofNullable(limit);
+    }
+
+    public Optional<SqlOffset> getOffset() {
+        return Optional.ofNullable(offset);
     }
 }

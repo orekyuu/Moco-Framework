@@ -41,6 +41,8 @@ public abstract class SqlVisitor {
     public abstract void visit(SqlJoin node, SqlContext context);
     public abstract void visit(SqlInnerJoin node, SqlContext context);
     public abstract void visit(SqlOuterJoin node, SqlContext context);
+    public abstract void visit(SqlLimit node, SqlContext context);
+    public abstract void visit(SqlOffset node, SqlContext context);
 
     public abstract void visit(SqlNodeArray node, SqlContext context);
 
