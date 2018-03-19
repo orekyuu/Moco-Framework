@@ -3,4 +3,5 @@ include 'feeling'
 include 'moco'
 include 'moco-sample'
 include 'chou'
+include 'moco-test'
 
