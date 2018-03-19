@@ -1,5 +1,7 @@
 package net.orekyuu.moco.sample;
 
+import java.util.stream.Collectors;
+
 public class SimpleSelectSample extends SampleBase {
     public static void main(String[] args) {
         setup();
@@ -22,6 +24,14 @@ public class SimpleSelectSample extends SampleBase {
             System.out.println(Users.all().where(Users.NAME.eq("hoge")).toList());
             // find fuga and activated
             System.out.println(Users.all().where(Users.NAME.eq("fuga"), Users.ACTIVE.isTrue()).toList());
+            // stream fetch
+            for (int i = 0; i < 100; i++) {
+                Users.create(new User(-1, "dummy", false));
+            }
+            String dummy = Users.all().where(Users.NAME.eq("dummy")).stream(10)
+                    .map(User::getName)
+                    .collect(Collectors.joining(","));
+            System.out.println(dummy);
         });
     }
 }

@@ -6,9 +6,9 @@ import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.node.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public abstract class EntityList<T extends EntityList<T, E>, E> {
 
@@ -56,6 +56,44 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         Preloader<E> preloader = new Preloader<>();
         preloader.preload(records, preloadRelations);
         return records;
+    }
+
+    public Stream<E> stream() {
+        return stream(1000);
+    }
+
+    public Stream<E> stream(int batchSize) {
+        Iterator<E> iterator = new Iterator<E>() {
+            int currentPage = 0;
+            private Iterator<E> list;
+            @Override
+            public boolean hasNext() {
+                if (list == null) {
+                    list = executeQuery().iterator();
+                    return list.hasNext();
+                }
+                if (list.hasNext()) {
+                    return true;
+                }
+                list = executeQuery().iterator();
+                return list.hasNext();
+            }
+
+            private List<E> executeQuery() {
+                List<E> records = select
+                        .limit(new SqlLimit(new SqlLiteral(String.valueOf(batchSize))))
+                        .offset(new SqlOffset(new SqlLiteral(String.valueOf(currentPage * batchSize))))
+                        .executeQuery(ConnectionManager.getConnection(), getMapper());
+                currentPage++;
+                return records;
+            }
+
+            @Override
+            public E next() {
+                return list.next();
+            }
+        };
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
     }
 
     public abstract Select.QueryResultMapper<E> getMapper();
