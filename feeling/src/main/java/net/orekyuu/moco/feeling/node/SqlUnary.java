@@ -1,13 +1,13 @@
 package net.orekyuu.moco.feeling.node;
 
 public abstract class SqlUnary extends SqlNodeExpression {
-    private final SqlNodeExpression expression;
+    private final SqlNode node;
 
-    public SqlUnary(SqlNodeExpression expression) {
-        this.expression = expression;
+    public SqlUnary(SqlNode node) {
+        this.node = node;
     }
 
-    public SqlNodeExpression expression() {
-        return expression;
+    public SqlNode node() {
+        return node;
     }
 }

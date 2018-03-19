@@ -4,8 +4,8 @@ import net.orekyuu.moco.feeling.SqlContext;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlOffset extends SqlUnary {
-    public SqlOffset(SqlNodeExpression expression) {
-        super(expression);
+    public SqlOffset(SqlNode node) {
+        super(node);
     }
 
     @Override

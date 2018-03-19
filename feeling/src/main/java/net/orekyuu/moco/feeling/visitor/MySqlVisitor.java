@@ -129,7 +129,7 @@ public class MySqlVisitor extends SqlVisitor {
     @Override
     public void visit(SqlOn node, SqlContext context) {
         context.append("on ");
-        node.expression().accept(this, context);
+        node.node().accept(this, context);
     }
 
     @Override
@@ -166,13 +166,13 @@ public class MySqlVisitor extends SqlVisitor {
     @Override
     public void visit(SqlLimit node, SqlContext context) {
         context.append("limit ");
-        node.expression().accept(this, context);
+        node.node().accept(this, context);
     }
 
     @Override
     public void visit(SqlOffset node, SqlContext context) {
         context.append("offset ");
-        node.expression().accept(this, context);
+        node.node().accept(this, context);
     }
 
     @Override

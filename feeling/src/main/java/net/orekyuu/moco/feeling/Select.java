@@ -42,6 +42,16 @@ public class Select {
         return this;
     }
 
+    public Select offset(SqlOffset offset) {
+        this.offset = offset;
+        return this;
+    }
+
+    public Select limit(SqlLimit limit) {
+        this.limit = limit;
+        return this;
+    }
+
     public void addResultColumn(Attribute attribute) {
         resultColumn.add(attribute);
     }

@@ -4,8 +4,8 @@ import net.orekyuu.moco.feeling.SqlContext;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlLimit extends SqlUnary {
-    public SqlLimit(SqlNodeExpression expression) {
-        super(expression);
+    public SqlLimit(SqlNode node) {
+        super(node);
     }
 
     @Override
