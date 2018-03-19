@@ -164,6 +164,18 @@ public class MySqlVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(SqlLimit node, SqlContext context) {
+        context.append("limit ");
+        node.expression().accept(this, context);
+    }
+
+    @Override
+    public void visit(SqlOffset node, SqlContext context) {
+        context.append("offset ");
+        node.expression().accept(this, context);
+    }
+
+    @Override
     public void visit(SqlNodeArray node, SqlContext context) {
         Iterator<SqlNode> iterator = node.getNodes().iterator();
         while (iterator.hasNext()) {
@@ -185,10 +197,9 @@ public class MySqlVisitor extends SqlVisitor {
 
         select.getFromClause().accept(this, context);
 
-        WhereClause whereClause = select.getWhereClause();
-        if (whereClause != null) {
-            whereClause.accept(this, context);
-        }
+        select.getWhereClause().ifPresent(whereClause -> whereClause.accept(this, context));
+        select.getOffset().ifPresent(sqlOffset -> sqlOffset.accept(this, context));
+        select.getLimit().ifPresent(sqlLimit -> sqlLimit.accept(this, context));
     }
 
     @Override
