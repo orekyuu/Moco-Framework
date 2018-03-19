@@ -1,7 +1,7 @@
-package net.orekyu.moco.core;
+package net.orekyuu.moco.core;
 
-import net.orekyu.moco.core.entity.User;
-import net.orekyu.moco.core.entity.Users;
+import net.orekyuu.moco.core.entity.User;
+import net.orekyuu.moco.core.entity.Users;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

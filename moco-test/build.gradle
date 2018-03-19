@@ -1,0 +1,36 @@
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+    }
+}
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+dependencies {
+    compile project(':moco')
+    compile project(':chou')
+    testCompile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0'
+}
+
+compileTestJava {
+    doFirst {
+        delete "${buildDir}/generated"
+        mkdir "${buildDir}/generated"
+    }
+    options.compilerArgs += ['-processor', 'net.orekyuu.moco.chou.entity.TableProcessor', '-s', "${buildDir}/generated"]
+}
+
+sourceSets {
+    test {
+        java {
+            srcDir "${buildDir}/generated"
+        }
+    }
+}
