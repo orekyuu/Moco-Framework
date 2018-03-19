@@ -1,4 +1,4 @@
-package net.orekyu.moco.core;
+package net.orekyuu.moco.core;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import net.orekyuu.moco.core.ConnectionManager;

@@ -1,4 +1,4 @@
-package net.orekyu.moco.core.entity;
+package net.orekyuu.moco.core.entity;
 
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.Table;
