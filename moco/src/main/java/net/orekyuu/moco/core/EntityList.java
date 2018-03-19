@@ -35,13 +35,14 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         return (T)this;
     }
 
-    public T offset(int offset) {
-        select.offset(new SqlOffset(new SqlBindParam(offset, Integer.class)));
+    public T limit(int limit) {
+        select.limit(new SqlLimit(new SqlBindParam(limit, Integer.class)));
         return (T)this;
     }
 
-    public T limit(int limit) {
-        select.limit(new SqlLimit(new SqlBindParam(limit, Integer.class)));
+    public T limitAndOffset(int limit, int offset) {
+        limit(limit);
+        select.offset(new SqlOffset(new SqlBindParam(offset, Integer.class)));
         return (T)this;
     }
 

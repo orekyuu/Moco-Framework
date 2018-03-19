@@ -198,8 +198,8 @@ public class MySqlVisitor extends SqlVisitor {
         select.getFromClause().accept(this, context);
 
         select.getWhereClause().ifPresent(whereClause -> whereClause.accept(this, context));
-        select.getOffset().ifPresent(sqlOffset -> sqlOffset.accept(this, context));
         select.getLimit().ifPresent(sqlLimit -> sqlLimit.accept(this, context));
+        select.getOffset().ifPresent(sqlOffset -> sqlOffset.accept(this, context));
     }
 
     @Override

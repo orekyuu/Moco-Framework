@@ -1,8 +1,16 @@
 package net.orekyu.moco.core.entity;
 
-
+import java.lang.Override;
+import java.lang.ReflectiveOperationException;
+import java.lang.RuntimeException;
+import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
-import net.orekyuu.moco.core.RecordNotFoundException;
 import net.orekyuu.moco.core.attribute.BooleanAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
@@ -13,48 +21,74 @@ import net.orekyuu.moco.feeling.TableBuilder;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
-import java.util.Arrays;
-import java.util.List;
+public final class Users {
+  public static final Select.QueryResultMapper<User> MAPPER = new Select.QueryResultMapper<User>() {
+    private Field id;
 
-public class Users {
-    // mapper
-    public static final Select.QueryResultMapper<User> MAPPER = resultSet -> new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBoolean("active"));
+    private Field name;
 
-    // table
-    public static final Table TABLE = new TableBuilder("users", MAPPER)._integer("id")._string("name")._boolean("active").build();
+    private Field active;
 
-    // columns
-    public static final IntAttribute<User> ID = new IntAttribute<>(TABLE.intCol("id"), User::getId);
-    public static final StringAttribute<User> NAME = new StringAttribute<>(TABLE.stringCol("name"), User::getName);
-    public static final BooleanAttribute<User> ACTIVE = new BooleanAttribute<>(TABLE.booleanCol("active"), User::isActive);
-
-    // create
-    public static void create(User user) {
-        Insert insert = new Insert(TABLE);
-        insert.setAttributes(Arrays.asList(NAME.ast(), ACTIVE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(
-                new SqlBindParam(user.getName(), String.class),
-                new SqlBindParam(user.isActive(), Boolean.class)
-        )));
-        insert.executeQuery(ConnectionManager.getConnection());
+    {
+      try {
+        id = User.class.getDeclaredField("id");
+        id.setAccessible(true);
+        name = User.class.getDeclaredField("name");
+        name.setAccessible(true);
+        active = User.class.getDeclaredField("active");
+        active.setAccessible(true);
+      } catch (ReflectiveOperationException e) {
+        throw new RuntimeException(e);
+      }
     }
 
-    // finder
-    public static User findById(int id) {
-        List<User> users = all().where(ID.eq(id)).toList();
-        if (users.isEmpty()) {
-            throw new RecordNotFoundException();
-        }
-        return users.get(0);
+    @Override
+    public User mapping(ResultSet resultSet) throws SQLException, ReflectiveOperationException {
+      User record = new User();
+      id.set(record, resultSet.getObject("id"));
+      name.set(record, resultSet.getObject("name"));
+      active.set(record, resultSet.getObject("active"));
+      return record;
     }
+  };
 
-    public static User first() {
-        List<User> users = all().toList();
-        return users.isEmpty() ? null : users.get(0);
-    }
+  public static final Table TABLE = new TableBuilder("users", MAPPER)._integer("id")._string("name")._boolean("active").build();
 
-    public static UserList all() {
-        return new UserList(TABLE.select());
-    }
+  public static final IntAttribute<User> ID = new IntAttribute<>(TABLE.intCol("id"), User::getId);
 
+  public static final StringAttribute<User> NAME = new StringAttribute<>(TABLE.stringCol("name"), User::getName);
+
+  public static final BooleanAttribute<User> ACTIVE = new BooleanAttribute<>(TABLE.booleanCol("active"), User::isActive);
+
+  public static void create(@Nonnull User entity) {
+    Insert insert = new Insert(TABLE);
+    insert.setAttributes(Arrays.asList(NAME.ast(), ACTIVE.ast()));
+    insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(NAME.getAccessor().get(entity), NAME.bindType()), new SqlBindParam(ACTIVE.getAccessor().get(entity), ACTIVE.bindType()))));
+    insert.executeQuery(ConnectionManager.getConnection());
+  }
+
+  @Nonnull
+  public static UserList all() {
+    return new UserList(TABLE.select());
+  }
+
+  @Nonnull
+  public static Optional<User> first() {
+    return all().toList().stream().findFirst();
+  }
+
+  @Nullable
+  public static User firstOrNull() {
+    return first().orElse(null);
+  }
+
+  @Nonnull
+  public static Optional<User> findById(@Nonnull int key) {
+    return all().where(ID.eq(key)).toList().stream().findFirst();
+  }
+
+  @Nullable
+  public static User findOrNullById(@Nonnull int key) {
+    return all().where(ID.eq(key)).toList().stream().findFirst().orElse(null);
+  }
 }
