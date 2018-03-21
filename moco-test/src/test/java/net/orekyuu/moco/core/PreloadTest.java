@@ -50,4 +50,10 @@ public class PreloadTest extends DatabaseTest {
         List<User> users = Users.all().preload(Users.USER_TO_POSTS).toList();
         Assertions.assertTrue(users.get(0).getPosts().isEmpty());
     }
+
+    @Test
+    void parentRecordNotFound() {
+        List<User> users = Users.all().preload(Users.USER_TO_POSTS).toList();
+        Assertions.assertTrue(users.isEmpty());
+    }
 }

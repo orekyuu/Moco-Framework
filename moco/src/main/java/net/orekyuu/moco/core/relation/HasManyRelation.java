@@ -11,7 +11,6 @@ import net.orekyuu.moco.feeling.node.SqlIn;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 import net.orekyuu.moco.feeling.node.WhereClause;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,10 @@ public class HasManyRelation<OWNER, CHILD> extends Relation<OWNER> {
                 .distinct().map(Object::toString)
                 .map(it -> new SqlBindParam(it, it.getClass()))
                 .collect(Collectors.toSet());
+
+        if (params.isEmpty()) {
+            return;
+        }
 
         Select select = child.select();
         select.where(new WhereClause(new SqlIn(childKeyAttribute.ast(), new SqlNodeArray(params))));
