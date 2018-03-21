@@ -43,4 +43,11 @@ public class PreloadTest extends DatabaseTest {
         List<User> users = Users.all().toList();
         Assertions.assertTrue(users.get(0).getPosts().isEmpty());
     }
+
+    @Test
+    public void hasManyRelationNotFound() {
+        Users.create(new User(-1, "foo", true));
+        List<User> users = Users.all().preload(Users.USER_TO_POSTS).toList();
+        Assertions.assertTrue(users.get(0).getPosts().isEmpty());
+    }
 }
