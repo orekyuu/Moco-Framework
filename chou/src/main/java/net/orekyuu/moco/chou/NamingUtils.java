@@ -25,7 +25,11 @@ public class NamingUtils {
             }
             return String.valueOf((char)c);
         }).forEach(builder::append);
-        return builder.toString();
+        String result = builder.toString().toUpperCase();
+        if (result.startsWith("_")) {
+            return result.substring(1);
+        }
+        return result;
     }
 
     public static String toUpperFirst(String word) {
