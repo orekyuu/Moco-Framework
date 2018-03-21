@@ -1,9 +1,9 @@
 # Moco sample
 Mocoの使い方を示すためのサンプルプロジェクトです。
-実行するためにはMysqlで `jdbc:mysql://localhost:3306/moco_developmentに` 接続できるようにしておく必要があります。
-詳しくはSampleBaseのDataSourceの設定を読んで下さい。
+SampleBaseを読んでMySQLのDBを用意するか、プロジェクトのルートディレクトリで `vagrant up` してください
 
 |クラス名|解説|
 |--|--|
 |InsertSample|インサートに関する操作のサンプルです|
 |SimpleSelectSample|基本的なSelectに関する操作のサンプルです|
+|RelationSample|リレーションを扱うためのサンプルです|
