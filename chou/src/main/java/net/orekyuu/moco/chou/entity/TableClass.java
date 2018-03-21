@@ -5,7 +5,6 @@ import net.orekyuu.moco.chou.AttributeField;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.util.Types;
 
 import static net.orekyuu.moco.chou.CodeGenerateOperation.run;
 
@@ -53,7 +52,7 @@ public class TableClass {
         return TableClassFields.columnField(entityClass, attributeField);
     }
 
-    public MethodSpec hasManyField(HasManyRelationField hasManyRelationField, TableClass tableClass) {
+    public FieldSpec hasManyField(HasManyRelationField hasManyRelationField, TableClass tableClass) {
         return hasManyRelationField.relationField(tableClass, entityClass);
     }
 
@@ -70,7 +69,7 @@ public class TableClass {
             run(messager, () -> classBuilder.addField(attributeField(field)));
         }
         for (HasManyRelationField field : entityClass.getHasManyRelationFields()) {
-            run(messager, () -> classBuilder.addMethod(hasManyField(field, this)));
+            run(messager, () -> classBuilder.addField(hasManyField(field, this)));
         }
 
         run(messager, () -> classBuilder.addMethod(createMethod()));
