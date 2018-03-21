@@ -49,11 +49,18 @@ public class HasOneRelationField extends RelationField {
                 .orElseThrow(() -> new CompilerException(getFieldElement(), hasOne.foreignKey() + "はentityClass " + childClassName.toString() + "に定義されていません"));
 
         FieldSpec.Builder builder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(HasOneRelation.class), entityClass.getClassName(), childClassName),
-                NamingUtils.toUpperName(entityClass.getClassName().simpleName()) + "_TO_" + NamingUtils.toUpperName(childClassName.simpleName()))
+                getFieldName(entityClass, childClassName))
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("new $T($N, $L, $T.TABLE, $T.$L, $T.MAPPER, $T.getFieldSetter($T.class, $S))",
                         ParameterizedTypeName.get(ClassName.get(HasOneRelation.class), entityClass.getClassName(), childClassName), tableClass.tableField(), parentAttribute.tableClassColumnName(),
                         childTableClassName, childTableClassName, childAttribute.tableClassColumnName(), childTableClassName, ReflectUtil.class, entityClass.getClassName(), getFieldElement().getSimpleName());
         return builder.build();
+    }
+
+    private String getFieldName(EntityClass entityClass, ClassName childClassName) {
+        if (!hasOne.variableName().isEmpty()) {
+            return hasOne.variableName();
+        }
+        return NamingUtils.toUpperName(entityClass.getClassName().simpleName()) + "_TO_" + NamingUtils.toUpperName(childClassName.simpleName());
     }
 }

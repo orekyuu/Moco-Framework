@@ -9,4 +9,5 @@ public @interface HasMany {
 
     String key();
 
+    String variableName() default "";
 }

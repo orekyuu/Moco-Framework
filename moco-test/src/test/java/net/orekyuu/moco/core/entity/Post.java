@@ -17,7 +17,7 @@ public class Post {
     @Column(name = "reply_to")
     private int replyTo;
 
-    @HasOne(key = "id", foreignKey = "reply_to")
+    @HasOne(key = "id", foreignKey = "reply_to", variableName = "REPLY_FROM")
     private Post replyFrom;
 
     public Post() {

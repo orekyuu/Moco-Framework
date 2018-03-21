@@ -63,7 +63,7 @@ public class PreloadTest extends DatabaseTest {
         Posts.create(new Post("first title", "contents", Users.firstOrNull()));
         Posts.create(new Post("title", "contents", Users.firstOrNull(), Posts.firstOrNull()));
 
-        List<Post> posts = Posts.all().preload(Posts.POST_TO_POST).toList();
+        List<Post> posts = Posts.all().preload(Posts.REPLY_FROM).toList();
 
         Assertions.assertEquals(posts.get(0).getReplyFrom().getTitle(), "title");
         Assertions.assertEquals(posts.get(1).getReplyFrom(), null);
@@ -71,7 +71,7 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     void hasOneParentRecordNotFound() {
-        List<Post> posts = Posts.all().preload(Posts.POST_TO_POST).toList();
+        List<Post> posts = Posts.all().preload(Posts.REPLY_FROM).toList();
         Assertions.assertEquals(posts.size(), 0);
     }
 }

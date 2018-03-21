@@ -4,4 +4,6 @@ public @interface HasOne {
     String foreignKey();
 
     String key();
+
+    String variableName() default "";
 }
