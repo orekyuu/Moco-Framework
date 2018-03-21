@@ -6,9 +6,9 @@ public class SimpleSelectSample extends SampleBase {
     public static void main(String[] args) {
         setup();
         transaction(() -> {
-            Users.create(new User(-1, "hoge", true));
-            Users.create(new User(-1, "fuga", true));
-            Users.create(new User(-1, "piyo", false));
+            Users.create(new User("hoge", true));
+            Users.create(new User("fuga", true));
+            Users.create(new User("piyo", false));
 
             // find first user
             User first = Users.firstOrNull();
@@ -26,7 +26,7 @@ public class SimpleSelectSample extends SampleBase {
             System.out.println(Users.all().where(Users.NAME.eq("fuga"), Users.ACTIVE.isTrue()).toList());
             // stream fetch
             for (int i = 0; i < 100; i++) {
-                Users.create(new User(-1, String.valueOf(i), false));
+                Users.create(new User(String.valueOf(i), false));
             }
             IntSummaryStatistics statistics = Users.all().where(Users.ACTIVE.isFalse()).stream(10)
                     .map(User::getName)
