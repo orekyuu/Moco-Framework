@@ -52,8 +52,8 @@ public class TableClass {
         return TableClassFields.columnField(entityClass, attributeField);
     }
 
-    public FieldSpec hasManyField(HasManyRelationField hasManyRelationField, TableClass tableClass) {
-        return hasManyRelationField.createFieldSpec(entityClass, tableClass);
+    public FieldSpec relationField(RelationField relationField, TableClass tableClass) {
+        return relationField.createFieldSpec(entityClass, tableClass);
     }
 
     public ClassName getClassName() {
@@ -68,8 +68,8 @@ public class TableClass {
         for (AttributeField field : entityClass.getAttributeFields()) {
             run(messager, () -> classBuilder.addField(attributeField(field)));
         }
-        for (HasManyRelationField field : entityClass.getHasManyRelationFields()) {
-            run(messager, () -> classBuilder.addField(hasManyField(field, this)));
+        for (RelationField field : entityClass.getRelationFields()) {
+            run(messager, () -> classBuilder.addField(relationField(field, this)));
         }
 
         run(messager, () -> classBuilder.addMethod(createMethod()));

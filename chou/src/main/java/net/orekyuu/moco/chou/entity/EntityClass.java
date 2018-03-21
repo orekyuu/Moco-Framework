@@ -17,14 +17,14 @@ public class EntityClass {
     private PackageElement packageElement;
     private TypeElement entityType;
     private List<AttributeField> attributeFields;
-    private List<HasManyRelationField> hasManyRelationFields;
+    private List<RelationField> relationFields;
 
-    private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields, List<HasManyRelationField> hasManyRelationFields) {
+    private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields, List<RelationField> relationFields) {
         this.table = Objects.requireNonNull(table);
         this.packageElement = Objects.requireNonNull(packageElement);
         this.entityType = Objects.requireNonNull(entityType);
         this.attributeFields = Objects.requireNonNull(attributeFields);
-        this.hasManyRelationFields = hasManyRelationFields;
+        this.relationFields = relationFields;
     }
 
     public Table getTable() {
@@ -47,8 +47,8 @@ public class EntityClass {
         return attributeFields;
     }
 
-    public List<HasManyRelationField> getHasManyRelationFields() {
-        return hasManyRelationFields;
+    public List<RelationField> getRelationFields() {
+        return relationFields;
     }
 
     public ClassName getTableClassName() {
@@ -79,7 +79,7 @@ public class EntityClass {
         private PackageElement packageElement;
         private TypeElement originalType;
         private List<AttributeField> attributeFields = new ArrayList<>();
-        private List<HasManyRelationField> hasManyRelationFields = new ArrayList<>();
+        private List<RelationField> relationFields = new ArrayList<>();
 
         public Builder table(Table table) {
             this.table = table;
@@ -101,13 +101,13 @@ public class EntityClass {
             return this;
         }
 
-        public Builder addHasManyField(HasManyRelationField hasManyRelationField) {
-            this.hasManyRelationFields.add(hasManyRelationField);
+        public Builder addRelationField(RelationField relationField) {
+            this.relationFields.add(relationField);
             return this;
         }
 
         public EntityClass build() {
-            return new EntityClass(table, packageElement, originalType, attributeFields, hasManyRelationFields);
+            return new EntityClass(table, packageElement, originalType, attributeFields, relationFields);
         }
     }
 }

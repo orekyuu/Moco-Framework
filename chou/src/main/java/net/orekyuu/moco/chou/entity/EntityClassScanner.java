@@ -4,8 +4,8 @@ import com.squareup.javapoet.JavaFile;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.HasMany;
+import net.orekyuu.moco.core.annotations.HasOne;
 import net.orekyuu.moco.core.annotations.Table;
-import net.orekyuu.moco.core.relation.HasManyRelation;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.TypeElement;
@@ -46,7 +46,10 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
                 .ifPresent(column -> originalEntityBuilder.addColumnField(new AttributeField(column, e)));
 
         Optional.ofNullable(e.getAnnotation(HasMany.class))
-                .ifPresent(hasMany -> originalEntityBuilder.addHasManyField(new HasManyRelationField(e, hasMany)));
+                .ifPresent(hasMany -> originalEntityBuilder.addRelationField(new HasManyRelationField(e, hasMany)));
+
+        Optional.ofNullable(e.getAnnotation(HasOne.class))
+                .ifPresent(hasOne -> originalEntityBuilder.addRelationField(new HasOneRelationField(e, hasOne)));
 
         return super.visitVariable(e, aVoid);
     }

@@ -1,6 +1,7 @@
 package net.orekyuu.moco.core.entity;
 
 import net.orekyuu.moco.core.annotations.Column;
+import net.orekyuu.moco.core.annotations.HasOne;
 import net.orekyuu.moco.core.annotations.Table;
 
 @Table(name = "posts")
@@ -13,15 +14,26 @@ public class Post {
     private String contents;
     @Column(name = "user_id")
     private int userId;
+    @Column(name = "reply_to")
+    private int replyTo;
+
+    @HasOne(key = "id", foreignKey = "reply_to")
+    private Post replyFrom;
 
     public Post() {
     }
 
-    public Post(int id, String title, String contents, User user) {
-        this.id = id;
+    public Post(String title, String contents, User user) {
+        this(title, contents, user, null);
+    }
+
+    public Post(String title, String contents, User user, Post post) {
         this.title = title;
         this.contents = contents;
         this.userId = user.getId();
+        if (post != null) {
+            this.replyTo = post.id;
+        }
     }
 
     public int getId() {
@@ -38,5 +50,13 @@ public class Post {
 
     public int getUserId() {
         return userId;
+    }
+
+    public int getReplyTo() {
+        return replyTo;
+    }
+
+    public Post getReplyFrom() {
+        return replyFrom;
     }
 }
