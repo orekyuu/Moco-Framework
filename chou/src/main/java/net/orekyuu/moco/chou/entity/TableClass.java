@@ -53,7 +53,7 @@ public class TableClass {
     }
 
     public FieldSpec hasManyField(HasManyRelationField hasManyRelationField, TableClass tableClass) {
-        return hasManyRelationField.relationField(tableClass, entityClass);
+        return hasManyRelationField.createFieldSpec(entityClass, tableClass);
     }
 
     public ClassName getClassName() {
