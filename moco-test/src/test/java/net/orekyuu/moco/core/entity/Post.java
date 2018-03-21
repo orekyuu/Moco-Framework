@@ -1,5 +1,6 @@
 package net.orekyuu.moco.core.entity;
 
+import net.orekyuu.moco.core.annotations.BelongsTo;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.HasOne;
 import net.orekyuu.moco.core.annotations.Table;
@@ -19,6 +20,8 @@ public class Post {
 
     @HasOne(key = "id", foreignKey = "reply_to", variableName = "REPLY_FROM")
     private Post replyFrom;
+    @BelongsTo(key = "user_id", foreignKey = "id", variableName = "OWNER")
+    private User user;
 
     public Post() {
     }
@@ -58,5 +61,9 @@ public class Post {
 
     public Post getReplyFrom() {
         return replyFrom;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

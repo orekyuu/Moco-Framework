@@ -2,10 +2,7 @@ package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.JavaFile;
 import net.orekyuu.moco.chou.AttributeField;
-import net.orekyuu.moco.core.annotations.Column;
-import net.orekyuu.moco.core.annotations.HasMany;
-import net.orekyuu.moco.core.annotations.HasOne;
-import net.orekyuu.moco.core.annotations.Table;
+import net.orekyuu.moco.core.annotations.*;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.TypeElement;
@@ -50,6 +47,9 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
         Optional.ofNullable(e.getAnnotation(HasOne.class))
                 .ifPresent(hasOne -> originalEntityBuilder.addRelationField(new HasOneRelationField(e, hasOne)));
+
+        Optional.ofNullable(e.getAnnotation(BelongsTo.class))
+                .ifPresent(belongsTo -> originalEntityBuilder.addRelationField(new BelongsToRelationField(e, belongsTo)));
 
         return super.visitVariable(e, aVoid);
     }

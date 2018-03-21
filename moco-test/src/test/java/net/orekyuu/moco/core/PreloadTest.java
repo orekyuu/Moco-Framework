@@ -74,4 +74,19 @@ public class PreloadTest extends DatabaseTest {
         List<Post> posts = Posts.all().preload(Posts.REPLY_FROM).toList();
         Assertions.assertEquals(posts.size(), 0);
     }
+
+    @Test
+    public void preloadBelongsTo() {
+        Users.create(new User(-1, "foo", true));
+        Posts.create(new Post("first title", "contents", Users.firstOrNull()));
+        List<Post> list = Posts.all().preload(Posts.OWNER).toList();
+        Post post = list.get(0);
+        Assertions.assertEquals(post.getUser().getName(), "foo");
+    }
+
+    @Test
+    public void preloadParentRecordNotFound() {
+        List<Post> list = Posts.all().preload(Posts.OWNER).toList();
+        Assertions.assertEquals(list.size(), 0);
+    }
 }
