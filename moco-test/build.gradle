@@ -24,7 +24,7 @@ compileTestJava {
         delete "${buildDir}/generated"
         mkdir "${buildDir}/generated"
     }
-    options.compilerArgs += ['-processor', 'net.orekyuu.moco.chou.entity.TableProcessor', '-s', "${buildDir}/generated"]
+    options.compilerArgs += ['-s', "${buildDir}/generated"]
 }
 
 sourceSets {
