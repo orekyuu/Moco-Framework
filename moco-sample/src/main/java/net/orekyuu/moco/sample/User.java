@@ -16,7 +16,7 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
-    @HasMany(foreignKey = "id", targetKey = "user_id")
+    @HasMany(key = "id", foreignKey = "user_id")
     private List<Post> posts = new ArrayList<>();
 
     public User() {
