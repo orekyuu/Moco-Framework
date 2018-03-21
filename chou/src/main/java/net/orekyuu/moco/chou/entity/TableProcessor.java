@@ -9,7 +9,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +36,6 @@ public class TableProcessor extends AbstractProcessor {
                     entityClassScanner.scan(element);
                     List<JavaFile> javaFile = entityClassScanner.generatedFiles();
                     for (JavaFile file : javaFile) {
-                        processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, file.toString());
                         file.writeTo(filer);
                     }
                 } catch (IOException e) {
