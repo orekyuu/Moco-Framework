@@ -3,26 +3,32 @@ package net.orekyuu.moco.chou.entity;
 import com.squareup.javapoet.JavaFile;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
+import net.orekyuu.moco.core.annotations.HasMany;
 import net.orekyuu.moco.core.annotations.Table;
+import net.orekyuu.moco.core.relation.HasManyRelation;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.ElementScanner8;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     private final Messager messager;
     private final Elements elementUtils;
+    private final Types typeUtils;
     private EntityClass.Builder originalEntityBuilder = new EntityClass.Builder();
 
-    public EntityClassScanner(Table table, Elements elementUtils, Messager messager) {
+    public EntityClassScanner(Table table, Elements elementUtils, Types typeUtils, Messager messager) {
         originalEntityBuilder.table(table);
         this.elementUtils = elementUtils;
         this.messager = messager;
+        this.typeUtils = typeUtils;
     }
 
     @Override
@@ -36,10 +42,11 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     @Override
     public Void visitVariable(VariableElement e, Void aVoid) {
-        Column column = e.getAnnotation(Column.class);
-        if (column != null) {
-            originalEntityBuilder.addColumnField(new AttributeField(column, e));
-        }
+        Optional.ofNullable(e.getAnnotation(Column.class))
+                .ifPresent(column -> originalEntityBuilder.addColumnField(new AttributeField(column, e)));
+
+        Optional.ofNullable(e.getAnnotation(HasMany.class))
+                .ifPresent(hasMany -> originalEntityBuilder.addHasManyField(new HasManyRelationField(e, hasMany)));
 
         return super.visitVariable(e, aVoid);
     }

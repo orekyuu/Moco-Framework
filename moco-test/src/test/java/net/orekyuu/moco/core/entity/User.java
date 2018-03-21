@@ -1,7 +1,11 @@
 package net.orekyuu.moco.core.entity;
 
 import net.orekyuu.moco.core.annotations.Column;
+import net.orekyuu.moco.core.annotations.HasMany;
 import net.orekyuu.moco.core.annotations.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "users", immutable = true)
 public class User {
@@ -11,6 +15,9 @@ public class User {
     private String name;
     @Column(name = "active")
     private boolean active;
+
+    @HasMany(targetKey = "user_id", foreignKey = "id")
+    private List<Post> posts = new ArrayList<>();
 
     public User() {
     }
@@ -31,6 +38,10 @@ public class User {
 
     public boolean isActive() {
         return active;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     @Override

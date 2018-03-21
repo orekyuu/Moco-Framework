@@ -17,12 +17,14 @@ public class EntityClass {
     private PackageElement packageElement;
     private TypeElement entityType;
     private List<AttributeField> attributeFields;
+    private List<HasManyRelationField> hasManyRelationFields;
 
-    private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields) {
+    private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields, List<HasManyRelationField> hasManyRelationFields) {
         this.table = Objects.requireNonNull(table);
         this.packageElement = Objects.requireNonNull(packageElement);
         this.entityType = Objects.requireNonNull(entityType);
         this.attributeFields = Objects.requireNonNull(attributeFields);
+        this.hasManyRelationFields = hasManyRelationFields;
     }
 
     public Table getTable() {
@@ -43,6 +45,10 @@ public class EntityClass {
 
     public List<AttributeField> getAttributeFields() {
         return attributeFields;
+    }
+
+    public List<HasManyRelationField> getHasManyRelationFields() {
+        return hasManyRelationFields;
     }
 
     public ClassName getTableClassName() {
@@ -73,6 +79,7 @@ public class EntityClass {
         private PackageElement packageElement;
         private TypeElement originalType;
         private List<AttributeField> attributeFields = new ArrayList<>();
+        private List<HasManyRelationField> hasManyRelationFields = new ArrayList<>();
 
         public Builder table(Table table) {
             this.table = table;
@@ -94,8 +101,13 @@ public class EntityClass {
             return this;
         }
 
+        public Builder addHasManyField(HasManyRelationField hasManyRelationField) {
+            this.hasManyRelationFields.add(hasManyRelationField);
+            return this;
+        }
+
         public EntityClass build() {
-            return new EntityClass(table, packageElement, originalType, attributeFields);
+            return new EntityClass(table, packageElement, originalType, attributeFields, hasManyRelationFields);
         }
     }
 }

@@ -8,6 +8,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +32,8 @@ public class TableProcessor extends AbstractProcessor {
                 Filer filer = super.processingEnv.getFiler();
                 try {
                     Elements elementUtils = processingEnv.getElementUtils();
-                    EntityClassScanner entityClassScanner = new EntityClassScanner(table, elementUtils, processingEnv.getMessager());
+                    Types typeUtils = processingEnv.getTypeUtils();
+                    EntityClassScanner entityClassScanner = new EntityClassScanner(table, elementUtils, typeUtils, processingEnv.getMessager());
                     entityClassScanner.scan(element);
                     List<JavaFile> javaFile = entityClassScanner.generatedFiles();
                     for (JavaFile file : javaFile) {

@@ -52,6 +52,10 @@ public class TableClass {
         return TableClassFields.columnField(entityClass, attributeField);
     }
 
+    public FieldSpec hasManyField(HasManyRelationField hasManyRelationField, TableClass tableClass) {
+        return hasManyRelationField.relationField(tableClass, entityClass);
+    }
+
     public ClassName getClassName() {
         return entityClass.getTableClassName();
     }
@@ -64,6 +68,10 @@ public class TableClass {
         for (AttributeField field : entityClass.getAttributeFields()) {
             run(messager, () -> classBuilder.addField(attributeField(field)));
         }
+        for (HasManyRelationField field : entityClass.getHasManyRelationFields()) {
+            run(messager, () -> classBuilder.addField(hasManyField(field, this)));
+        }
+
         run(messager, () -> classBuilder.addMethod(createMethod()));
         run(messager, () -> classBuilder.addMethod(allMethod()));
         run(messager, () -> classBuilder.addMethod(firstMethod()));
@@ -74,6 +82,7 @@ public class TableClass {
                 run(messager, () -> classBuilder.addMethod(findOrNullMethod(field)));
             }
         }
+
         return JavaFile.builder(entityClass.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
     }
