@@ -8,6 +8,9 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_DATABASE: moco_test
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -20,10 +23,12 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-
+      MYSQL_USER: root
+      MYSQL_HOST: 127.0.0.1
     steps:
       - checkout
-
+      - run:
+          command: sudo apt install -y mysql-client
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -35,7 +40,9 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "chou/build.gradle" }}-{{ checksum "feeling/build.gradle" }}-{{ checksum "moco/build.gradle" }}-{{ checksum "moco-sample/build.gradle" }}-{{ checksum "moco-test/build.gradle" }}
-
+      - run:
+          name: Mysql create table
+          command: mysql  -h 127.0.0.1 -u root moco_test < scripts/test_mysql_setup.sql
       # run tests!
       - run: gradle test
 
