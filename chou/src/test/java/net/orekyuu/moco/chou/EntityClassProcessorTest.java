@@ -37,4 +37,32 @@ public class EntityClassProcessorTest {
         CompilationSubject.assertThat(compilation).generatedSourceFile("GeneratedIdEntityList")
                 .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/GeneratedIdEntityList.java"));
     }
+
+    @Test
+    public void compileUniqueTestEntityClass() {
+        Compilation compilation = javac()
+                .withProcessors(new TableProcessor())
+                .compile(JavaFileObjects.forResource("entity/UniqueTestEntity.java"));
+
+        CompilationSubject.assertThat(compilation).succeeded();
+
+        CompilationSubject.assertThat(compilation).generatedSourceFile("UniqueTestEntities")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/UniqueTestEntities.java"));
+        CompilationSubject.assertThat(compilation).generatedSourceFile("UniqueTestEntityList")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/UniqueTestEntityList.java"));
+    }
+
+    @Test
+    public void compileColumnVariableNameTestEntityClass() {
+        Compilation compilation = javac()
+                .withProcessors(new TableProcessor())
+                .compile(JavaFileObjects.forResource("entity/ColumnVariableNameTestEntity.java"));
+
+        CompilationSubject.assertThat(compilation).succeeded();
+
+        CompilationSubject.assertThat(compilation).generatedSourceFile("ColumnVariableNameTestEntities")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/ColumnVariableNameTestEntities.java"));
+        CompilationSubject.assertThat(compilation).generatedSourceFile("ColumnVariableNameTestEntityList")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/ColumnVariableNameTestEntityList.java"));
+    }
 }
