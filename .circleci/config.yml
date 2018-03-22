@@ -11,8 +11,6 @@ jobs:
       - image: circleci/mysql:5.7
         environment:
           MYSQL_DATABASE: moco_test
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_USER: moco
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -25,6 +23,8 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
+      MYSQL_USER: root
+      MYSQL_HOST: 127.0.0.1
     steps:
       - checkout
       - run:
