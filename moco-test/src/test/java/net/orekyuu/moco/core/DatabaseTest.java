@@ -1,7 +1,6 @@
 package net.orekyuu.moco.core;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import net.orekyuu.moco.core.ConnectionManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -12,7 +11,8 @@ public abstract class DatabaseTest {
     @BeforeEach
     public void before() throws SQLException {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setURL("jdbc:mysql://localhost:3306/moco_test");
+        String host = System.getProperty("MYSQL_HOST", "localhost");
+        dataSource.setURL("jdbc:mysql://" + host + ":3306/moco_test");
         dataSource.setUser("moco");
         dataSource.setPassword("moco");
         ConnectionManager.initialize(dataSource);
