@@ -12,7 +12,7 @@ public class NamingUtils {
             return word.replaceAll("fe?$", "ves");
         }
         if (word.matches(".*[^aiueo]y")) {
-            return word.replace("y$", "ies");
+            return word.replaceFirst("y$", "ies");
         }
         return word + "s";
     }
