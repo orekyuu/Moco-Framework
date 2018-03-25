@@ -36,7 +36,9 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         Delete delete = table.delete();
         whereClause.ifPresent(delete::where);
         sqlLimit.ifPresent(delete::limit);
-        sqlOffset.ifPresent(delete::offset);
+        if (sqlOffset.isPresent()) {
+            throw new UnsupportedOperationException("offset not supported.");
+        }
         return delete;
     }
 

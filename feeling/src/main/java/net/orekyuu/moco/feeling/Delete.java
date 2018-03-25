@@ -1,6 +1,9 @@
 package net.orekyuu.moco.feeling;
 
-import net.orekyuu.moco.feeling.node.*;
+import net.orekyuu.moco.feeling.node.FromClause;
+import net.orekyuu.moco.feeling.node.SqlJoinClause;
+import net.orekyuu.moco.feeling.node.SqlLimit;
+import net.orekyuu.moco.feeling.node.WhereClause;
 import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
@@ -13,7 +16,6 @@ public class Delete {
     private FromClause fromClause;
     private WhereClause whereClause;
     private SqlLimit limit = null;
-    private SqlOffset offset = null;
 
     public Delete from(Table table) {
         fromClause = new FromClause(new SqlJoinClause(table));
@@ -22,11 +24,6 @@ public class Delete {
 
     public Delete where(WhereClause whereClause) {
         this.whereClause = whereClause;
-        return this;
-    }
-
-    public Delete offset(SqlOffset offset) {
-        this.offset = offset;
         return this;
     }
 
@@ -68,7 +65,4 @@ public class Delete {
         return limit;
     }
 
-    public SqlOffset getOffset() {
-        return offset;
-    }
 }

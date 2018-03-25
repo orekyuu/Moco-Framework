@@ -228,10 +228,6 @@ public class MySqlVisitor extends SqlVisitor {
         if (delete.getLimit() != null) {
             delete.getLimit().accept(this, context);
         }
-
-        if (delete.getOffset() != null) {
-            delete.getOffset().accept(this, context);
-        }
     }
 
     private void appendAttributArray(SqlContext context, Iterator<Attribute> attributeIterator) {

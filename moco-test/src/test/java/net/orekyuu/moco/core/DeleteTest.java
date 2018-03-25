@@ -27,6 +27,21 @@ public class DeleteTest extends DatabaseTest {
         }
 
         @Test
+        public void limit() {
+            Users.all().where(Users.ACTIVE.isFalse()).limit(1).delete();
+            List<User> users = Users.all().where(Users.ACTIVE.isFalse()).toList();
+            Assertions.assertEquals(users.size(), 1);
+            Assertions.assertEquals(users.get(0).getName(), "bar");
+        }
+
+        @Test
+        public void limitAndOffset() {
+            Assertions.assertThrows(UnsupportedOperationException.class, () -> Users.all().where(Users.ACTIVE.isFalse()).limitAndOffset(1, 1).delete());
+            List<User> users = Users.all().toList();
+            Assertions.assertEquals(users.size(), 3);
+        }
+
+        @Test
         public void deleteWhere() {
             Users.all().where(Users.ACTIVE.isFalse()).delete();
             List<User> users = Users.all().toList();
