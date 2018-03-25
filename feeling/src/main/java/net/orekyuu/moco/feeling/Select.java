@@ -10,9 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 public class Select {
 
@@ -21,6 +21,7 @@ public class Select {
     private SqlLimit limit = null;
     private SqlOffset offset = null;
     private List<Attribute> resultColumn = new ArrayList<>();
+    private List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public Select from(Table table) {
         return from(new SqlJoinClause(table));
@@ -39,6 +40,21 @@ public class Select {
 
     public Select where(WhereClause whereClause) {
         this.whereClause = whereClause;
+        return this;
+    }
+
+    public Select order(SqlOrderigTerm term) {
+        orders.add(term);
+        return this;
+    }
+
+    public Select order(SqlOrderigTerm ... term) {
+        orders.addAll(Arrays.asList(term));
+        return this;
+    }
+
+    public Select order(Iterable<SqlOrderigTerm> terms) {
+        terms.forEach(orders::add);
         return this;
     }
 
@@ -119,5 +135,12 @@ public class Select {
 
     public Optional<SqlOffset> getOffset() {
         return Optional.ofNullable(offset);
+    }
+
+    public Optional<SqlOrderBy> getOrderBy() {
+        if (orders.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new SqlOrderBy(new SqlNodeArray(orders)));
     }
 }

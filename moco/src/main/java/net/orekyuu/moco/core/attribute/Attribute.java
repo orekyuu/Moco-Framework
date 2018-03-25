@@ -1,5 +1,7 @@
 package net.orekyuu.moco.core.attribute;
 
+import net.orekyuu.moco.feeling.node.SqlOrderigTerm;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,5 +61,11 @@ public abstract class Attribute<OWNER> {
         return new Predicate(attribute.lteq(value.ast()));
     }
 
+    public SqlOrderigTerm asc() {
+        return new SqlOrderigTerm(attribute, SqlOrderigTerm.OrderType.ASC);
+    }
 
+    public SqlOrderigTerm desc() {
+        return new SqlOrderigTerm(attribute, SqlOrderigTerm.OrderType.DESC);
+    }
 }
