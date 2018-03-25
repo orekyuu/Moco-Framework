@@ -242,6 +242,7 @@ public class MySqlVisitor extends SqlVisitor {
         if (delete.getWhereClause() != null) {
             delete.getWhereClause().accept(this, context);
         }
+        delete.getOrderBy().ifPresent(orderBy -> orderBy.accept(this, context));
         if (delete.getLimit() != null) {
             delete.getLimit().accept(this, context);
         }

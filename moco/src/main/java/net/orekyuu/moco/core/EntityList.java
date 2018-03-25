@@ -41,6 +41,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         if (sqlOffset.isPresent()) {
             throw new UnsupportedOperationException("offset not supported.");
         }
+        delete.order(orders);
         return delete;
     }
 
