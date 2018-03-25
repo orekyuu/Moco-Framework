@@ -19,6 +19,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     protected Optional<SqlLimit> sqlLimit = Optional.empty();
     protected Optional<SqlOffset> sqlOffset = Optional.empty();
     private List<Relation<E>> preloadRelations = new ArrayList<>();
+    private List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public EntityList(Table table) {
         this.table = table;
@@ -29,6 +30,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         whereClause.ifPresent(select::where);
         sqlLimit.ifPresent(select::limit);
         sqlOffset.ifPresent(select::offset);
+        select.order(orders);
         return select;
     }
 
@@ -39,6 +41,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         if (sqlOffset.isPresent()) {
             throw new UnsupportedOperationException("offset not supported.");
         }
+        delete.order(orders);
         return delete;
     }
 
@@ -54,6 +57,16 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
             return where;
         }).orElseGet(() -> new WhereClause(predicate.getExpression()));
         this.whereClause = Optional.of(clause);
+        return (T)this;
+    }
+
+    public T order(SqlOrderigTerm term) {
+        orders.add(term);
+        return (T)this;
+    }
+
+    public T order(SqlOrderigTerm ... term) {
+        orders.addAll(Arrays.asList(term));
         return (T)this;
     }
 

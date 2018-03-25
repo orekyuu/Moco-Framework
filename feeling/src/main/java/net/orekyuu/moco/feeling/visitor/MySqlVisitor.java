@@ -177,6 +177,22 @@ public class MySqlVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(SqlOrderBy sqlOrderBy, SqlContext context) {
+        context.append("order by ");
+        sqlOrderBy.node().accept(this, context);
+    }
+
+    @Override
+    public void visit(SqlOrderigTerm sqlOrderigTerm, SqlContext context) {
+        sqlOrderigTerm.getAttribute().accept(this, context);
+        switch (sqlOrderigTerm.getOrderType()) {
+            case ASC: context.append("asc "); break;
+            case DESC: context.append("desc "); break;
+            default: throw new IllegalArgumentException(sqlOrderigTerm.getOrderType().name());
+        }
+    }
+
+    @Override
     public void visit(SqlNodeArray node, SqlContext context) {
         Iterator<SqlNode> iterator = node.getNodes().iterator();
         while (iterator.hasNext()) {
@@ -199,6 +215,7 @@ public class MySqlVisitor extends SqlVisitor {
         select.getFromClause().accept(this, context);
 
         select.getWhereClause().ifPresent(whereClause -> whereClause.accept(this, context));
+        select.getOrderBy().ifPresent(orderBy -> orderBy.accept(this, context));
         select.getLimit().ifPresent(sqlLimit -> sqlLimit.accept(this, context));
         select.getOffset().ifPresent(sqlOffset -> sqlOffset.accept(this, context));
     }
@@ -225,6 +242,7 @@ public class MySqlVisitor extends SqlVisitor {
         if (delete.getWhereClause() != null) {
             delete.getWhereClause().accept(this, context);
         }
+        delete.getOrderBy().ifPresent(orderBy -> orderBy.accept(this, context));
         if (delete.getLimit() != null) {
             delete.getLimit().accept(this, context);
         }

@@ -1,21 +1,23 @@
 package net.orekyuu.moco.feeling;
 
-import net.orekyuu.moco.feeling.node.FromClause;
-import net.orekyuu.moco.feeling.node.SqlJoinClause;
-import net.orekyuu.moco.feeling.node.SqlLimit;
-import net.orekyuu.moco.feeling.node.WhereClause;
+import net.orekyuu.moco.feeling.node.*;
 import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class Delete {
 
     private FromClause fromClause;
     private WhereClause whereClause;
     private SqlLimit limit = null;
+    private List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public Delete from(Table table) {
         fromClause = new FromClause(new SqlJoinClause(table));
@@ -32,6 +34,20 @@ public class Delete {
         return this;
     }
 
+    public Delete order(SqlOrderigTerm term) {
+        orders.add(term);
+        return this;
+    }
+
+    public Delete order(SqlOrderigTerm ... term) {
+        orders.addAll(Arrays.asList(term));
+        return this;
+    }
+
+    public Delete order(Iterable<SqlOrderigTerm> terms) {
+        terms.forEach(orders::add);
+        return this;
+    }
 
     public SqlContext prepareQuery() {
         SqlContext context = new SqlContext();
@@ -65,4 +81,10 @@ public class Delete {
         return limit;
     }
 
+    public Optional<SqlOrderBy> getOrderBy() {
+        if (orders.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new SqlOrderBy(new SqlNodeArray(orders)));
+    }
 }

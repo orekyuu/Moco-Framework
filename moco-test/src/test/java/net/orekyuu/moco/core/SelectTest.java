@@ -139,4 +139,30 @@ public class SelectTest extends DatabaseTest {
         Assertions.assertEquals(users.get(0).getName(), "user1");
         Assertions.assertEquals(users.get(1).getName(), "user2");
     }
+
+    @Test
+    void order() {
+        Users.create(new User(-1, "user1", true));
+        Users.create(new User(-1, "user2", false));
+        Users.create(new User(-1, "user3", true));
+
+        List<User> desc = Users.all().order(Users.ID.desc()).toList();
+        Assertions.assertEquals(desc.size(), 3);
+        Assertions.assertEquals(desc.get(0).getName(), "user3");
+
+        List<User> asc = Users.all().order(Users.ID.asc()).toList();
+        Assertions.assertEquals(asc.size(), 3);
+        Assertions.assertEquals(asc.get(0).getName(), "user1");
+    }
+
+    @Test
+    void order2() {
+        Users.create(new User(-1, "user1", true));
+        Users.create(new User(-1, "user2", true));
+        Users.create(new User(-1, "user3", false));
+
+        List<User> desc = Users.all().order(Users.ACTIVE.desc(), Users.ID.desc()).toList();
+        Assertions.assertEquals(desc.size(), 3);
+        Assertions.assertEquals(desc.get(0).getName(), "user2");
+    }
 }

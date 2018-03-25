@@ -48,6 +48,18 @@ public class DeleteTest extends DatabaseTest {
             Assertions.assertEquals(users.size(), 1);
             Assertions.assertEquals(users.get(0).getName(), "foo");
         }
+
+        @Test
+        public void orderBy() {
+            Users.all().order(Users.ID.desc()).limit(1).delete();
+            List<User> users = Users.all().toList();
+            Assertions.assertEquals(users.size(), 2);
+            Assertions.assertEquals(users.get(0).getName(), "foo");
+            Assertions.assertEquals(users.get(0).isActive(), true);
+
+            Assertions.assertEquals(users.get(1).getName(), "foo");
+            Assertions.assertEquals(users.get(1).isActive(), false);
+        }
     }
 
     @Nested
