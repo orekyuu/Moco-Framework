@@ -24,6 +24,8 @@ public class SimpleSelectSample extends SampleBase {
             System.out.println(Users.all().where(Users.NAME.eq("hoge")).toList());
             // find fuga and activated
             System.out.println(Users.all().where(Users.NAME.eq("fuga"), Users.ACTIVE.isTrue()).toList());
+            // order by and limit
+            System.out.println(Users.all().order(Users.ID.desc()).limit(1).toList());
             // stream fetch
             for (int i = 0; i < 100; i++) {
                 Users.create(new User(String.valueOf(i), false));
