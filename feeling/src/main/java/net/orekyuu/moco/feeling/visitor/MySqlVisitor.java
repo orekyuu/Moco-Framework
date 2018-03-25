@@ -220,9 +220,11 @@ public class MySqlVisitor extends SqlVisitor {
 
     @Override
     public void visit(Delete delete, SqlContext context) {
-        context.append("delete from ");
+        context.append("delete ");
         delete.getFromClause().accept(this, context);
-        delete.getWhereClause().accept(this, context);
+        if (delete.getWhereClause() != null) {
+            delete.getWhereClause().accept(this, context);
+        }
         if (delete.getLimit() != null) {
             delete.getLimit().accept(this, context);
         }
