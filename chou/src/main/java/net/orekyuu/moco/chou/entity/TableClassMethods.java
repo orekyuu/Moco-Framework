@@ -64,7 +64,7 @@ public class TableClassMethods {
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
                 .returns(entity.getEntityListClassName())
-                .addStatement("return new $T(TABLE.select())", entity.getEntityListClassName())
+                .addStatement("return new $T(TABLE)", entity.getEntityListClassName())
                 .build();
     }
 

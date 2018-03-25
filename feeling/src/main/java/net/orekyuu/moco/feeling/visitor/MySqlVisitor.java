@@ -1,5 +1,6 @@
 package net.orekyuu.moco.feeling.visitor;
 
+import net.orekyuu.moco.feeling.Delete;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.SqlContext;
@@ -215,6 +216,20 @@ public class MySqlVisitor extends SqlVisitor {
         context.append("(");
         insert.getValues().accept(this, context);
         context.append(")");
+    }
+
+    @Override
+    public void visit(Delete delete, SqlContext context) {
+        context.append("delete from ");
+        delete.getFromClause().accept(this, context);
+        delete.getWhereClause().accept(this, context);
+        if (delete.getLimit() != null) {
+            delete.getLimit().accept(this, context);
+        }
+
+        if (delete.getOffset() != null) {
+            delete.getOffset().accept(this, context);
+        }
     }
 
     private void appendAttributArray(SqlContext context, Iterator<Attribute> attributeIterator) {

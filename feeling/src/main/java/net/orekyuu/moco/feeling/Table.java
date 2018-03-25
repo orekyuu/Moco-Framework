@@ -41,6 +41,10 @@ public class Table implements ColumnFindable {
         return new Select().from(this);
     }
 
+    public Delete delete() {
+        return new Delete().from(this);
+    }
+
     private static class ClassColumnPair {
         private Class clazz;
         private String name;

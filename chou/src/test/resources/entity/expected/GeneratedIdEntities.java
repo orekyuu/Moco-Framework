@@ -60,7 +60,7 @@ public final class GeneratedIdEntities {
 
     @Nonnull
     public static GeneratedIdEntityList all() {
-        return new GeneratedIdEntityList(TABLE.select());
+        return new GeneratedIdEntityList(TABLE);
     }
 
     @Nonnull

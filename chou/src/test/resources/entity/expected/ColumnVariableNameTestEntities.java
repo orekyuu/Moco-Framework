@@ -75,7 +75,7 @@ public final class ColumnVariableNameTestEntities {
 
     @Nonnull
     public static ColumnVariableNameTestEntityList all() {
-        return new ColumnVariableNameTestEntityList(TABLE.select());
+        return new ColumnVariableNameTestEntityList(TABLE);
     }
 
     @Nonnull

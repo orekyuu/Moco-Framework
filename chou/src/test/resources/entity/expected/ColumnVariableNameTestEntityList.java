@@ -2,10 +2,11 @@ import java.lang.Override;
 import javax.annotation.Nonnull;
 import net.orekyuu.moco.core.EntityList;
 import net.orekyuu.moco.feeling.Select;
+import net.orekyuu.moco.feeling.Table;
 
 public final class ColumnVariableNameTestEntityList extends EntityList<ColumnVariableNameTestEntityList, ColumnVariableNameTestEntity> {
-    ColumnVariableNameTestEntityList(Select select) {
-        super(select);
+    ColumnVariableNameTestEntityList(Table table) {
+        super(table);
     }
 
     @Nonnull
