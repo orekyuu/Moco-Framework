@@ -3,6 +3,7 @@ package net.orekyuu.moco.chou.entity;
 import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.CodeGenerateOperation;
 import net.orekyuu.moco.feeling.Select;
+import net.orekyuu.moco.feeling.Table;
 
 import javax.annotation.Nonnull;
 import javax.annotation.processing.Messager;
@@ -18,8 +19,8 @@ public class EntityListClass {
 
     public MethodSpec constructor() {
         return MethodSpec.constructorBuilder()
-                .addParameter(Select.class, "select")
-                .addStatement("super(select)").build();
+                .addParameter(Table.class, "table")
+                .addStatement("super(table)").build();
     }
 
     public MethodSpec getMapperMethod(TableClass tableClass) {

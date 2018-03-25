@@ -1,5 +1,6 @@
 package net.orekyuu.moco.feeling.visitor;
 
+import net.orekyuu.moco.feeling.Delete;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.SqlContext;
@@ -48,4 +49,6 @@ public abstract class SqlVisitor {
 
     public abstract void visit(Select select, SqlContext context);
     public abstract void visit(Insert insert, SqlContext context);
+
+    public abstract void visit(Delete delete, SqlContext context);
 }

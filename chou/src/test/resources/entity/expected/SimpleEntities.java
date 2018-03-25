@@ -61,7 +61,7 @@ public final class SimpleEntities {
 
     @Nonnull
     public static SimpleEntityList all() {
-        return new SimpleEntityList(TABLE.select());
+        return new SimpleEntityList(TABLE);
     }
 
     @Nonnull

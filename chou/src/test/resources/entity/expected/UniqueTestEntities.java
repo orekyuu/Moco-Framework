@@ -61,7 +61,7 @@ public final class UniqueTestEntities {
 
     @Nonnull
     public static UniqueTestEntityList all() {
-        return new UniqueTestEntityList(TABLE.select());
+        return new UniqueTestEntityList(TABLE);
     }
 
     @Nonnull

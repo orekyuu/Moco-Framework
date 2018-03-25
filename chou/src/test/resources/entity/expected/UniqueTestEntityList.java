@@ -2,10 +2,11 @@ import java.lang.Override;
 import javax.annotation.Nonnull;
 import net.orekyuu.moco.core.EntityList;
 import net.orekyuu.moco.feeling.Select;
+import net.orekyuu.moco.feeling.Table;
 
 public final class UniqueTestEntityList extends EntityList<UniqueTestEntityList, UniqueTestEntity> {
-    UniqueTestEntityList(Select select) {
-        super(select);
+    UniqueTestEntityList(Table table) {
+        super(table);
     }
 
     @Nonnull
