@@ -57,4 +57,8 @@ public class AttributeField {
         }
         return fieldName;
     }
+
+    public String getDatabaseValueMethodGetterName() {
+        return columnType.getDatabaseValueMethodGetterName();
+    }
 }

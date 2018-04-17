@@ -48,7 +48,7 @@ public class TableClassFields {
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
-            mappingMethod.addStatement("$L.set(record, resultSet.getObject($S))", fieldName, columnName);
+            mappingMethod.addStatement("$L.set(record, resultSet.$L($S))", fieldName, attributeField.getDatabaseValueMethodGetterName(), columnName);
         }
         mappingMethod.addStatement("return record");
         // end constructor

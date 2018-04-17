@@ -40,8 +40,8 @@ public final class UniqueTestEntities {
         public UniqueTestEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             UniqueTestEntity record = new UniqueTestEntity();
-            id.set(record, resultSet.getObject("id"));
-            text.set(record, resultSet.getObject("text"));
+            id.set(record, resultSet.getInt("id"));
+            text.set(record, resultSet.getString("text"));
             return record;
         }
     };
