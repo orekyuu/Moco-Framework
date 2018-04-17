@@ -39,8 +39,8 @@ public final class GeneratedIdEntities {
         public GeneratedIdEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             GeneratedIdEntity record = new GeneratedIdEntity();
-            id.set(record, resultSet.getObject("id"));
-            text.set(record, resultSet.getObject("text"));
+            id.set(record, resultSet.getInt("id"));
+            text.set(record, resultSet.getString("text"));
             return record;
         }
     };

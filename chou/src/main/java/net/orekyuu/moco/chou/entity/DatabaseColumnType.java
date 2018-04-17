@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum DatabaseColumnType {
-    INT(IntAttribute.class, "intCol") {
+    INT(IntAttribute.class, "intCol", "getInt") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(int.class.getName(), Integer.class.getName()).contains(fieldType.asType().toString());
@@ -23,7 +23,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._integer($S)", columnName);
         }
-    },LONG(IntAttribute.class, "intCol") {
+    },LONG(IntAttribute.class, "intCol", "getInt") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(long.class.getName(), Long.class.getName()).contains(fieldType.asType().toString());
@@ -33,7 +33,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._decimal($S)", columnName);
         }
-    },STRING(StringAttribute.class, "stringCol") {
+    },STRING(StringAttribute.class, "stringCol", "getString") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(String.class.getName()).contains(fieldType.asType().toString());
@@ -43,7 +43,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._string($S)", columnName);
         }
-    },BOOLEAN(BooleanAttribute.class, "booleanCol") {
+    },BOOLEAN(BooleanAttribute.class, "booleanCol", "getBoolean") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(boolean.class.getName(), Boolean.class.getName()).contains(fieldType.asType().toString());
@@ -52,7 +52,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._boolean($S)", columnName);
         }
-    },DOUBLE(StringAttribute.class, "stringCol") {
+    },DOUBLE(StringAttribute.class, "stringCol", "getDouble") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(float.class.getName(), Float.class.getName(), double.class.getName(), Double.class.getName())
@@ -63,7 +63,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._decimal($S)", columnName);
         }
-    },DATE(StringAttribute.class, "timeCol") {
+    },DATE(StringAttribute.class, "timeCol", "getDate") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(LocalDate.class.getName()).contains(fieldType.asType().toString());
@@ -72,7 +72,7 @@ public enum DatabaseColumnType {
         void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._datetime($S)", columnName);
         }
-    },DATETIME(StringAttribute.class, "timeCol") {
+    },DATETIME(StringAttribute.class, "timeCol", "getTimestamp") {
         @Override
         boolean isSupport(VariableElement fieldType) {
             return Arrays.asList(LocalDateTime.class.getName()).contains(fieldType.asType().toString());
@@ -83,13 +83,15 @@ public enum DatabaseColumnType {
         }
     };
 
-    DatabaseColumnType(Class<? extends Attribute> attribute, String feelingTableMethod) {
+    DatabaseColumnType(Class<? extends Attribute> attribute, String feelingTableMethod, String databaseValueMethodGetterName) {
         this.attribute = attribute;
         this.feelingTableMethod = feelingTableMethod;
+        this.databaseValueMethodGetterName = databaseValueMethodGetterName;
     }
 
     private final Class<? extends Attribute> attribute;
     private final String feelingTableMethod;
+    private final String databaseValueMethodGetterName;
 
 
     abstract boolean isSupport(VariableElement fieldType);
@@ -111,5 +113,9 @@ public enum DatabaseColumnType {
 
     public String getFeelingTableMethod() {
         return feelingTableMethod;
+    }
+
+    public String getDatabaseValueMethodGetterName() {
+        return databaseValueMethodGetterName;
     }
 }

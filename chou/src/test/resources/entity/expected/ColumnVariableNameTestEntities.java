@@ -48,10 +48,10 @@ public final class ColumnVariableNameTestEntities {
         public ColumnVariableNameTestEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             ColumnVariableNameTestEntity record = new ColumnVariableNameTestEntity();
-            intCol1.set(record, resultSet.getObject("id1"));
-            intCol2.set(record, resultSet.getObject("id2"));
-            text1.set(record, resultSet.getObject("text1"));
-            text2.set(record, resultSet.getObject("text2"));
+            intCol1.set(record, resultSet.getInt("id1"));
+            intCol2.set(record, resultSet.getInt("id2"));
+            text1.set(record, resultSet.getString("text1"));
+            text2.set(record, resultSet.getString("text2"));
             return record;
         }
     };
