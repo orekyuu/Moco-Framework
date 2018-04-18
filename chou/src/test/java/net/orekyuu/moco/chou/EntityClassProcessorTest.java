@@ -14,7 +14,7 @@ public class EntityClassProcessorTest {
     public void compileEntityClass() {
         Compilation compilation = javac()
                 .withProcessors(new TableProcessor())
-                .compile(JavaFileObjects.forResource("entity/SimpleEntity.java"));
+                .compile(JavaFileObjects.forResource("entity/SimpleEntity.javaa"));
 
         CompilationSubject.assertThat(compilation).succeeded();
 

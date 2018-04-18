@@ -2,10 +2,14 @@ package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.TypeUtils;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
+import net.orekyuu.moco.feeling.exposer.Converter;
+import net.orekyuu.moco.feeling.exposer.DatabaseColumnType;
+import net.orekyuu.moco.feeling.exposer.Exposer;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
@@ -48,7 +52,8 @@ public class TableClassFields {
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
-            mappingMethod.addStatement("$L.set(record, resultSet.$L($S))", fieldName, attributeField.getDatabaseValueMethodGetterName(), columnName);
+            mappingMethod.addStatement("$L.set(record, new $T<>($T.INT, $T.raw()).expose(resultSet, $S))",
+                    fieldName, Exposer.class, net.orekyuu.moco.feeling.exposer.DatabaseColumnType.class, Converter.class, columnName);
         }
         mappingMethod.addStatement("return record");
         // end constructor
@@ -70,9 +75,23 @@ public class TableClassFields {
         CodeBlock.Builder block = CodeBlock.builder().add("new $T($S, MAPPER)", TableBuilder.class, entityClass.getTable().name());
         for (AttributeField field : entityClass.getAttributeFields()) {
             VariableElement element = field.getVariableElement();
-            Optional<DatabaseColumnType> type = DatabaseColumnType.findSupportedType(element);
-            DatabaseColumnType databaseColumnType = type.orElseThrow(RuntimeException::new);
-            databaseColumnType.addColumnMethod(block, field.getColumn().name());
+            TypeName variableType = ClassName.get(element.asType());
+            DatabaseColumnType type = TypeUtils.findByType(variableType);
+            //TODO
+            switch (type) {
+                case INT:
+                case SHORT:
+                case BYTE:
+                case LONG:
+                    block.add("_integer($S)", field.getColumn().name());
+                    break;
+                case STRING:
+                    block.add("_string($S)", field.getColumn().name());
+                    break;
+                case BOOLEAN:
+                    block.add("_boolean($S)", field.getColumn().name());
+                    break;
+            }
         }
         block.add(".build()");
         return FieldSpec.builder(Table.class, "TABLE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

@@ -16,6 +16,8 @@ import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
+import net.orekyuu.moco.feeling.exposer.Converter;
+import net.orekyuu.moco.feeling.exposer.DatabaseColumnType;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
@@ -40,7 +42,7 @@ public final class SimpleEntities {
         public SimpleEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             SimpleEntity record = new SimpleEntity();
-            id.set(record, resultSet.getInt("id"));
+            id.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.<Integer>raw()).expose(resultSet, "id"));
             text.set(record, resultSet.getString("text"));
             return record;
         }
