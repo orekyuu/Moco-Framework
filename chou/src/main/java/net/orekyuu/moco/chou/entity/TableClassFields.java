@@ -16,7 +16,6 @@ import javax.lang.model.element.VariableElement;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class TableClassFields {
     private TableClassFields() {
@@ -52,6 +51,7 @@ public class TableClassFields {
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
+            // TODO: INTをいい感じに分岐させる
             mappingMethod.addStatement("$L.set(record, new $T<>($T.INT, $T.raw()).expose(resultSet, $S))",
                     fieldName, Exposer.class, net.orekyuu.moco.feeling.exposer.DatabaseColumnType.class, Converter.class, columnName);
         }
@@ -83,13 +83,13 @@ public class TableClassFields {
                 case SHORT:
                 case BYTE:
                 case LONG:
-                    block.add("_integer($S)", field.getColumn().name());
+                    block.add("._integer($S)", field.getColumn().name());
                     break;
                 case STRING:
-                    block.add("_string($S)", field.getColumn().name());
+                    block.add("._string($S)", field.getColumn().name());
                     break;
                 case BOOLEAN:
-                    block.add("_boolean($S)", field.getColumn().name());
+                    block.add("._boolean($S)", field.getColumn().name());
                     break;
             }
         }

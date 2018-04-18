@@ -15,6 +15,9 @@ import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
+import net.orekyuu.moco.feeling.exposer.Converter;
+import net.orekyuu.moco.feeling.exposer.DatabaseColumnType;
+import net.orekyuu.moco.feeling.exposer.Exposer;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
@@ -39,8 +42,8 @@ public final class GeneratedIdEntities {
         public GeneratedIdEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             GeneratedIdEntity record = new GeneratedIdEntity();
-            id.set(record, resultSet.getInt("id"));
-            text.set(record, resultSet.getString("text"));
+            id.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id"));
+            text.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text"));
             return record;
         }
     };

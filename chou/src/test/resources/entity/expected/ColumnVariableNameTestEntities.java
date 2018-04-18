@@ -16,6 +16,9 @@ import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
+import net.orekyuu.moco.feeling.exposer.Converter;
+import net.orekyuu.moco.feeling.exposer.DatabaseColumnType;
+import net.orekyuu.moco.feeling.exposer.Exposer;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
@@ -48,10 +51,10 @@ public final class ColumnVariableNameTestEntities {
         public ColumnVariableNameTestEntity mapping(ResultSet resultSet) throws SQLException,
                 ReflectiveOperationException {
             ColumnVariableNameTestEntity record = new ColumnVariableNameTestEntity();
-            intCol1.set(record, resultSet.getInt("id1"));
-            intCol2.set(record, resultSet.getInt("id2"));
-            text1.set(record, resultSet.getString("text1"));
-            text2.set(record, resultSet.getString("text2"));
+            intCol1.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id1"));
+            intCol2.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id2"));
+            text1.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text1"));
+            text2.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text2"));
             return record;
         }
     };

@@ -11,31 +11,31 @@ import java.sql.Timestamp;
 public class TypeUtils {
 
     public static DatabaseColumnType findByType(TypeName className) {
-        if (ClassName.get(Byte.class).equals(className) || ClassName.get(byte.class).equals(className)) {
+        if (ClassName.get(Byte.class).equals(className) || TypeName.BYTE.equals(className)) {
             return DatabaseColumnType.BYTE;
         }
-        if (ClassName.get(Integer.class).equals(className) || ClassName.get(int.class).equals(className)) {
+        if (ClassName.get(Integer.class).equals(className) || TypeName.INT.equals(className)) {
             return DatabaseColumnType.INT;
         }
-        if (ClassName.get(Short.class).equals(className) || ClassName.get(short.class).equals(className)) {
+        if (ClassName.get(Short.class).equals(className) || TypeName.SHORT.equals(className)) {
             return DatabaseColumnType.SHORT;
         }
         if (ClassName.get(String.class).equals(className)) {
             return DatabaseColumnType.STRING;
         }
-        if (ClassName.get(Boolean.class).equals(className) || ClassName.get(boolean.class).equals(className)) {
+        if (ClassName.get(Boolean.class).equals(className) || TypeName.BOOLEAN.equals(className)) {
             return DatabaseColumnType.BOOLEAN;
         }
         if (ClassName.get(Date.class).equals(className)) {
             return DatabaseColumnType.DATE;
         }
-        if (ClassName.get(Double.class).equals(className) || ClassName.get(double.class).equals(className)) {
+        if (ClassName.get(Double.class).equals(className) || TypeName.DOUBLE.equals(className)) {
             return DatabaseColumnType.DOUBLE;
         }
-        if (ClassName.get(Float.class).equals(className) || ClassName.get(float.class).equals(className)) {
+        if (ClassName.get(Float.class).equals(className) || TypeName.FLOAT.equals(className)) {
             return DatabaseColumnType.FLOAT;
         }
-        if (ClassName.get(Long.class).equals(className) || ClassName.get(long.class).equals(className)) {
+        if (ClassName.get(Long.class).equals(className) || TypeName.LONG.equals(className)) {
             return DatabaseColumnType.LONG;
         }
         if (ClassName.get(Time.class).equals(className)) {
