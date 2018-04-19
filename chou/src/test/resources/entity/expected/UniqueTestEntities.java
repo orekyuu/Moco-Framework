@@ -44,7 +44,7 @@ public final class UniqueTestEntities {
                 ReflectiveOperationException {
             UniqueTestEntity record = new UniqueTestEntity();
             id.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id"));
-            text.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text"));
+            text.set(record, new Exposer<>(DatabaseColumnType.STRING, Converter.raw()).expose(resultSet, "text"));
             return record;
         }
     };

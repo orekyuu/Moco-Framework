@@ -43,7 +43,7 @@ public final class GeneratedIdEntities {
                 ReflectiveOperationException {
             GeneratedIdEntity record = new GeneratedIdEntity();
             id.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id"));
-            text.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text"));
+            text.set(record, new Exposer<>(DatabaseColumnType.STRING, Converter.raw()).expose(resultSet, "text"));
             return record;
         }
     };

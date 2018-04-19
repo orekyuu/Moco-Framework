@@ -51,9 +51,8 @@ public class TableClassFields {
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
             // mapper
-            // TODO: INTをいい感じに分岐させる
-            mappingMethod.addStatement("$L.set(record, new $T<>($T.INT, $T.raw()).expose(resultSet, $S))",
-                    fieldName, Exposer.class, net.orekyuu.moco.feeling.exposer.DatabaseColumnType.class, Converter.class, columnName);
+            mappingMethod.addStatement("$L.set(record, new $T<>($T.$L, $T.raw()).expose(resultSet, $S))",
+                    fieldName, Exposer.class, net.orekyuu.moco.feeling.exposer.DatabaseColumnType.class, attributeField.getColumnType().name(), Converter.class, columnName);
         }
         mappingMethod.addStatement("return record");
         // end constructor

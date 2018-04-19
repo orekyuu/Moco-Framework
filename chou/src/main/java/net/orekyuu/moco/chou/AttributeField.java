@@ -83,4 +83,7 @@ public class AttributeField {
         return fieldName;
     }
 
+    public DatabaseColumnType getColumnType() {
+        return columnType;
+    }
 }

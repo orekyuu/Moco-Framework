@@ -53,8 +53,8 @@ public final class ColumnVariableNameTestEntities {
             ColumnVariableNameTestEntity record = new ColumnVariableNameTestEntity();
             intCol1.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id1"));
             intCol2.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "id2"));
-            text1.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text1"));
-            text2.set(record, new Exposer<>(DatabaseColumnType.INT, Converter.raw()).expose(resultSet, "text2"));
+            text1.set(record, new Exposer<>(DatabaseColumnType.STRING, Converter.raw()).expose(resultSet, "text1"));
+            text2.set(record, new Exposer<>(DatabaseColumnType.STRING, Converter.raw()).expose(resultSet, "text2"));
             return record;
         }
     };
