@@ -5,6 +5,7 @@ import com.squareup.javapoet.FieldSpec;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.CompilerException;
 import net.orekyuu.moco.chou.NamingUtils;
+import net.orekyuu.moco.chou.RoundContext;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.TypeElement;
@@ -15,8 +16,10 @@ import java.util.Optional;
 
 public abstract class RelationField {
     private VariableElement fieldElement;
+    protected RoundContext context;
 
-    public RelationField(VariableElement fieldElement) {
+    public RelationField(RoundContext context, VariableElement fieldElement) {
+        this.context = context;
         this.fieldElement = fieldElement;
     }
 

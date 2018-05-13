@@ -2,8 +2,8 @@ package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.RoundContext;
 
-import javax.annotation.processing.Messager;
 import javax.lang.model.element.Modifier;
 
 import static net.orekyuu.moco.chou.CodeGenerateOperation.run;
@@ -44,8 +44,8 @@ public class TableClass {
         return TableClassFields.mapper(entityClass);
     }
 
-    public FieldSpec tableField() {
-        return TableClassFields.tableField(entityClass);
+    public FieldSpec tableField(RoundContext context) {
+        return TableClassFields.tableField(context, entityClass);
     }
 
     public FieldSpec attributeField(AttributeField attributeField) {
@@ -60,26 +60,26 @@ public class TableClass {
         return entityClass.getTableClassName();
     }
 
-    public JavaFile createJavaFile(Messager messager) {
+    public JavaFile createJavaFile(RoundContext roundContext) {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(getClassName())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        run(messager, () -> classBuilder.addField(mapperField()));
-        run(messager, () -> classBuilder.addField(tableField()));
+        run(roundContext, () -> classBuilder.addField(mapperField()));
+        run(roundContext, () -> classBuilder.addField(tableField(roundContext)));
         for (AttributeField field : entityClass.getAttributeFields()) {
-            run(messager, () -> classBuilder.addField(attributeField(field)));
+            run(roundContext, () -> classBuilder.addField(attributeField(field)));
         }
         for (RelationField field : entityClass.getRelationFields()) {
-            run(messager, () -> classBuilder.addField(relationField(field, this)));
+            run(roundContext, () -> classBuilder.addField(relationField(field, this)));
         }
 
-        run(messager, () -> classBuilder.addMethod(createMethod()));
-        run(messager, () -> classBuilder.addMethod(allMethod()));
-        run(messager, () -> classBuilder.addMethod(firstMethod()));
-        run(messager, () -> classBuilder.addMethod(firstOrNullMethod()));
+        run(roundContext, () -> classBuilder.addMethod(createMethod()));
+        run(roundContext, () -> classBuilder.addMethod(allMethod()));
+        run(roundContext, () -> classBuilder.addMethod(firstMethod()));
+        run(roundContext, () -> classBuilder.addMethod(firstOrNullMethod()));
         for (AttributeField field : entityClass.getAttributeFields()) {
             if (field.isUnique()) {
-                run(messager, () -> classBuilder.addMethod(findMethod(field)));
-                run(messager, () -> classBuilder.addMethod(findOrNullMethod(field)));
+                run(roundContext, () -> classBuilder.addMethod(findMethod(field)));
+                run(roundContext, () -> classBuilder.addMethod(findOrNullMethod(field)));
             }
         }
 

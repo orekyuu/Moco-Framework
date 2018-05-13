@@ -2,11 +2,11 @@ package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.CodeGenerateOperation;
+import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 
 import javax.annotation.Nonnull;
-import javax.annotation.processing.Messager;
 import javax.lang.model.element.Modifier;
 
 public class EntityListClass {
@@ -37,13 +37,13 @@ public class EntityListClass {
         return entityClass.getEntityListClassName();
     }
 
-    public JavaFile createJavaFile(Messager messager, TableClass tableClass) {
+    public JavaFile createJavaFile(RoundContext context, TableClass tableClass) {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(getClassName())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         ParameterizedTypeName superclass = ParameterizedTypeName.get(ClassName.get(net.orekyuu.moco.core.EntityList.class), getClassName(), entityClass.getClassName());
         classBuilder.superclass(superclass);
-        CodeGenerateOperation.run(messager, () -> classBuilder.addMethod(constructor()));
-        CodeGenerateOperation.run(messager, () -> classBuilder.addMethod(getMapperMethod(tableClass)));
+        CodeGenerateOperation.run(context, () -> classBuilder.addMethod(constructor()));
+        CodeGenerateOperation.run(context, () -> classBuilder.addMethod(getMapperMethod(tableClass)));
         return JavaFile.builder(entityClass.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
     }

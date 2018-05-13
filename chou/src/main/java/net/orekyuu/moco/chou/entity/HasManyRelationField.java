@@ -6,6 +6,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.CompilerException;
 import net.orekyuu.moco.chou.NamingUtils;
+import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.chou.visitor.ColumnFieldVisitor;
 import net.orekyuu.moco.core.ReflectUtil;
 import net.orekyuu.moco.core.annotations.HasMany;
@@ -24,8 +25,8 @@ import java.util.stream.Stream;
 public class HasManyRelationField extends RelationField {
     private final HasMany hasMany;
 
-    public HasManyRelationField(VariableElement field, HasMany hasMany) {
-        super(field);
+    public HasManyRelationField(RoundContext context, VariableElement field, HasMany hasMany) {
+        super(context, field);
         this.hasMany = hasMany;
     }
 
@@ -54,12 +55,12 @@ public class HasManyRelationField extends RelationField {
         ClassName childClassName = ClassName.get(childEntityTypeElement);
         ClassName childTableClassName = childTableClassName(childClassName);
 
-        ColumnFieldVisitor parentVisitor = new ColumnFieldVisitor();
+        ColumnFieldVisitor parentVisitor = new ColumnFieldVisitor(context);
         parentVisitor.scan(entityClass.getEntityType());
         AttributeField parentAttribute = findByName(parentVisitor.getAttrs(), hasMany.key())
                 .orElseThrow(() -> new CompilerException(getFieldElement(), hasMany.key() + "はentityClass " + entityClass.getClassName().toString() + "に定義されていません"));
 
-        ColumnFieldVisitor childVisitor = new ColumnFieldVisitor();
+        ColumnFieldVisitor childVisitor = new ColumnFieldVisitor(context);
         childVisitor.scan(childEntityTypeElement);
         AttributeField childAttribute = findByName(childVisitor.getAttrs(), hasMany.foreignKey())
                 .orElseThrow(() -> new CompilerException(getFieldElement(), hasMany.foreignKey() + "はentityClass " + childClassName.toString() + "に定義されていません"));
@@ -70,7 +71,7 @@ public class HasManyRelationField extends RelationField {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .addAnnotation(Nonnull.class)
                 .initializer("new $T($N, $L, $T.TABLE, $T.$L, $T.MAPPER, $T.getFieldSetter($T.class, $S))",
-                        ParameterizedTypeName.get(ClassName.get(HasManyRelation.class), entityClass.getClassName(), childClassName), tableClass.tableField(), parentAttribute.tableClassColumnName(),
+                        ParameterizedTypeName.get(ClassName.get(HasManyRelation.class), entityClass.getClassName(), childClassName), tableClass.tableField(context), parentAttribute.tableClassColumnName(),
                         childTableClassName, childTableClassName, childAttribute.tableClassColumnName(), childTableClassName, ReflectUtil.class, entityClass.getClassName(), getFieldElement().getSimpleName());
         return builder.build();
     }
