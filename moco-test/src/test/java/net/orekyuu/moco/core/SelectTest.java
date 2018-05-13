@@ -11,9 +11,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findAll() {
-        Users.create(new User(-1, "foo", true));
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "bar", false));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "bar", false, User.Gender.MALE));
 
         List<User> users = Users.all().toList();
         Assertions.assertEquals(users.size(), 3);
@@ -27,8 +27,8 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void first() {
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "bar", false));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "bar", false, User.Gender.MALE));
 
         User first = Users.firstOrNull();
         Assertions.assertEquals(first.getName(), "foo");
@@ -42,7 +42,7 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findById() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         User first = Users.firstOrNull();
         User byId = Users.findOrNullById(first.getId());
         Assertions.assertEquals(byId.getId(), first.getId());
@@ -58,9 +58,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findByName() {
-        Users.create(new User(-1, "bar", false));
-        Users.create(new User(-1, "foo", true));
-        Users.create(new User(-1, "foo", false));
+        Users.create(new User(-1, "bar", false, User.Gender.MALE));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
 
         List<User> users = Users.all().where(Users.NAME.eq("foo")).toList();
         Assertions.assertEquals(users.size(), 2);
@@ -71,9 +71,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findByActive() {
-        Users.create(new User(-1, "bar", true));
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
 
         List<User> users = Users.all().where(Users.ACTIVE.isTrue()).toList();
         Assertions.assertEquals(users.size(), 2);
@@ -84,9 +84,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findFooAndActive() {
-        Users.create(new User(-1, "bar", true));
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
 
         List<User> users = Users.all().where(Users.NAME.eq("foo"), Users.ACTIVE.isTrue()).toList();
         Assertions.assertEquals(users.size(), 1);
@@ -96,9 +96,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findFooAndActiveMultiWhere() {
-        Users.create(new User(-1, "bar", true));
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
 
         List<User> users = Users.all()
                 .where(Users.NAME.eq("foo"))
@@ -111,9 +111,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void findAttributeEq() {
-        Users.create(new User(-1, "bar", true));
-        Users.create(new User(-1, "foo", false));
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE));
+        Users.create(new User(-1, "foo", false, User.Gender.MALE));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
 
         List<User> users = Users.all().where(Users.NAME.eq(Users.NAME)).toList();
         Assertions.assertEquals(users.size(), 3);
@@ -121,9 +121,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void limitAndOffset() {
-        Users.create(new User(-1, "user1", true));
-        Users.create(new User(-1, "user2", true));
-        Users.create(new User(-1, "user3", true));
+        Users.create(new User(-1, "user1", true, User.Gender.MALE));
+        Users.create(new User(-1, "user2", true, User.Gender.MALE));
+        Users.create(new User(-1, "user3", true, User.Gender.MALE));
         List<User> users = Users.all().limitAndOffset(1, 1).toList();
         Assertions.assertEquals(users.size(), 1);
         Assertions.assertEquals(users.get(0).getName(), "user2");
@@ -131,9 +131,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void limitOnly() {
-        Users.create(new User(-1, "user1", true));
-        Users.create(new User(-1, "user2", true));
-        Users.create(new User(-1, "user3", true));
+        Users.create(new User(-1, "user1", true, User.Gender.MALE));
+        Users.create(new User(-1, "user2", true, User.Gender.MALE));
+        Users.create(new User(-1, "user3", true, User.Gender.MALE));
         List<User> users = Users.all().limit(2).toList();
         Assertions.assertEquals(users.size(), 2);
         Assertions.assertEquals(users.get(0).getName(), "user1");
@@ -142,9 +142,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void order() {
-        Users.create(new User(-1, "user1", true));
-        Users.create(new User(-1, "user2", false));
-        Users.create(new User(-1, "user3", true));
+        Users.create(new User(-1, "user1", true, User.Gender.MALE));
+        Users.create(new User(-1, "user2", false, User.Gender.MALE));
+        Users.create(new User(-1, "user3", true, User.Gender.MALE));
 
         List<User> desc = Users.all().order(Users.ID.desc()).toList();
         Assertions.assertEquals(desc.size(), 3);
@@ -157,9 +157,9 @@ public class SelectTest extends DatabaseTest {
 
     @Test
     void order2() {
-        Users.create(new User(-1, "user1", true));
-        Users.create(new User(-1, "user2", true));
-        Users.create(new User(-1, "user3", false));
+        Users.create(new User(-1, "user1", true, User.Gender.MALE));
+        Users.create(new User(-1, "user2", true, User.Gender.MALE));
+        Users.create(new User(-1, "user3", false,User.Gender.MALE));
 
         List<User> desc = Users.all().order(Users.ACTIVE.desc(), Users.ID.desc()).toList();
         Assertions.assertEquals(desc.size(), 3);

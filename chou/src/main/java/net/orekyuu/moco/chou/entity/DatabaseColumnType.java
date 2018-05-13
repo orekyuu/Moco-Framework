@@ -1,12 +1,13 @@
 package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.CodeBlock;
-import net.orekyuu.moco.core.attribute.Attribute;
-import net.orekyuu.moco.core.attribute.BooleanAttribute;
-import net.orekyuu.moco.core.attribute.IntAttribute;
-import net.orekyuu.moco.core.attribute.StringAttribute;
+import net.orekyuu.moco.chou.AnnotationProcessHelper;
+import net.orekyuu.moco.chou.RoundContext;
+import net.orekyuu.moco.core.attribute.*;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,71 +16,84 @@ import java.util.Optional;
 public enum DatabaseColumnType {
     INT(IntAttribute.class, "intCol", "getInt") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(int.class.getName(), Integer.class.getName()).contains(fieldType.asType().toString());
         }
 
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._integer($S)", columnName);
         }
     },LONG(IntAttribute.class, "intCol", "getInt") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(long.class.getName(), Long.class.getName()).contains(fieldType.asType().toString());
         }
 
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._decimal($S)", columnName);
         }
     },STRING(StringAttribute.class, "stringCol", "getString") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(String.class.getName()).contains(fieldType.asType().toString());
         }
 
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._string($S)", columnName);
         }
     },BOOLEAN(BooleanAttribute.class, "booleanCol", "getBoolean") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(boolean.class.getName(), Boolean.class.getName()).contains(fieldType.asType().toString());
         }
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._boolean($S)", columnName);
         }
     },DOUBLE(StringAttribute.class, "stringCol", "getDouble") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(float.class.getName(), Float.class.getName(), double.class.getName(), Double.class.getName())
                     .contains(fieldType.asType().toString());
         }
 
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._decimal($S)", columnName);
         }
     },DATE(StringAttribute.class, "timeCol", "getDate") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(LocalDate.class.getName()).contains(fieldType.asType().toString());
         }
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._datetime($S)", columnName);
         }
     },DATETIME(StringAttribute.class, "timeCol", "getTimestamp") {
         @Override
-        boolean isSupport(VariableElement fieldType) {
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
             return Arrays.asList(LocalDateTime.class.getName()).contains(fieldType.asType().toString());
         }
         @Override
-        void addColumnMethod(CodeBlock.Builder codeBlock, String columnName) {
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
             codeBlock.add("._datetime($S)", columnName);
+        }
+    },ENUM(EnumAttribute.class, "stringCol", "getString") {
+        @Override
+        boolean isSupport(RoundContext context, VariableElement fieldType) {
+            ProcessingEnvironment processingEnv = context.getProcessingEnv();
+            TypeMirror enumType = AnnotationProcessHelper.getTypeMirrorFromClass(context, Enum.class);
+            processingEnv.getTypeUtils().isAssignable(fieldType.asType(), enumType);
+            return true;
+        }
+
+        @Override
+        void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName) {
+            codeBlock.add("._string($S)", columnName);
         }
     };
 
@@ -94,13 +108,13 @@ public enum DatabaseColumnType {
     private final String databaseValueMethodGetterName;
 
 
-    abstract boolean isSupport(VariableElement fieldType);
+    abstract boolean isSupport(RoundContext context, VariableElement fieldType);
 
-    abstract void addColumnMethod(CodeBlock.Builder codeBlock, String columnName);
+    abstract void addColumnMethod(RoundContext context, CodeBlock.Builder codeBlock, String columnName);
 
-    public static Optional<DatabaseColumnType> findSupportedType(VariableElement fieldType) {
+    public static Optional<DatabaseColumnType> findSupportedType(RoundContext context, VariableElement fieldType) {
         for (DatabaseColumnType columnType : values()) {
-            if (columnType.isSupport(fieldType)) {
+            if (columnType.isSupport(context, fieldType)) {
                 return Optional.of(columnType);
             }
         }

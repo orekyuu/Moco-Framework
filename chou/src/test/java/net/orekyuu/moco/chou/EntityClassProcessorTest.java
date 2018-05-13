@@ -25,6 +25,20 @@ public class EntityClassProcessorTest {
     }
 
     @Test
+    public void compileEnumEntityClass() {
+        Compilation compilation = javac()
+                .withProcessors(new TableProcessor())
+                .compile(JavaFileObjects.forResource("entity/EnumEntity.java"));
+
+        CompilationSubject.assertThat(compilation).succeeded();
+
+        CompilationSubject.assertThat(compilation).generatedSourceFile("EnumEntities")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/EnumEntities.java"));
+        CompilationSubject.assertThat(compilation).generatedSourceFile("EnumEntityList")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/EnumEntityList.java"));
+    }
+
+    @Test
     public void compileGeneratedIdEntityClass() {
         Compilation compilation = javac()
                 .withProcessors(new TableProcessor())

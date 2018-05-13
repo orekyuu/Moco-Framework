@@ -11,10 +11,10 @@ public class AttributeField {
     private Column column;
     private VariableElement variableElement;
 
-    public AttributeField(Column column, VariableElement variableElement) {
+    public AttributeField(RoundContext context, Column column, VariableElement variableElement) {
         this.column = column;
         this.variableElement = variableElement;
-        columnType = DatabaseColumnType.findSupportedType(variableElement).orElseThrow(RuntimeException::new);
+        columnType = DatabaseColumnType.findSupportedType(context, variableElement).orElseThrow(RuntimeException::new);
     }
 
     public Column getColumn() {
@@ -31,6 +31,10 @@ public class AttributeField {
 
     public String getFeelingTableMethod() {
         return columnType.getFeelingTableMethod();
+    }
+
+    public DatabaseColumnType getColumnType() {
+        return columnType;
     }
 
     public String entityGetterMethod() {

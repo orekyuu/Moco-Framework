@@ -13,13 +13,13 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     public void preloadHasMany() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         User foo = Users.all().where(Users.NAME.eq("foo")).toList().get(0);
         Posts.create(new Post("foo_title1", "contents", foo));
         Posts.create(new Post("foo_title2", "contents", foo));
         Posts.create(new Post("foo_title3", "contents", foo));
 
-        Users.create(new User(-1, "bar", true));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE));
         User bar = Users.all().where(Users.NAME.eq("bar")).toList().get(0);
         Posts.create(new Post("bar_title1", "contents", bar));
         Posts.create(new Post("bar_title2", "contents", bar));
@@ -37,7 +37,7 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     public void preloadNotUsed() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         Posts.create(new Post("foo_title1", "contents", Users.firstOrNull()));
 
         List<User> users = Users.all().toList();
@@ -46,7 +46,7 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     public void hasManyRelationNotFound() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         List<User> users = Users.all().preload(Users.USER_TO_POSTS).toList();
         Assertions.assertTrue(users.get(0).getPosts().isEmpty());
     }
@@ -59,7 +59,7 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     public void preloadHasOne() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         Posts.create(new Post("first title", "contents", Users.firstOrNull()));
         Posts.create(new Post("title", "contents", Users.firstOrNull(), Posts.firstOrNull()));
 
@@ -77,7 +77,7 @@ public class PreloadTest extends DatabaseTest {
 
     @Test
     public void preloadBelongsTo() {
-        Users.create(new User(-1, "foo", true));
+        Users.create(new User(-1, "foo", true, User.Gender.MALE));
         Posts.create(new Post("first title", "contents", Users.firstOrNull()));
         List<Post> list = Posts.all().preload(Posts.OWNER).toList();
         Post post = list.get(0);

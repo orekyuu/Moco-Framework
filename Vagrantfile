@@ -15,9 +15,9 @@ mysql -uroot -ppassword -e "create database moco_test;"
 mysql -uroot -ppassword -e "create database moco_sample;"
 mysql -uroot -ppassword -e "create database moco_develop;"
 
-mysql -uroot -ppassword moco_test -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL) ENGINE = InnoDB;"
-mysql -uroot -ppassword moco_sample -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL) ENGINE = InnoDB;"
-mysql -uroot -ppassword moco_develop -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL) ENGINE = InnoDB;"
+mysql -uroot -ppassword moco_test -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL, gender TEXT NOT NULL) ENGINE = InnoDB;"
+mysql -uroot -ppassword moco_sample -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL, gender TEXT NOT NULL) ENGINE = InnoDB;"
+mysql -uroot -ppassword moco_develop -e "CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name TEXT NOT NULL, active BOOL NOT NULL, gender TEXT NOT NULL) ENGINE = InnoDB;"
 
 mysql -uroot -ppassword moco_test -e "CREATE TABLE posts(id INT AUTO_INCREMENT PRIMARY KEY, title TEXT NOT NULL, contents TEXT NOT NULL, user_id INT NOT NULL, reply_to INT NOT NULL) ENGINE = InnoDB;"
 mysql -uroot -ppassword moco_sample -e "CREATE TABLE posts(id INT AUTO_INCREMENT PRIMARY KEY, title TEXT NOT NULL, contents TEXT NOT NULL, user_id INT NOT NULL, reply_to INT NOT NULL) ENGINE = InnoDB;"

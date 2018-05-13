@@ -15,9 +15,9 @@ public class DeleteTest extends DatabaseTest {
     class NotEmpty {
         @BeforeEach
         public void setup() {
-            Users.create(new User(-1, "foo", true));
-            Users.create(new User(-1, "foo", false));
-            Users.create(new User(-1, "bar", false));
+            Users.create(new User(-1, "foo", true, User.Gender.MALE));
+            Users.create(new User(-1, "foo", false, User.Gender.MALE));
+            Users.create(new User(-1, "bar", false, User.Gender.MALE));
         }
 
         @Test

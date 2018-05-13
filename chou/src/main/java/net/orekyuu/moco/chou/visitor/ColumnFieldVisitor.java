@@ -1,6 +1,7 @@
 package net.orekyuu.moco.chou.visitor;
 
 import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.core.annotations.Column;
 
 import javax.lang.model.element.VariableElement;
@@ -12,10 +13,15 @@ import java.util.Optional;
 public class ColumnFieldVisitor extends ElementScanner8<Void, Void> {
 
     private List<AttributeField> attrs = new ArrayList<>();
+    private RoundContext context;
+
+    public ColumnFieldVisitor(RoundContext context) {
+        this.context = context;
+    }
 
     @Override
     public Void visitVariable(VariableElement e, Void aVoid) {
-        Optional.ofNullable(e.getAnnotation(Column.class)).ifPresent(column -> attrs.add(new AttributeField(column, e)));
+        Optional.ofNullable(e.getAnnotation(Column.class)).ifPresent(column -> attrs.add(new AttributeField(context, column, e)));
         return super.visitVariable(e, aVoid);
     }
 

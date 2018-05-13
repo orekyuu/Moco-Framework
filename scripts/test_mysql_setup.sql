@@ -1,7 +1,8 @@
 CREATE TABLE users (
   id     INT AUTO_INCREMENT PRIMARY KEY,
   name   TEXT NOT NULL,
-  active BOOL NOT NULL
+  active BOOL NOT NULL,
+  gender TEXT NOT NULL
 )
   ENGINE = InnoDB;
 CREATE TABLE posts (

@@ -48,7 +48,13 @@ public class TableClassMethods {
             if (attributeField.getColumn().generatedValue()) {
                 continue;
             }
-            codeBlock.add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
+
+            if (attributeField.getColumnType() == DatabaseColumnType.ENUM) {
+                codeBlock.add("new $T((($T)($L.getAccessor().get(entity))).name(), $L.bindType())", SqlBindParam.class, Enum.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
+            } else {
+                codeBlock.add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
+            }
+
             if (columnFieldIterator.hasNext()) {
                 codeBlock.add(", ");
             }
