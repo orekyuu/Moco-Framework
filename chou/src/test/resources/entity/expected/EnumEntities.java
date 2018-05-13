@@ -1,3 +1,5 @@
+
+import java.lang.Enum;
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
@@ -40,7 +42,7 @@ public final class EnumEntities {
                 ReflectiveOperationException {
             EnumEntity record = new EnumEntity();
             id.set(record, resultSet.getInt("id"));
-            locale.set(record, resultSet.getString("locale"));
+            locale.set(record, Enum.valueOf(EnumEntity.Locale.class, resultSet.getString("locale")));
             return record;
         }
     };
@@ -54,7 +56,7 @@ public final class EnumEntities {
     public static void create(@Nonnull EnumEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(ID.ast(), LOCALE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(ID.getAccessor().get(entity), ID.bindType()), new SqlBindParam(LOCALE.getAccessor().get(entity), LOCALE.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(ID.getAccessor().get(entity), ID.bindType()), new SqlBindParam(((Enum)(LOCALE.getAccessor().get(entity))).name(), LOCALE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

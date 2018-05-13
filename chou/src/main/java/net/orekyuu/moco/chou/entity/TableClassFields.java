@@ -40,7 +40,8 @@ public class TableClassFields {
         initializer.beginControlFlow("try");
         for (AttributeField attributeField : entityClass.getAttributeFields()) {
             Column column = attributeField.getColumn();
-            String fieldName = attributeField.getVariableElement().getSimpleName().toString();
+            VariableElement variableElement = attributeField.getVariableElement();
+            String fieldName = variableElement.getSimpleName().toString();
             String columnName = column.name();
 
             // add field
@@ -48,8 +49,13 @@ public class TableClassFields {
             // initialize field
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
+
             // mapper
-            mappingMethod.addStatement("$L.set(record, resultSet.$L($S))", fieldName, attributeField.getDatabaseValueMethodGetterName(), columnName);
+            if (attributeField.getColumnType() == DatabaseColumnType.ENUM) {
+                mappingMethod.addStatement("$L.set(record, $T.valueOf($T.class, resultSet.$L($S)))", fieldName, Enum.class, ClassName.get(variableElement.asType()), attributeField.getDatabaseValueMethodGetterName(), columnName);
+            } else {
+                mappingMethod.addStatement("$L.set(record, resultSet.$L($S))", fieldName, attributeField.getDatabaseValueMethodGetterName(), columnName);
+            }
         }
         mappingMethod.addStatement("return record");
         // end constructor

@@ -10,11 +10,12 @@ public class InsertTest extends DatabaseTest {
     @Test
     void createUser() {
         Assertions.assertEquals(Users.all().toList().size(), 0);
-        Users.create(new User(-1, "test", true));
+        Users.create(new User(-1, "test", true, User.Gender.MALE));
         Assertions.assertEquals(Users.all().toList().size(), 1);
         User first = Users.firstOrNull();
         Assertions.assertNotEquals(first.getId(), -1);
         Assertions.assertEquals(first.getName(), "test");
         Assertions.assertEquals(first.isActive(), true);
+        Assertions.assertEquals(first.getGender(), User.Gender.MALE);
     }
 }
