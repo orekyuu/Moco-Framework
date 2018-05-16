@@ -79,4 +79,18 @@ public class EntityClassProcessorTest {
         CompilationSubject.assertThat(compilation).generatedSourceFile("ColumnVariableNameTestEntityList")
                 .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/ColumnVariableNameTestEntityList.java"));
     }
+
+    @Test
+    public void compileAttributeTestEntityClass() {
+        Compilation compilation = javac()
+                .withProcessors(new TableProcessor())
+                .compile(JavaFileObjects.forResource("entity/AttributeTestEntity.java"));
+
+        CompilationSubject.assertThat(compilation).succeeded();
+
+        CompilationSubject.assertThat(compilation).generatedSourceFile("AttributeTestEntities")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/AttributeTestEntities.java"));
+        CompilationSubject.assertThat(compilation).generatedSourceFile("AttributeTestEntityList")
+                .hasSourceEquivalentTo(JavaFileObjects.forResource("entity/expected/AttributeTestEntityList.java"));
+    }
 }

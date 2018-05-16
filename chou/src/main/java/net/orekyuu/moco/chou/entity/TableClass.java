@@ -1,8 +1,8 @@
 package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
-import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.RoundContext;
+import net.orekyuu.moco.chou.attribute.AttributeField;
 
 import javax.lang.model.element.Modifier;
 

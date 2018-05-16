@@ -1,11 +1,10 @@
 package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
-import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.NamingUtils;
+import net.orekyuu.moco.chou.attribute.AttributeField;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.feeling.Insert;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
 import javax.annotation.Nonnull;
@@ -45,15 +44,11 @@ public class TableClassMethods {
         Iterator<AttributeField> columnFieldIterator = entity.getAttributeFields().iterator();
         while (columnFieldIterator.hasNext()) {
             AttributeField attributeField = columnFieldIterator.next();
-            if (attributeField.getColumn().generatedValue()) {
+            if (attributeField.isGeneratedValue()) {
                 continue;
             }
 
-            if (attributeField.getColumnType() == DatabaseColumnType.ENUM) {
-                codeBlock.add("new $T((($T)($L.getAccessor().get(entity))).name(), $L.bindType())", SqlBindParam.class, Enum.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
-            } else {
-                codeBlock.add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, attributeField.tableClassColumnName(), attributeField.tableClassColumnName());
-            }
+            codeBlock.add(attributeField.createSqlBindParam());
 
             if (columnFieldIterator.hasNext()) {
                 codeBlock.add(", ");

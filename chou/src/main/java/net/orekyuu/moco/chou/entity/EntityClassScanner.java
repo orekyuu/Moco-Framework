@@ -1,8 +1,10 @@
 package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.JavaFile;
-import net.orekyuu.moco.chou.AttributeField;
+import net.orekyuu.moco.chou.CompilerException;
 import net.orekyuu.moco.chou.RoundContext;
+import net.orekyuu.moco.chou.attribute.AttributeFieldFactory;
+import net.orekyuu.moco.chou.attribute.UnsupportedAttributeFieldException;
 import net.orekyuu.moco.core.annotations.*;
 
 import javax.lang.model.element.TypeElement;
@@ -33,8 +35,15 @@ public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     @Override
     public Void visitVariable(VariableElement e, Void aVoid) {
+        AttributeFieldFactory attributeFieldFactory = new AttributeFieldFactory();
         Optional.ofNullable(e.getAnnotation(Column.class))
-                .ifPresent(column -> originalEntityBuilder.addColumnField(new AttributeField(roundContext, column, e)));
+                .ifPresent(column -> {
+                    try {
+                        originalEntityBuilder.addColumnField(attributeFieldFactory.create(roundContext, column, e));
+                    } catch (UnsupportedAttributeFieldException e1) {
+                        throw new CompilerException(e, "サポートされていないColumnの型です。");
+                    }
+                });
 
         Optional.ofNullable(e.getAnnotation(HasMany.class))
                 .ifPresent(hasMany -> originalEntityBuilder.addRelationField(new HasManyRelationField(roundContext, e, hasMany)));

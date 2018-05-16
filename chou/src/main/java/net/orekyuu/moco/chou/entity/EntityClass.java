@@ -2,8 +2,8 @@ package net.orekyuu.moco.chou.entity;
 
 
 import com.squareup.javapoet.ClassName;
-import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.NamingUtils;
+import net.orekyuu.moco.chou.attribute.AttributeField;
 import net.orekyuu.moco.core.annotations.Table;
 
 import javax.lang.model.element.PackageElement;
