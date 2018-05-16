@@ -39,6 +39,11 @@ public class EnumAttributeField extends AttributeField {
     }
 
     @Override
+    public CodeBlock createColumnMethod() {
+        return CodeBlock.builder().add("._string($S)", column.name()).build();
+    }
+
+    @Override
     public CodeBlock createSqlBindParam() {
         return CodeBlock.builder().add("new $T((($T)($L.getAccessor().get(entity))).name(), $L.bindType())", SqlBindParam.class, Enum.class, tableClassColumnName(), tableClassColumnName()).build();
     }
