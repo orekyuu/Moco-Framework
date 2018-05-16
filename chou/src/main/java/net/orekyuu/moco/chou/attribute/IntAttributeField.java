@@ -27,4 +27,9 @@ public class IntAttributeField extends AttributeField {
     public CodeBlock createSetterBlock() {
         return CodeBlock.builder().addStatement("$L.set(record, resultSet.getInt($S))", variableElement.getSimpleName().toString(), column.name()).build();
     }
+
+    @Override
+    public CodeBlock createColumnMethod() {
+        return CodeBlock.builder().add("._integer($S)", column.name()).build();
+    }
 }

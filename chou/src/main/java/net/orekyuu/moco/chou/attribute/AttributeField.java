@@ -64,6 +64,8 @@ public abstract class AttributeField {
 
     public abstract CodeBlock createSetterBlock();
 
+    public abstract CodeBlock createColumnMethod();
+
     public FieldSpec createTableClassField(EntityClass entityClass) {
         CodeBlock.Builder builder = CodeBlock.builder()
                 .add("new $T<>(TABLE.$L($S), $T::$L)", getAttributeClass(), getFeelingTableMethod(), getColumn().name(), entityClass.getClassName(), entityGetterMethod());

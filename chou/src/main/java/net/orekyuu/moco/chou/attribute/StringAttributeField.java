@@ -27,4 +27,9 @@ public class StringAttributeField extends AttributeField {
     public CodeBlock createSetterBlock() {
         return CodeBlock.builder().addStatement("$L.set(record, resultSet.getString($S))", variableElement.getSimpleName().toString(), column.name()).build();
     }
+
+    @Override
+    public CodeBlock createColumnMethod() {
+        return CodeBlock.builder().add("._string($S)", column.name()).build();
+    }
 }

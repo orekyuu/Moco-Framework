@@ -13,7 +13,6 @@ import javax.lang.model.element.VariableElement;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class TableClassFields {
     private TableClassFields() {
@@ -71,10 +70,8 @@ public class TableClassFields {
     public static FieldSpec tableField(RoundContext roundContext, EntityClass entityClass) {
         CodeBlock.Builder block = CodeBlock.builder().add("new $T($S, MAPPER)", TableBuilder.class, entityClass.getTable().name());
         for (AttributeField field : entityClass.getAttributeFields()) {
-            VariableElement element = field.getVariableElement();
-            Optional<DatabaseColumnType> type = DatabaseColumnType.findSupportedType(roundContext, element);
-            DatabaseColumnType databaseColumnType = type.orElseThrow(RuntimeException::new);
-            databaseColumnType.addColumnMethod(roundContext, block, field.getColumn().name());
+            CodeBlock codeBlock = field.createColumnMethod();
+            block.add(codeBlock);
         }
         block.add(".build()");
         return FieldSpec.builder(Table.class, "TABLE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

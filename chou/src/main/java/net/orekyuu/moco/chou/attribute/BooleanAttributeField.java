@@ -38,4 +38,9 @@ public class BooleanAttributeField extends AttributeField {
     public CodeBlock createSetterBlock() {
         return CodeBlock.builder().addStatement("$L.set(record, resultSet.getBoolean($S))", variableElement.getSimpleName().toString(), column.name()).build();
     }
+
+    @Override
+    public CodeBlock createColumnMethod() {
+        return CodeBlock.builder().add("._boolean($S)", column.name()).build();
+    }
 }
