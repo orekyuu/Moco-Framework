@@ -1,8 +1,8 @@
 package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.*;
-import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.RoundContext;
+import net.orekyuu.moco.chou.attribute.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -50,12 +50,7 @@ public class TableClassFields {
             initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
             initializer.addStatement("$L.setAccessible(true)", fieldName);
 
-            // mapper
-            if (attributeField.getColumnType() == DatabaseColumnType.ENUM) {
-                mappingMethod.addStatement("$L.set(record, $T.valueOf($T.class, resultSet.$L($S)))", fieldName, Enum.class, ClassName.get(variableElement.asType()), attributeField.getDatabaseValueMethodGetterName(), columnName);
-            } else {
-                mappingMethod.addStatement("$L.set(record, resultSet.$L($S))", fieldName, attributeField.getDatabaseValueMethodGetterName(), columnName);
-            }
+            mappingMethod.addCode(attributeField.createSetterBlock());
         }
         mappingMethod.addStatement("return record");
         // end constructor
@@ -88,25 +83,6 @@ public class TableClassFields {
     }
 
     public static FieldSpec columnField(EntityClass entityClass, AttributeField field) {
-        String fieldName = field.tableClassColumnName();
-
-        ClassName attributeClass = field.getAttributeClass();
-        CodeBlock.Builder builder = CodeBlock.builder().add("new $T<>(TABLE.$L($S), $T::$L)",
-                attributeClass, field.getFeelingTableMethod(), field.getColumn().name(), entityClass.getClassName(), field.entityGetterMethod());
-
-        ParameterizedTypeName parameterizedTypeName;
-        if (field.getColumnType() == DatabaseColumnType.ENUM) {
-            VariableElement variableElement = field.getVariableElement();
-            parameterizedTypeName = ParameterizedTypeName.get(attributeClass, entityClass.getClassName(), ClassName.get(variableElement.asType()));
-        } else {
-            parameterizedTypeName = ParameterizedTypeName.get(attributeClass, entityClass.getClassName());
-        }
-
-        return FieldSpec.builder(
-                parameterizedTypeName,
-                fieldName,
-                Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer(builder.build())
-                .build();
+        return field.createTableClassField(entityClass);
     }
 }

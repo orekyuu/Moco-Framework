@@ -2,10 +2,10 @@ package net.orekyuu.moco.chou.entity;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
-import net.orekyuu.moco.chou.AttributeField;
 import net.orekyuu.moco.chou.CompilerException;
 import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.chou.RoundContext;
+import net.orekyuu.moco.chou.attribute.AttributeField;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.TypeElement;
