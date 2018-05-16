@@ -16,6 +16,7 @@ import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.BooleanAttribute;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
+import net.orekyuu.moco.core.attribute.LocalDateTimeAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
@@ -38,6 +39,8 @@ public final class AttributeTestEntities {
 
         private Field hogeValue;
 
+        private Field localDateTimeValue;
+
         {
             try {
                 intValue = AttributeTestEntity.class.getDeclaredField("intValue");
@@ -52,6 +55,8 @@ public final class AttributeTestEntities {
                 stringValue.setAccessible(true);
                 hogeValue = AttributeTestEntity.class.getDeclaredField("hogeValue");
                 hogeValue.setAccessible(true);
+                localDateTimeValue = AttributeTestEntity.class.getDeclaredField("localDateTimeValue");
+                localDateTimeValue.setAccessible(true);
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }
@@ -67,11 +72,12 @@ public final class AttributeTestEntities {
             booleanValue2.set(record, resultSet.getBoolean("boolean_value2"));
             stringValue.set(record, resultSet.getString("string_value"));
             hogeValue.set(record, Enum.valueOf(AttributeTestEntity.Hoge.class, resultSet.getString("enum_value")));
+            localDateTimeValue.set(record, Optional.ofNullable(resultSet.getTimestamp("local_date_time_value")).map(t -> t.toLocalDateTime()).orElse(null));
             return record;
         }
     };
 
-    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value").build();
+    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value")._datetime("local_date_time_value").build();
 
     public static final IntAttribute<AttributeTestEntity> INT_VALUE = new IntAttribute<>(TABLE.intCol("int_value"), AttributeTestEntity::getIntValue);
 
@@ -85,10 +91,12 @@ public final class AttributeTestEntities {
 
     public static final EnumAttribute<AttributeTestEntity, AttributeTestEntity.Hoge> HOGE_VALUE = new EnumAttribute<>(TABLE.stringCol("enum_value"), AttributeTestEntity::getHogeValue);
 
+    public static final LocalDateTimeAttribute<AttributeTestEntity> LOCAL_DATE_TIME_VALUE = new LocalDateTimeAttribute<>(TABLE.timeCol("local_date_time_value"), AttributeTestEntity::getLocalDateTimeValue);
+
     public static void create(@Nonnull AttributeTestEntity entity) {
         Insert insert = new Insert(TABLE);
-        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(INT_VALUE2.getAccessor().get(entity), INT_VALUE2.bindType()), new SqlBindParam(BOOLEAN_VALUE.getAccessor().get(entity), BOOLEAN_VALUE.bindType()), new SqlBindParam(BOOLEAN_VALUE2.getAccessor().get(entity), BOOLEAN_VALUE2.bindType()), new SqlBindParam(STRING_VALUE.getAccessor().get(entity), STRING_VALUE.bindType()), new SqlBindParam(((Enum)(HOGE_VALUE.getAccessor().get(entity))).name(), HOGE_VALUE.bindType()))));
+        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
+        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(INT_VALUE2.getAccessor().get(entity), INT_VALUE2.bindType()), new SqlBindParam(BOOLEAN_VALUE.getAccessor().get(entity), BOOLEAN_VALUE.bindType()), new SqlBindParam(BOOLEAN_VALUE2.getAccessor().get(entity), BOOLEAN_VALUE2.bindType()), new SqlBindParam(STRING_VALUE.getAccessor().get(entity), STRING_VALUE.bindType()), new SqlBindParam(((Enum)(HOGE_VALUE.getAccessor().get(entity))).name(), HOGE_VALUE.bindType()), new SqlBindParam(LOCAL_DATE_TIME_VALUE.getAccessor().get(entity), LOCAL_DATE_TIME_VALUE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 
