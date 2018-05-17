@@ -10,6 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,7 @@ public final class AttributeFieldFactory {
         register(IntAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, int.class, Integer.class));
         register(StringAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, String.class));
         register(BooleanAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, boolean.class, Boolean.class));
+        register(LocalDateTimeAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, LocalDateTime.class));
 
         // Enum
         register(EnumAttributeField::new, (context, column, fieldType) -> isEnum(context, fieldType));

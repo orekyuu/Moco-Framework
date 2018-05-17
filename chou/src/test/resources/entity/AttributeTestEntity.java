@@ -1,5 +1,6 @@
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.Table;
+import java.time.LocalDateTime;
 
 @Table(name = "attribute_test_entity")
 class AttributeTestEntity {
@@ -23,6 +24,9 @@ class AttributeTestEntity {
     @Column(name = "enum_value", unique = true)
     private Hoge hogeValue;
 
+    @Column(name = "local_date_time_value")
+    private LocalDateTime localDateTimeValue;
+
     public int getIntValue() {
         return intValue;
     }
@@ -45,5 +49,9 @@ class AttributeTestEntity {
 
     public Hoge getHogeValue() {
         return hogeValue;
+    }
+
+    public LocalDateTime getLocalDateTimeValue() {
+        return localDateTimeValue;
     }
 }
