@@ -42,7 +42,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "chou/build.gradle" }}-{{ checksum "feeling/build.gradle" }}-{{ checksum "moco/build.gradle" }}-{{ checksum "moco-sample/build.gradle" }}-{{ checksum "moco-test/build.gradle" }}
       - run:
           name: Mysql create table
-          command: mysql  -h 127.0.0.1 -u root moco_test < scripts/test_mysql_setup.sql
+          command: mysql  -h 127.0.0.1 -u root moco_test < scripts/schema.sql
       # run tests!
       - run: gradle test
 
