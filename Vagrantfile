@@ -16,8 +16,9 @@ mysql -uroot -ppassword -e "create database moco_sample;"
 mysql -uroot -ppassword -e "create database moco_develop;"
 
 mysql -uroot -ppassword moco_test < /vagrant/scripts/schema.sql
-mysql -uroot -ppassword moco_sample < /vagrant/scripts/schema.sql
 mysql -uroot -ppassword moco_develop < /vagrant/scripts/schema.sql
+
+mysql -uroot -ppassword moco_sample < /vagrant/scripts/schema_sample.sql
 
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 sed -i "119 a default-character-set=utf8mb4" /etc/mysql/my.cnf
