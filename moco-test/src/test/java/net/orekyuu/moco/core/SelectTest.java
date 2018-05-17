@@ -5,6 +5,8 @@ import net.orekyuu.moco.core.entity.Users;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SelectTest extends DatabaseTest {
@@ -32,6 +34,33 @@ public class SelectTest extends DatabaseTest {
 
         User first = Users.firstOrNull();
         Assertions.assertEquals(first.getName(), "foo");
+    }
+
+    @Test
+    void findByRegisteredAt() {
+        Users.create(new User(-1, "foo", true, User.Gender.MALE, LocalDateTime.of(2018, 5, 20, 0, 0)));
+        Users.create(new User(-1, "bar", true, User.Gender.MALE, LocalDateTime.of(2018, 5, 21, 0, 0)));
+        Users.create(new User(-1, "baz", true, User.Gender.MALE, LocalDateTime.of(2018, 5, 22, 0, 0)));
+
+        List<User> after = Users.all().where(Users.REGISTERED_AT.after(LocalDateTime.of(2018, 5, 21, 0, 0))).toList();
+        Assertions.assertEquals(after.size(), 1);
+        Assertions.assertEquals(after.get(0).getName(), "baz");
+
+        List<User> before = Users.all().where(Users.REGISTERED_AT.before(LocalDateTime.of(2018, 5, 21, 0, 0))).toList();
+        Assertions.assertEquals(before.size(), 1);
+        Assertions.assertEquals(before.get(0).getName(), "foo");
+
+        List<User> between = Users.all()
+                .where(Users.REGISTERED_AT.between(LocalDate.of(2018, 5, 20).atStartOfDay(), LocalDate.of(2018, 5, 22).atStartOfDay()))
+                .order(Users.ID.asc())
+                .toList();
+        Assertions.assertEquals(between.size(), 2);
+        Assertions.assertEquals(between.get(0).getName(), "foo");
+        Assertions.assertEquals(between.get(1).getName(), "bar");
+
+        List<User> allDay = Users.all().where(Users.REGISTERED_AT.allDay(LocalDate.of(2018, 5, 21))).toList();
+        Assertions.assertEquals(allDay.size(), 1);
+        Assertions.assertEquals(allDay.get(0).getName(), "bar");
     }
 
     @Test

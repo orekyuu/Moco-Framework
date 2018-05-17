@@ -4,6 +4,7 @@ import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.HasMany;
 import net.orekyuu.moco.core.annotations.Table;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class User {
     private boolean active;
     @Column(name = "gender")
     private Gender gender;
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
 
     @HasMany(foreignKey = "user_id", key = "id")
     private List<Post> posts = new ArrayList<>();
@@ -29,10 +32,15 @@ public class User {
     }
 
     public User(int id, String name, boolean active, Gender gender) {
+        this(id, name, active, gender, LocalDateTime.now());
+    }
+
+    public User(int id, String name, boolean active, Gender gender, LocalDateTime registeredAt) {
         this.id = id;
         this.name = name;
         this.active = active;
         this.gender = gender;
+        this.registeredAt = registeredAt;
     }
 
     public int getId() {
@@ -51,6 +59,10 @@ public class User {
         return gender;
     }
 
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
+
     public List<Post> getPosts() {
         return posts;
     }
@@ -62,6 +74,7 @@ public class User {
         sb.append(", name='").append(name).append('\'');
         sb.append(", active=").append(active);
         sb.append(", gender=").append(gender);
+        sb.append(", registeredAt=").append(registeredAt);
         sb.append(", posts=").append(posts);
         sb.append('}');
         return sb.toString();

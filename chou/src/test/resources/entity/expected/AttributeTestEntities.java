@@ -8,6 +8,8 @@ import java.lang.String;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import javax.annotation.Nonnull;
@@ -96,7 +98,7 @@ public final class AttributeTestEntities {
     public static void create(@Nonnull AttributeTestEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(INT_VALUE2.getAccessor().get(entity), INT_VALUE2.bindType()), new SqlBindParam(BOOLEAN_VALUE.getAccessor().get(entity), BOOLEAN_VALUE.bindType()), new SqlBindParam(BOOLEAN_VALUE2.getAccessor().get(entity), BOOLEAN_VALUE2.bindType()), new SqlBindParam(STRING_VALUE.getAccessor().get(entity), STRING_VALUE.bindType()), new SqlBindParam(((Enum)(HOGE_VALUE.getAccessor().get(entity))).name(), HOGE_VALUE.bindType()), new SqlBindParam(LOCAL_DATE_TIME_VALUE.getAccessor().get(entity), LOCAL_DATE_TIME_VALUE.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(INT_VALUE2.getAccessor().get(entity), INT_VALUE2.bindType()), new SqlBindParam(BOOLEAN_VALUE.getAccessor().get(entity), BOOLEAN_VALUE.bindType()), new SqlBindParam(BOOLEAN_VALUE2.getAccessor().get(entity), BOOLEAN_VALUE2.bindType()), new SqlBindParam(STRING_VALUE.getAccessor().get(entity), STRING_VALUE.bindType()), new SqlBindParam(((Enum)(HOGE_VALUE.getAccessor().get(entity))).name(), HOGE_VALUE.bindType()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

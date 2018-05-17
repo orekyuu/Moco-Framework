@@ -43,15 +43,15 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
     }
 
     public Predicate after(LocalDateTime time) {
-        return gt(time);
-    }
-
-    public Predicate before(LocalDateTime time) {
         return lt(time);
     }
 
+    public Predicate before(LocalDateTime time) {
+        return gt(time);
+    }
+
     public Predicate between(LocalDateTime before, LocalDateTime after) {
-        SqlNodeExpression expression = gt(before).getExpression().and(lt(after).getExpression());
+        SqlNodeExpression expression = lteq(before).getExpression().and(gt(after).getExpression());
         return new Predicate(expression);
     }
 
