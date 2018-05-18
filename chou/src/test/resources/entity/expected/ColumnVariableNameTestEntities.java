@@ -1,3 +1,4 @@
+
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
@@ -12,11 +13,11 @@ import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
 public final class ColumnVariableNameTestEntities {
@@ -31,14 +32,10 @@ public final class ColumnVariableNameTestEntities {
 
         {
             try {
-                intCol1 = ColumnVariableNameTestEntity.class.getDeclaredField("intCol1");
-                intCol1.setAccessible(true);
-                intCol2 = ColumnVariableNameTestEntity.class.getDeclaredField("intCol2");
-                intCol2.setAccessible(true);
-                text1 = ColumnVariableNameTestEntity.class.getDeclaredField("text1");
-                text1.setAccessible(true);
-                text2 = ColumnVariableNameTestEntity.class.getDeclaredField("text2");
-                text2.setAccessible(true);
+                intCol1 = TableClassHelper.getDeclaredField(ColumnVariableNameTestEntity.class, "intCol1");
+                intCol2 = TableClassHelper.getDeclaredField(ColumnVariableNameTestEntity.class, "intCol2");
+                text1 = TableClassHelper.getDeclaredField(ColumnVariableNameTestEntity.class, "text1");
+                text2 = TableClassHelper.getDeclaredField(ColumnVariableNameTestEntity.class, "text2");
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }
@@ -69,7 +66,7 @@ public final class ColumnVariableNameTestEntities {
     public static void create(@Nonnull ColumnVariableNameTestEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(TEXT_TEST1.ast(), TEXT_TEST2.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(TEXT_TEST1.getAccessor().get(entity), TEXT_TEST1.bindType()), new SqlBindParam(TEXT_TEST2.getAccessor().get(entity), TEXT_TEST2.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(TEXT_TEST1, entity), TableClassHelper.createBindParam(TEXT_TEST2, entity))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

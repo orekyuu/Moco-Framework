@@ -1,5 +1,4 @@
 import java.lang.Boolean;
-import java.lang.Enum;
 import java.lang.Integer;
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
@@ -20,6 +19,7 @@ import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.LocalDateTimeAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -45,20 +45,13 @@ public final class AttributeTestEntities {
 
         {
             try {
-                intValue = AttributeTestEntity.class.getDeclaredField("intValue");
-                intValue.setAccessible(true);
-                intValue2 = AttributeTestEntity.class.getDeclaredField("intValue2");
-                intValue2.setAccessible(true);
-                booleanValue = AttributeTestEntity.class.getDeclaredField("booleanValue");
-                booleanValue.setAccessible(true);
-                booleanValue2 = AttributeTestEntity.class.getDeclaredField("booleanValue2");
-                booleanValue2.setAccessible(true);
-                stringValue = AttributeTestEntity.class.getDeclaredField("stringValue");
-                stringValue.setAccessible(true);
-                hogeValue = AttributeTestEntity.class.getDeclaredField("hogeValue");
-                hogeValue.setAccessible(true);
-                localDateTimeValue = AttributeTestEntity.class.getDeclaredField("localDateTimeValue");
-                localDateTimeValue.setAccessible(true);
+                intValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "intValue");
+                intValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "intValue2");
+                booleanValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue");
+                booleanValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue2");
+                stringValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "stringValue");
+                hogeValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "hogeValue");
+                localDateTimeValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "localDateTimeValue");
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }
@@ -73,7 +66,9 @@ public final class AttributeTestEntities {
             booleanValue.set(record, resultSet.getBoolean("boolean_value"));
             booleanValue2.set(record, resultSet.getBoolean("boolean_value2"));
             stringValue.set(record, resultSet.getString("string_value"));
-            hogeValue.set(record, Enum.valueOf(AttributeTestEntity.Hoge.class, resultSet.getString("enum_value")));
+            String enum_valueResultValue = resultSet.getString("enum_value");
+            AttributeTestEntity.Hoge enum_valueResultValue2 = enum_valueResultValue == null ? null : AttributeTestEntity.Hoge.valueOf(resultSet.getString("enum_value"));
+            hogeValue.set(record, enum_valueResultValue2);
             localDateTimeValue.set(record, Optional.ofNullable(resultSet.getTimestamp("local_date_time_value")).map(t -> t.toLocalDateTime()).orElse(null));
             return record;
         }
@@ -98,7 +93,7 @@ public final class AttributeTestEntities {
     public static void create(@Nonnull AttributeTestEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(INT_VALUE2.getAccessor().get(entity), INT_VALUE2.bindType()), new SqlBindParam(BOOLEAN_VALUE.getAccessor().get(entity), BOOLEAN_VALUE.bindType()), new SqlBindParam(BOOLEAN_VALUE2.getAccessor().get(entity), BOOLEAN_VALUE2.bindType()), new SqlBindParam(STRING_VALUE.getAccessor().get(entity), STRING_VALUE.bindType()), new SqlBindParam(((Enum)(HOGE_VALUE.getAccessor().get(entity))).name(), HOGE_VALUE.bindType()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

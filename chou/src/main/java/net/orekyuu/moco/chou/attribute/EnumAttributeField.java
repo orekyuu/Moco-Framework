@@ -7,7 +7,7 @@ import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.chou.entity.EntityClass;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 
 import javax.lang.model.element.VariableElement;
 
@@ -35,7 +35,12 @@ public class EnumAttributeField extends AttributeField {
     @Override
     public CodeBlock createSetterBlock() {
         VariableElement element = getVariableElement();
-        return CodeBlock.builder().addStatement("$L.set(record, $T.valueOf($T.class, resultSet.getString($S)))", element.getSimpleName().toString(), Enum.class, ClassName.get(element.asType()), getColumn().name()).build();
+        return CodeBlock.builder()
+                .addStatement("$T $LResultValue = resultSet.getString($S)", String.class, getColumn().name(), getColumn().name())
+                .addStatement("$T $LResultValue2 = $LResultValue == null ? null : $T.valueOf(resultSet.getString($S))",
+                        ClassName.get(element.asType()), getColumn().name(), getColumn().name(), ClassName.get(element.asType()), getColumn().name())
+                .addStatement("$L.set(record, $LResultValue2)", element.getSimpleName().toString(), getColumn().name())
+                .build();
     }
 
     @Override
@@ -45,6 +50,6 @@ public class EnumAttributeField extends AttributeField {
 
     @Override
     public CodeBlock createSqlBindParam() {
-        return CodeBlock.builder().add("new $T((($T)($L.getAccessor().get(entity))).name(), $L.bindType())", SqlBindParam.class, Enum.class, tableClassColumnName(), tableClassColumnName()).build();
+        return CodeBlock.builder().add("$T.createBindParam($L, entity, o -> (($T)o).name())", TableClassHelper.class, tableClassColumnName(), variableElement.asType()).build();
     }
 }
