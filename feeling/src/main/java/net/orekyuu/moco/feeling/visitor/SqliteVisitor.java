@@ -31,6 +31,11 @@ public class SqliteVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(LongAttribute node, SqlContext context) {
+        context.append(node.getName()).append(" ");
+    }
+
+    @Override
     public void visit(StringAttribute node, SqlContext context) {
         context.append(node.getName()).append(" ");
     }

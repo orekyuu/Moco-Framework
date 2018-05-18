@@ -17,6 +17,7 @@ public abstract class SqlVisitor {
     public abstract void visit(DecimalAttribute node, SqlContext context);
     public abstract void visit(FloatAttribute node, SqlContext context);
     public abstract void visit(IntAttribute node, SqlContext context);
+    public abstract void visit(LongAttribute node, SqlContext context);
     public abstract void visit(StringAttribute node, SqlContext context);
     public abstract void visit(TimeAttribute node, SqlContext context);
 

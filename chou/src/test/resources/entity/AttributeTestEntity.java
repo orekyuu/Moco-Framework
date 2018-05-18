@@ -13,6 +13,11 @@ class AttributeTestEntity {
     @Column(name = "int_value2", unique = true)
     private Integer intValue2;
 
+    @Column(name = "long_value", generatedValue = true, unique = true)
+    private long longValue;
+    @Column(name = "long_value2", unique = true)
+    private Long longValue2;
+
     @Column(name = "boolean_value", unique = true)
     private boolean booleanValue;
     @Column(name = "boolean_value2", unique = true)
@@ -33,6 +38,14 @@ class AttributeTestEntity {
 
     public Integer getIntValue2() {
         return intValue2;
+    }
+
+    public long getLongValue() {
+        return longValue;
+    }
+
+    public Long getLongValue2() {
+        return longValue2;
     }
 
     public boolean isBooleanValue() {

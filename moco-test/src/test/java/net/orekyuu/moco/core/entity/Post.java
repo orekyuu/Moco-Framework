@@ -17,6 +17,8 @@ public class Post {
     private int userId;
     @Column(name = "reply_to")
     private int replyTo;
+    @Column(name = "like_count")
+    private long likeCount;
 
     @HasOne(key = "id", foreignKey = "reply_to", variableName = "REPLY_FROM")
     private Post replyFrom;
@@ -27,16 +29,17 @@ public class Post {
     }
 
     public Post(String title, String contents, User user) {
-        this(title, contents, user, null);
+        this(title, contents, user, null, 0);
     }
 
-    public Post(String title, String contents, User user, Post post) {
+    public Post(String title, String contents, User user, Post post, long likeCount) {
         this.title = title;
         this.contents = contents;
         this.userId = user.getId();
         if (post != null) {
             this.replyTo = post.id;
         }
+        this.likeCount = likeCount;
     }
 
     public int getId() {
@@ -65,5 +68,9 @@ public class Post {
 
     public User getUser() {
         return user;
+    }
+
+    public long getLikeCount() {
+        return likeCount;
     }
 }

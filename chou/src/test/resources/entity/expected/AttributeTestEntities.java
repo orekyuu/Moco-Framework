@@ -1,5 +1,6 @@
 import java.lang.Boolean;
 import java.lang.Integer;
+import java.lang.Long;
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
@@ -18,6 +19,7 @@ import net.orekyuu.moco.core.attribute.BooleanAttribute;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.LocalDateTimeAttribute;
+import net.orekyuu.moco.core.attribute.LongAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
 import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Insert;
@@ -33,6 +35,10 @@ public final class AttributeTestEntities {
 
         private Field intValue2;
 
+        private Field longValue;
+
+        private Field longValue2;
+
         private Field booleanValue;
 
         private Field booleanValue2;
@@ -47,6 +53,8 @@ public final class AttributeTestEntities {
             try {
                 intValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "intValue");
                 intValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "intValue2");
+                longValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "longValue");
+                longValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "longValue2");
                 booleanValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue");
                 booleanValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue2");
                 stringValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "stringValue");
@@ -63,6 +71,8 @@ public final class AttributeTestEntities {
             AttributeTestEntity record = new AttributeTestEntity();
             intValue.set(record, resultSet.getInt("int_value"));
             intValue2.set(record, resultSet.getInt("int_value2"));
+            longValue.set(record, resultSet.getLong("long_value"));
+            longValue2.set(record, resultSet.getLong("long_value2"));
             booleanValue.set(record, resultSet.getBoolean("boolean_value"));
             booleanValue2.set(record, resultSet.getBoolean("boolean_value2"));
             stringValue.set(record, resultSet.getString("string_value"));
@@ -74,11 +84,15 @@ public final class AttributeTestEntities {
         }
     };
 
-    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value")._datetime("local_date_time_value").build();
+    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._long("long_value")._long("long_value2")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value")._datetime("local_date_time_value").build();
 
     public static final IntAttribute<AttributeTestEntity> INT_VALUE = new IntAttribute<>(TABLE.intCol("int_value"), AttributeTestEntity::getIntValue);
 
     public static final IntAttribute<AttributeTestEntity> INT_VALUE2 = new IntAttribute<>(TABLE.intCol("int_value2"), AttributeTestEntity::getIntValue2);
+
+    public static final LongAttribute<AttributeTestEntity> LONG_VALUE = new LongAttribute<>(TABLE.longCol("long_value"), AttributeTestEntity::getLongValue);
+
+    public static final LongAttribute<AttributeTestEntity> LONG_VALUE2 = new LongAttribute<>(TABLE.longCol("long_value2"), AttributeTestEntity::getLongValue2);
 
     public static final BooleanAttribute<AttributeTestEntity> BOOLEAN_VALUE = new BooleanAttribute<>(TABLE.booleanCol("boolean_value"), AttributeTestEntity::isBooleanValue);
 
@@ -92,8 +106,8 @@ public final class AttributeTestEntities {
 
     public static void create(@Nonnull AttributeTestEntity entity) {
         Insert insert = new Insert(TABLE);
-        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
+        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), LONG_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(LONG_VALUE2, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 
@@ -130,6 +144,26 @@ public final class AttributeTestEntities {
     @Nullable
     public static AttributeTestEntity findOrNullByIntValue2(@Nonnull Integer key) {
         return all().where(INT_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+    }
+
+    @Nonnull
+    public static Optional<AttributeTestEntity> findByLongValue(@Nonnull long key) {
+        return all().where(LONG_VALUE.eq(key)).limit(1).toList().stream().findFirst();
+    }
+
+    @Nullable
+    public static AttributeTestEntity findOrNullByLongValue(@Nonnull long key) {
+        return all().where(LONG_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+    }
+
+    @Nonnull
+    public static Optional<AttributeTestEntity> findByLongValue2(@Nonnull Long key) {
+        return all().where(LONG_VALUE2.eq(key)).limit(1).toList().stream().findFirst();
+    }
+
+    @Nullable
+    public static AttributeTestEntity findOrNullByLongValue2(@Nonnull Long key) {
+        return all().where(LONG_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
     @Nonnull

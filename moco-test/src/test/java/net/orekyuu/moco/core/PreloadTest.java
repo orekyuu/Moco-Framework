@@ -61,7 +61,7 @@ public class PreloadTest extends DatabaseTest {
     public void preloadHasOne() {
         Users.create(new User(-1, "foo", true, User.Gender.MALE));
         Posts.create(new Post("first title", "contents", Users.firstOrNull()));
-        Posts.create(new Post("title", "contents", Users.firstOrNull(), Posts.firstOrNull()));
+        Posts.create(new Post("title", "contents", Users.firstOrNull(), Posts.firstOrNull(), 10));
 
         List<Post> posts = Posts.all().preload(Posts.REPLY_FROM).toList();
 

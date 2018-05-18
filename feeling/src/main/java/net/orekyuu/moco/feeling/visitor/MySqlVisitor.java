@@ -31,6 +31,11 @@ public class MySqlVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(LongAttribute node, SqlContext context) {
+        context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
+    }
+
+    @Override
     public void visit(StringAttribute node, SqlContext context) {
         context.append(escape(node.getRelation())).append(".").append(escape(node.getName())).append(" ");
     }

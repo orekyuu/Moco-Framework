@@ -11,5 +11,6 @@ CREATE TABLE posts (
   title    TEXT NOT NULL,
   contents TEXT NOT NULL,
   user_id  INT  NOT NULL,
-  reply_to INT  NOT NULL
+  reply_to INT  NOT NULL,
+  like_count INT  NOT NULL
 ) ENGINE = InnoDB;
