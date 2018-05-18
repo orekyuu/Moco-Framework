@@ -22,6 +22,11 @@ public class TableBuilder {
         return this;
     }
 
+    public TableBuilder _long(String name) {
+        attrs.add(new LongAttribute(tableName, name));
+        return this;
+    }
+
     public TableBuilder _string(String name) {
         attrs.add(new StringAttribute(tableName, name));
         return this;

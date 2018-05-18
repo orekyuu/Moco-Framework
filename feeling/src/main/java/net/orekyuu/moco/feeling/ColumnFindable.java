@@ -8,6 +8,10 @@ public interface ColumnFindable {
         return findColumn(IntAttribute.class, name);
     }
 
+    default LongAttribute longCol(String name) {
+        return findColumn(LongAttribute.class, name);
+    }
+
     default StringAttribute stringCol(String name) {
         return findColumn(StringAttribute.class, name);
     }

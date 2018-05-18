@@ -10,7 +10,7 @@ public abstract class Attribute<OWNER> {
     net.orekyuu.moco.feeling.attributes.Attribute attribute;
     private AttributeValueAccessor<OWNER> accessor;
 
-    Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
+    public Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         this.attribute = attribute;
         this.accessor = accessor;
     }
