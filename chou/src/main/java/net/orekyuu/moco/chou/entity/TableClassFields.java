@@ -4,6 +4,7 @@ import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.chou.attribute.AttributeField;
 import net.orekyuu.moco.core.annotations.Column;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
@@ -46,8 +47,7 @@ public class TableClassFields {
             // add field
             mapperClass.addField(FieldSpec.builder(ClassName.get(Field.class), fieldName).addModifiers(Modifier.PRIVATE).build());
             // initialize field
-            initializer.addStatement("$L = $T.class.getDeclaredField($S)", fieldName, entityClass.getClassName(), fieldName);
-            initializer.addStatement("$L.setAccessible(true)", fieldName);
+            initializer.addStatement("$L = $T.getDeclaredField($T.class, $S)", fieldName, TableClassHelper.class, entityClass.getClassName(), fieldName);
 
             mappingMethod.addCode(attributeField.createSetterBlock());
         }

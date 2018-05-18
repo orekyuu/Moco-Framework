@@ -1,3 +1,4 @@
+
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
@@ -11,11 +12,11 @@ import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
 public final class GeneratedIdEntities {
@@ -26,10 +27,8 @@ public final class GeneratedIdEntities {
 
         {
             try {
-                id = GeneratedIdEntity.class.getDeclaredField("id");
-                id.setAccessible(true);
-                text = GeneratedIdEntity.class.getDeclaredField("text");
-                text.setAccessible(true);
+                id = TableClassHelper.getDeclaredField(GeneratedIdEntity.class, "id");
+                text = TableClassHelper.getDeclaredField(GeneratedIdEntity.class, "text");
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }
@@ -54,7 +53,7 @@ public final class GeneratedIdEntities {
     public static void create(@Nonnull GeneratedIdEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(TEXT.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(TEXT.getAccessor().get(entity), TEXT.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(TEXT, entity))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 

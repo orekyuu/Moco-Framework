@@ -8,6 +8,7 @@ import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.chou.entity.EntityClass;
 import net.orekyuu.moco.core.annotations.Column;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 
 import javax.lang.model.element.Modifier;
@@ -79,6 +80,6 @@ public abstract class AttributeField {
     }
 
     public CodeBlock createSqlBindParam() {
-        return CodeBlock.builder().add("new $T($L.getAccessor().get(entity), $L.bindType())", SqlBindParam.class, tableClassColumnName(), tableClassColumnName()).build();
+        return CodeBlock.builder().add("$T.createBindParam($L, entity)", TableClassHelper.class, tableClassColumnName()).build();
     }
 }

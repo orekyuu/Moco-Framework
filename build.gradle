@@ -1,3 +1,5 @@
+apply plugin: 'idea'
+
 group 'net.orekyuu'
 version '1.0-SNAPSHOT'
 
@@ -9,6 +11,14 @@ subprojects {
 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
+
+    idea {
+        project {
+            jdkName = "1.8"
+            languageLevel = "1.8"
+        }
+
+    }
 
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'

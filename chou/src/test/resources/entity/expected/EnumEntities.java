@@ -1,8 +1,7 @@
-
-import java.lang.Enum;
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
+import java.lang.String;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,11 +12,11 @@ import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
+import net.orekyuu.moco.core.internal.TableClassHelper;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.TableBuilder;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
 public final class EnumEntities {
@@ -28,10 +27,8 @@ public final class EnumEntities {
 
         {
             try {
-                id = EnumEntity.class.getDeclaredField("id");
-                id.setAccessible(true);
-                locale = EnumEntity.class.getDeclaredField("locale");
-                locale.setAccessible(true);
+                id = TableClassHelper.getDeclaredField(EnumEntity.class, "id");
+                locale = TableClassHelper.getDeclaredField(EnumEntity.class, "locale");
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }
@@ -42,7 +39,9 @@ public final class EnumEntities {
                 ReflectiveOperationException {
             EnumEntity record = new EnumEntity();
             id.set(record, resultSet.getInt("id"));
-            locale.set(record, Enum.valueOf(EnumEntity.Locale.class, resultSet.getString("locale")));
+            String localeResultValue = resultSet.getString("locale");
+            EnumEntity.Locale localeResultValue2 = localeResultValue == null ? null : EnumEntity.Locale.valueOf(resultSet.getString("locale"));
+            locale.set(record, localeResultValue2);
             return record;
         }
     };
@@ -56,7 +55,7 @@ public final class EnumEntities {
     public static void create(@Nonnull EnumEntity entity) {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(ID.ast(), LOCALE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(new SqlBindParam(ID.getAccessor().get(entity), ID.bindType()), new SqlBindParam(((Enum)(LOCALE.getAccessor().get(entity))).name(), LOCALE.bindType()))));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(ID, entity), TableClassHelper.createBindParam(LOCALE, entity, o -> ((EnumEntity.Locale)o).name()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 
