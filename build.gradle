@@ -1,10 +1,9 @@
 apply plugin: 'idea'
-
-group 'net.orekyuu'
-version '1.0-SNAPSHOT'
+apply plugin: 'maven'
 
 subprojects {
-    group 'net.orekyuu'
+    group 'net.orekyuu.moco'
+    version '0.0.1'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
