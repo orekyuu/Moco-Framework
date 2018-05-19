@@ -1,5 +1,7 @@
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.annotations.Table;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Table(name = "attribute_test_entity")
@@ -17,6 +19,9 @@ class AttributeTestEntity {
     private long longValue;
     @Column(name = "long_value2", unique = true)
     private Long longValue2;
+
+    @Column(name = "big_decimal_value", unique = true)
+    private BigDecimal bigDecimalValue;
 
     @Column(name = "boolean_value", unique = true)
     private boolean booleanValue;
@@ -46,6 +51,10 @@ class AttributeTestEntity {
 
     public Long getLongValue2() {
         return longValue2;
+    }
+
+    public BigDecimal getBigDecimalValue() {
+        return bigDecimalValue;
     }
 
     public boolean isBooleanValue() {

@@ -35,7 +35,7 @@ public abstract class AttributeField {
 
     public abstract ClassName getAttributeClass();
 
-    public abstract String getFeelingTableMethod();
+    public abstract ColumnFindableMethod getFeelingTableMethod();
 
     public String entityGetterMethod() {
         String name = variableElement.getSimpleName().toString();
@@ -69,7 +69,7 @@ public abstract class AttributeField {
 
     public FieldSpec createTableClassField(EntityClass entityClass) {
         CodeBlock.Builder builder = CodeBlock.builder()
-                .add("new $T<>(TABLE.$L($S), $T::$L)", getAttributeClass(), getFeelingTableMethod(), getColumn().name(), entityClass.getClassName(), entityGetterMethod());
+                .add("new $T<>(TABLE.$L($S), $T::$L)", getAttributeClass(), getFeelingTableMethod().getMethodName(), getColumn().name(), entityClass.getClassName(), entityGetterMethod());
 
         return FieldSpec.builder(
                 tableClassFieldType(entityClass),

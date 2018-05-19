@@ -6,6 +6,7 @@ import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
 import java.lang.String;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.orekyuu.moco.core.ConnectionManager;
+import net.orekyuu.moco.core.attribute.BigDecimalAttribute;
 import net.orekyuu.moco.core.attribute.BooleanAttribute;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
@@ -39,6 +41,8 @@ public final class AttributeTestEntities {
 
         private Field longValue2;
 
+        private Field bigDecimalValue;
+
         private Field booleanValue;
 
         private Field booleanValue2;
@@ -55,6 +59,7 @@ public final class AttributeTestEntities {
                 intValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "intValue2");
                 longValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "longValue");
                 longValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "longValue2");
+                bigDecimalValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "bigDecimalValue");
                 booleanValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue");
                 booleanValue2 = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "booleanValue2");
                 stringValue = TableClassHelper.getDeclaredField(AttributeTestEntity.class, "stringValue");
@@ -73,6 +78,7 @@ public final class AttributeTestEntities {
             intValue2.set(record, resultSet.getInt("int_value2"));
             longValue.set(record, resultSet.getLong("long_value"));
             longValue2.set(record, resultSet.getLong("long_value2"));
+            bigDecimalValue.set(record, resultSet.getBigDecimal("big_decimal_value"));
             booleanValue.set(record, resultSet.getBoolean("boolean_value"));
             booleanValue2.set(record, resultSet.getBoolean("boolean_value2"));
             stringValue.set(record, resultSet.getString("string_value"));
@@ -84,7 +90,7 @@ public final class AttributeTestEntities {
         }
     };
 
-    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._long("long_value")._long("long_value2")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value")._datetime("local_date_time_value").build();
+    public static final Table TABLE = new TableBuilder("attribute_test_entity", MAPPER)._integer("int_value")._integer("int_value2")._long("long_value")._long("long_value2")._decimal("big_decimal_value")._boolean("boolean_value")._boolean("boolean_value2")._string("string_value")._string("enum_value")._datetime("local_date_time_value").build();
 
     public static final IntAttribute<AttributeTestEntity> INT_VALUE = new IntAttribute<>(TABLE.intCol("int_value"), AttributeTestEntity::getIntValue);
 
@@ -93,6 +99,8 @@ public final class AttributeTestEntities {
     public static final LongAttribute<AttributeTestEntity> LONG_VALUE = new LongAttribute<>(TABLE.longCol("long_value"), AttributeTestEntity::getLongValue);
 
     public static final LongAttribute<AttributeTestEntity> LONG_VALUE2 = new LongAttribute<>(TABLE.longCol("long_value2"), AttributeTestEntity::getLongValue2);
+
+    public static final BigDecimalAttribute<AttributeTestEntity> BIG_DECIMAL_VALUE = new BigDecimalAttribute<>(TABLE.decimalCol("big_decimal_value"), AttributeTestEntity::getBigDecimalValue);
 
     public static final BooleanAttribute<AttributeTestEntity> BOOLEAN_VALUE = new BooleanAttribute<>(TABLE.booleanCol("boolean_value"), AttributeTestEntity::isBooleanValue);
 
@@ -106,8 +114,8 @@ public final class AttributeTestEntities {
 
     public static void create(@Nonnull AttributeTestEntity entity) {
         Insert insert = new Insert(TABLE);
-        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), LONG_VALUE2.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
-        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(LONG_VALUE2, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
+        insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), LONG_VALUE2.ast(), BIG_DECIMAL_VALUE.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
+        insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(LONG_VALUE2, entity), TableClassHelper.createBindParam(BIG_DECIMAL_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
         insert.executeQuery(ConnectionManager.getConnection());
     }
 
@@ -164,6 +172,16 @@ public final class AttributeTestEntities {
     @Nullable
     public static AttributeTestEntity findOrNullByLongValue2(@Nonnull Long key) {
         return all().where(LONG_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+    }
+
+    @Nonnull
+    public static Optional<AttributeTestEntity> findByBigDecimalValue(@Nonnull BigDecimal key) {
+        return all().where(BIG_DECIMAL_VALUE.eq(key)).limit(1).toList().stream().findFirst();
+    }
+
+    @Nullable
+    public static AttributeTestEntity findOrNullByBigDecimalValue(@Nonnull BigDecimal key) {
+        return all().where(BIG_DECIMAL_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
     @Nonnull

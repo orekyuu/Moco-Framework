@@ -19,8 +19,8 @@ public class BooleanAttributeField extends AttributeField {
     }
 
     @Override
-    public String getFeelingTableMethod() {
-        return "booleanCol";
+    public ColumnFindableMethod getFeelingTableMethod() {
+        return ColumnFindableMethod.BOOLEAN;
     }
 
     @Override
