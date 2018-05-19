@@ -57,7 +57,7 @@ public class TableClassMethods {
         }
         builder.addCode(codeBlock.add(")));\n").build());
 
-        builder.addStatement("insert.executeQuery($T.getConnection())", ConnectionManager.class);
+        builder.addStatement("insert.executeQuery($T.getConnection(), $T.createSqlVisitor())", ConnectionManager.class, ConnectionManager.class);
         return builder.build();
     }
 

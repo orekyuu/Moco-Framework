@@ -76,10 +76,9 @@ public class Select {
         table.getColumns().forEach(this::addResultColumn);
     }
 
-    public SqlContext prepareQuery() {
+    public SqlContext prepareQuery(SqlVisitor sqlVisitor) {
         SqlContext context = new SqlContext();
-        SqlVisitor visitor = new MySqlVisitor();
-        accept(visitor, context);
+        accept(sqlVisitor, context);
         return context;
     }
 
@@ -87,8 +86,8 @@ public class Select {
         void onResult(ResultSet resultSet) throws SQLException, ReflectiveOperationException;
     }
 
-    public void executeQueryWithResultListener(Connection connection, QueryResultListener listener) {
-        SqlContext context = prepareQuery();
+    public void executeQueryWithResultListener(Connection connection, SqlVisitor sqlVisitor, QueryResultListener listener) {
+        SqlContext context = prepareQuery(sqlVisitor);
         try (PreparedStatement statement = context.createStatement(connection)) {
             ResultSet resultSet = statement.executeQuery();
             listener.onResult(resultSet);
@@ -102,9 +101,9 @@ public class Select {
     public interface QueryResultMapper<R> {
         R mapping(ResultSet resultSet) throws SQLException, ReflectiveOperationException;
     }
-    public <R> List<R> executeQuery(Connection connection, QueryResultMapper<R> mapper) {
+    public <R> List<R> executeQuery(Connection connection, SqlVisitor sqlVisitor, QueryResultMapper<R> mapper) {
         ArrayList<R> list = new ArrayList<>();
-        executeQueryWithResultListener(connection, resultSet -> {
+        executeQueryWithResultListener(connection, sqlVisitor, resultSet -> {
             while (resultSet.next()) {
                 R record = mapper.mapping(resultSet);
                 list.add(record);

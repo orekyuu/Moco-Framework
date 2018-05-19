@@ -43,7 +43,7 @@ public class BelongsRelation<OWNER, CHILD> extends Relation<OWNER> {
 
         Select select = child.select();
         select.where(new WhereClause(new SqlIn(childKeyAttribute.ast(), new SqlNodeArray(params))));
-        List<CHILD> children = select.executeQuery(ConnectionManager.getConnection(), mapper);
+        List<CHILD> children = select.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor(), mapper);
 
         Map<Object, List<CHILD>> groupedRecords = children.stream()
                 .collect(Collectors.groupingBy((Function<Object, Object>) childKeyAttribute.getAccessor()::get));

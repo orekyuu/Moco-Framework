@@ -92,11 +92,11 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     }
 
     public void delete() {
-        createDelete().executeQuery(ConnectionManager.getConnection());
+        createDelete().executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     public List<E> toList() {
-        List<E> records = createSelect().executeQuery(ConnectionManager.getConnection(), getMapper());
+        List<E> records = createSelect().executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor(), getMapper());
         Preloader<E> preloader = new Preloader<>();
         preloader.preload(records, preloadRelations);
         return records;
@@ -127,7 +127,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
                 List<E> records = createSelect()
                         .limit(new SqlLimit(new SqlLiteral(String.valueOf(batchSize))))
                         .offset(new SqlOffset(new SqlLiteral(String.valueOf(currentPage * batchSize))))
-                        .executeQuery(ConnectionManager.getConnection(), getMapper());
+                        .executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor(), getMapper());
                 Preloader<E> preloader = new Preloader<>();
                 preloader.preload(records, preloadRelations);
                 currentPage++;
