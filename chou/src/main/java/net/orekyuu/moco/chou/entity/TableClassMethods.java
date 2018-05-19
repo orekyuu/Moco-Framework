@@ -4,6 +4,7 @@ import com.squareup.javapoet.*;
 import net.orekyuu.moco.chou.NamingUtils;
 import net.orekyuu.moco.chou.attribute.AttributeField;
 import net.orekyuu.moco.core.ConnectionManager;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
 
@@ -78,12 +79,35 @@ public class TableClassMethods {
                 .build();
     }
 
+    public static MethodSpec firstPreloadableMethod(EntityClass entity) {
+        ParameterizedTypeName parameterType = ParameterizedTypeName.get(ClassName.get(Relation.class), entity.getClassName());
+
+        return MethodSpec.methodBuilder("first")
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addAnnotation(Nonnull.class)
+                .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
+                .addStatement("return all().limit(1).preload(relations).toList().stream().findFirst()", entity.getEntityListClassName())
+                .build();
+    }
+
     public static MethodSpec firstOrNullMethod(EntityClass entity) {
         return MethodSpec.methodBuilder("firstOrNull")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nullable.class)
                 .returns(entity.getClassName())
                 .addStatement("return first().orElse(null)", entity.getEntityListClassName())
+                .build();
+    }
+
+    public static MethodSpec firstOrNullPreloadableMethod(EntityClass entity) {
+        ParameterizedTypeName parameterType = ParameterizedTypeName.get(ClassName.get(Relation.class), entity.getClassName());
+        return MethodSpec.methodBuilder("firstOrNull")
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addAnnotation(Nullable.class)
+                .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
+                .returns(entity.getClassName())
+                .addStatement("return first(relations).orElse(null)", entity.getEntityListClassName())
                 .build();
     }
 
@@ -99,6 +123,21 @@ public class TableClassMethods {
                 .build();
     }
 
+    public static MethodSpec findPreloadableMethod(EntityClass entity, AttributeField field) {
+        ParameterizedTypeName parameterType = ParameterizedTypeName.get(ClassName.get(Relation.class), entity.getClassName());
+
+        VariableElement variableElement = field.getVariableElement();
+        String fieldName = NamingUtils.toUpperFirst(variableElement.getSimpleName().toString());
+        return MethodSpec.methodBuilder("findBy" + fieldName)
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addAnnotation(Nonnull.class)
+                .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
+                .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
+                .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
+                .addStatement("return all().where($L.eq(key)).limit(1).preload(relations).toList().stream().findFirst()", field.tableClassColumnName())
+                .build();
+    }
+
     public static MethodSpec findOrNullMethod(EntityClass entity, AttributeField field) {
         VariableElement variableElement = field.getVariableElement();
         String fieldName = NamingUtils.toUpperFirst(variableElement.getSimpleName().toString());
@@ -108,6 +147,21 @@ public class TableClassMethods {
                 .returns(entity.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addStatement("return all().where($L.eq(key)).limit(1).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
+                .build();
+    }
+
+    public static MethodSpec findOrNullPreloadableMethod(EntityClass entity, AttributeField field) {
+        ParameterizedTypeName parameterType = ParameterizedTypeName.get(ClassName.get(Relation.class), entity.getClassName());
+
+        VariableElement variableElement = field.getVariableElement();
+        String fieldName = NamingUtils.toUpperFirst(variableElement.getSimpleName().toString());
+        return MethodSpec.methodBuilder("findOrNullBy" + fieldName)
+                .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                .addAnnotation(Nullable.class)
+                .returns(entity.getClassName())
+                .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
+                .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
+                .addStatement("return all().where($L.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
                 .build();
     }
 }

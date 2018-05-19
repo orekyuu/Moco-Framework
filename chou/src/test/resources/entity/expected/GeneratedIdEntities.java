@@ -1,4 +1,3 @@
-
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
@@ -13,6 +12,7 @@ import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
 import net.orekyuu.moco.core.internal.TableClassHelper;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -65,6 +65,11 @@ public final class GeneratedIdEntities {
     @Nonnull
     public static Optional<GeneratedIdEntity> first() {
         return all().limit(1).toList().stream().findFirst();
+    }
+
+    @Nonnull
+    public static Optional<GeneratedIdEntity> first(@Nonnull Relation<GeneratedIdEntity>... relations) {
+        return all().limit(1).preload(relations).toList().stream().findFirst();
     }
 
     @Nullable

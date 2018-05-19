@@ -1,3 +1,4 @@
+
 import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.Long;
@@ -24,6 +25,7 @@ import net.orekyuu.moco.core.attribute.LocalDateTimeAttribute;
 import net.orekyuu.moco.core.attribute.LongAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
 import net.orekyuu.moco.core.internal.TableClassHelper;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -129,6 +131,11 @@ public final class AttributeTestEntities {
         return all().limit(1).toList().stream().findFirst();
     }
 
+    @Nonnull
+    public static Optional<AttributeTestEntity> first(@Nonnull Relation<AttributeTestEntity>... relations) {
+        return all().limit(1).preload(relations).toList().stream().findFirst();
+    }
+
     @Nullable
     public static AttributeTestEntity firstOrNull() {
         return first().orElse(null);
@@ -140,7 +147,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByIntValue(@Nonnull int key) {
+    public static AttributeTestEntity findOrNullByIntValue(@Nonnull int key,
+                                                           @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -150,7 +158,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByIntValue2(@Nonnull Integer key) {
+    public static AttributeTestEntity findOrNullByIntValue2(@Nonnull Integer key,
+                                                            @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -160,7 +169,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByLongValue(@Nonnull long key) {
+    public static AttributeTestEntity findOrNullByLongValue(@Nonnull long key,
+                                                            @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -170,7 +180,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByLongValue2(@Nonnull Long key) {
+    public static AttributeTestEntity findOrNullByLongValue2(@Nonnull Long key,
+                                                             @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -180,7 +191,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByBigDecimalValue(@Nonnull BigDecimal key) {
+    public static AttributeTestEntity findOrNullByBigDecimalValue(@Nonnull BigDecimal key,
+                                                                  @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BIG_DECIMAL_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -190,7 +202,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByBooleanValue(@Nonnull boolean key) {
+    public static AttributeTestEntity findOrNullByBooleanValue(@Nonnull boolean key,
+                                                               @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -200,7 +213,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByBooleanValue2(@Nonnull Boolean key) {
+    public static AttributeTestEntity findOrNullByBooleanValue2(@Nonnull Boolean key,
+                                                                @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE2.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -210,7 +224,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByStringValue(@Nonnull String key) {
+    public static AttributeTestEntity findOrNullByStringValue(@Nonnull String key,
+                                                              @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(STRING_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -220,7 +235,8 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
-    public static AttributeTestEntity findOrNullByHogeValue(@Nonnull AttributeTestEntity.Hoge key) {
+    public static AttributeTestEntity findOrNullByHogeValue(@Nonnull AttributeTestEntity.Hoge key,
+                                                            @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(HOGE_VALUE.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 }

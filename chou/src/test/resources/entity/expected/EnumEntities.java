@@ -13,6 +13,7 @@ import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.EnumAttribute;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.internal.TableClassHelper;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -67,6 +68,11 @@ public final class EnumEntities {
     @Nonnull
     public static Optional<EnumEntity> first() {
         return all().limit(1).toList().stream().findFirst();
+    }
+
+    @Nonnull
+    public static Optional<EnumEntity> first(@Nonnull Relation<EnumEntity>... relations) {
+        return all().limit(1).preload(relations).toList().stream().findFirst();
     }
 
     @Nullable

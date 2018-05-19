@@ -86,6 +86,11 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         return (T)this;
     }
 
+    public T preload(Relation<E> ... relation) {
+        preloadRelations.addAll(Arrays.asList(relation));
+        return (T)this;
+    }
+
     public void delete() {
         createDelete().executeQuery(ConnectionManager.getConnection());
     }

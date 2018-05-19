@@ -33,8 +33,7 @@ public class InsertTest extends DatabaseTest {
         Assertions.assertEquals(Points.all().toList().size(), 0);
         Points.create(new Point(-1, user.getId(), BigDecimal.valueOf(100, 3)));
 
-        List<User> users = Users.all().where(Users.ID.eq(user.getId())).preload(Users.USER_TO_POINTS).toList();
-        User result = users.get(0);
+        User result = Users.findOrNullById(user.getId(), Users.USER_TO_POINTS);
         List<Point> points = result.getPoints();
 
         Assertions.assertEquals(points.size(), 1);

@@ -13,6 +13,7 @@ import net.orekyuu.moco.core.ConnectionManager;
 import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.StringAttribute;
 import net.orekyuu.moco.core.internal.TableClassHelper;
+import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Insert;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
@@ -67,6 +68,11 @@ public final class UniqueTestEntities {
         return all().limit(1).toList().stream().findFirst();
     }
 
+    @Nonnull
+    public static Optional<UniqueTestEntity> first(@Nonnull Relation<UniqueTestEntity>... relations) {
+        return all().limit(1).preload(relations).toList().stream().findFirst();
+    }
+
     @Nullable
     public static UniqueTestEntity firstOrNull() {
         return first().orElse(null);
@@ -78,7 +84,8 @@ public final class UniqueTestEntities {
     }
 
     @Nullable
-    public static UniqueTestEntity findOrNullById(@Nonnull int key) {
+    public static UniqueTestEntity findOrNullById(@Nonnull int key,
+                                                  @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(ID.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 
@@ -88,7 +95,8 @@ public final class UniqueTestEntities {
     }
 
     @Nullable
-    public static UniqueTestEntity findOrNullByText(@Nonnull String key) {
+    public static UniqueTestEntity findOrNullByText(@Nonnull String key,
+                                                    @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(TEXT.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
     }
 }
