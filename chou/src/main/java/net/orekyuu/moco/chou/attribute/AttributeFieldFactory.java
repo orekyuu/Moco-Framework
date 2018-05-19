@@ -10,6 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public final class AttributeFieldFactory {
     public AttributeFieldFactory() {
         register(IntAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, int.class, Integer.class));
         register(LongAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, long.class, Long.class));
+        register(BigDecimalAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, BigDecimal.class));
         register(StringAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, String.class));
         register(BooleanAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, boolean.class, Boolean.class));
         register(LocalDateTimeAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, LocalDateTime.class));

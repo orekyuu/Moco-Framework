@@ -20,8 +20,8 @@ public class LongAttributeField extends AttributeField {
     }
 
     @Override
-    public String getFeelingTableMethod() {
-        return "longCol";
+    public ColumnFindableMethod getFeelingTableMethod() {
+        return ColumnFindableMethod.LONG;
     }
 
     @Override

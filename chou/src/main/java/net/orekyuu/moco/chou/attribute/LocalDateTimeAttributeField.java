@@ -23,8 +23,8 @@ public class LocalDateTimeAttributeField extends AttributeField {
     }
 
     @Override
-    public String getFeelingTableMethod() {
-        return "timeCol";
+    public ColumnFindableMethod getFeelingTableMethod() {
+        return ColumnFindableMethod.TIME;
     }
 
     @Override

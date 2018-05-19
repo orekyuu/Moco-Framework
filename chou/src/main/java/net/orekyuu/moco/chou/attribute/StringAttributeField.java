@@ -19,8 +19,8 @@ public class StringAttributeField extends AttributeField {
     }
 
     @Override
-    public String getFeelingTableMethod() {
-        return "stringCol";
+    public ColumnFindableMethod getFeelingTableMethod() {
+        return ColumnFindableMethod.STRING;
     }
 
     @Override

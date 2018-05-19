@@ -27,6 +27,8 @@ public class User {
 
     @HasMany(foreignKey = "user_id", key = "id")
     private List<Post> posts = new ArrayList<>();
+    @HasMany(foreignKey = "user_id", key = "id")
+    private List<Point> points = new ArrayList<>();
 
     public User() {
     }
@@ -65,6 +67,10 @@ public class User {
 
     public List<Post> getPosts() {
         return posts;
+    }
+
+    public List<Point> getPoints() {
+        return points;
     }
 
     @Override
