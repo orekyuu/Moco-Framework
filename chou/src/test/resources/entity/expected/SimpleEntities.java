@@ -76,4 +76,9 @@ public final class SimpleEntities {
     public static SimpleEntity firstOrNull() {
         return first().orElse(null);
     }
+
+    @Nullable
+    public static SimpleEntity firstOrNull(@Nonnull Relation<SimpleEntity>... relations) {
+        return first(relations).orElse(null);
+    }
 }

@@ -76,4 +76,9 @@ public final class GeneratedIdEntities {
     public static GeneratedIdEntity firstOrNull() {
         return first().orElse(null);
     }
+
+    @Nullable
+    public static GeneratedIdEntity firstOrNull(@Nonnull Relation<GeneratedIdEntity>... relations) {
+        return first(relations).orElse(null);
+    }
 }

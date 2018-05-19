@@ -90,15 +90,31 @@ public final class ColumnVariableNameTestEntities {
         return first().orElse(null);
     }
 
+    @Nullable
+    public static ColumnVariableNameTestEntity firstOrNull(@Nonnull Relation<ColumnVariableNameTestEntity>... relations) {
+        return first(relations).orElse(null);
+    }
+
     @Nonnull
     public static Optional<ColumnVariableNameTestEntity> findByIntCol1(@Nonnull int key) {
         return all().where(ID_TEST.eq(key)).limit(1).toList().stream().findFirst();
     }
 
+    @Nonnull
+    public static Optional<ColumnVariableNameTestEntity> findByIntCol1(@Nonnull int key,
+                                                                       @Nonnull Relation<ColumnVariableNameTestEntity>... relations) {
+        return all().where(ID_TEST.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
+    }
+
+    @Nullable
+    public static ColumnVariableNameTestEntity findOrNullByIntCol1(@Nonnull int key) {
+        return all().where(ID_TEST.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+    }
+
     @Nullable
     public static ColumnVariableNameTestEntity findOrNullByIntCol1(@Nonnull int key,
                                                                    @Nonnull Relation<ColumnVariableNameTestEntity>... relations) {
-        return all().where(ID_TEST.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+        return all().where(ID_TEST.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
     }
 
     @Nonnull
@@ -106,9 +122,20 @@ public final class ColumnVariableNameTestEntities {
         return all().where(TEXT_TEST1.eq(key)).limit(1).toList().stream().findFirst();
     }
 
+    @Nonnull
+    public static Optional<ColumnVariableNameTestEntity> findByText1(@Nonnull String key,
+                                                                     @Nonnull Relation<ColumnVariableNameTestEntity>... relations) {
+        return all().where(TEXT_TEST1.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
+    }
+
+    @Nullable
+    public static ColumnVariableNameTestEntity findOrNullByText1(@Nonnull String key) {
+        return all().where(TEXT_TEST1.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+    }
+
     @Nullable
     public static ColumnVariableNameTestEntity findOrNullByText1(@Nonnull String key,
                                                                  @Nonnull Relation<ColumnVariableNameTestEntity>... relations) {
-        return all().where(TEXT_TEST1.eq(key)).limit(1).toList().stream().findFirst().orElse(null);
+        return all().where(TEXT_TEST1.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
     }
 }

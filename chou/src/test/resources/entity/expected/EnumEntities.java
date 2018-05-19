@@ -79,4 +79,9 @@ public final class EnumEntities {
     public static EnumEntity firstOrNull() {
         return first().orElse(null);
     }
+
+    @Nullable
+    public static EnumEntity firstOrNull(@Nonnull Relation<EnumEntity>... relations) {
+        return first(relations).orElse(null);
+    }
 }
