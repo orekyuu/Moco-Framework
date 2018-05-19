@@ -36,6 +36,10 @@ public class TableClass {
         return TableClassMethods.firstMethod(entityClass);
     }
 
+    public MethodSpec firstPreloadableMethod() {
+        return TableClassMethods.firstPreloadableMethod(entityClass);
+    }
+
     public MethodSpec firstOrNullMethod() {
         return TableClassMethods.firstOrNullMethod(entityClass);
     }
@@ -75,15 +79,31 @@ public class TableClass {
         run(roundContext, () -> classBuilder.addMethod(createMethod()));
         run(roundContext, () -> classBuilder.addMethod(allMethod()));
         run(roundContext, () -> classBuilder.addMethod(firstMethod()));
+        run(roundContext, () -> classBuilder.addMethod(firstPreloadableMethod()));
         run(roundContext, () -> classBuilder.addMethod(firstOrNullMethod()));
+        run(roundContext, () -> classBuilder.addMethod(firstOrNullPreloadableMethod()));
         for (AttributeField field : entityClass.getAttributeFields()) {
             if (field.isUnique()) {
                 run(roundContext, () -> classBuilder.addMethod(findMethod(field)));
+                run(roundContext, () -> classBuilder.addMethod(findPreloadableMethod(field)));
                 run(roundContext, () -> classBuilder.addMethod(findOrNullMethod(field)));
+                run(roundContext, () -> classBuilder.addMethod(findOrNullPreloadableMethod(field)));
             }
         }
 
         return JavaFile.builder(entityClass.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
+    }
+
+    private MethodSpec findOrNullPreloadableMethod(AttributeField field) {
+        return TableClassMethods.findOrNullPreloadableMethod(entityClass, field);
+    }
+
+    private MethodSpec findPreloadableMethod(AttributeField field) {
+        return TableClassMethods.findPreloadableMethod(entityClass, field);
+    }
+
+    private MethodSpec firstOrNullPreloadableMethod() {
+        return TableClassMethods.firstOrNullPreloadableMethod(entityClass);
     }
 }
