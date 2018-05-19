@@ -54,7 +54,7 @@ public final class SimpleEntities {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(ID.ast(), TEXT.ast()));
         insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(ID, entity), TableClassHelper.createBindParam(TEXT, entity))));
-        insert.executeQuery(ConnectionManager.getConnection());
+        insert.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     @Nonnull

@@ -67,7 +67,7 @@ public final class ColumnVariableNameTestEntities {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(TEXT_TEST1.ast(), TEXT_TEST2.ast()));
         insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(TEXT_TEST1, entity), TableClassHelper.createBindParam(TEXT_TEST2, entity))));
-        insert.executeQuery(ConnectionManager.getConnection());
+        insert.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     @Nonnull

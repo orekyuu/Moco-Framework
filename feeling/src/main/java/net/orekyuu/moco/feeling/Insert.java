@@ -40,15 +40,14 @@ public class Insert {
         return values;
     }
 
-    public SqlContext prepareQuery() {
+    public SqlContext prepareQuery(SqlVisitor sqlVisitor) {
         SqlContext context = new SqlContext();
-        SqlVisitor visitor = new MySqlVisitor();
-        accept(visitor, context);
+        accept(sqlVisitor, context);
         return context;
     }
 
-    public int executeQuery(Connection connection) throws UncheckedSQLException {
-        SqlContext context = prepareQuery();
+    public int executeQuery(Connection connection, SqlVisitor sqlVisitor) throws UncheckedSQLException {
+        SqlContext context = prepareQuery(sqlVisitor);
         try (PreparedStatement statement = context.createStatement(connection)) {
             return statement.executeUpdate();
         } catch (SQLException e) {

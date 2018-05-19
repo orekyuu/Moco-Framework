@@ -21,7 +21,7 @@ public abstract class DatabaseTest {
         if (!mysqlUser.isPresent()) {
             dataSource.setPassword("moco");
         }
-        ConnectionManager.initialize(dataSource);
+        ConnectionManager.initialize(dataSource, DataSourceType.MYSQL);
         ConnectionManager.getConnection().setAutoCommit(false);
     }
 

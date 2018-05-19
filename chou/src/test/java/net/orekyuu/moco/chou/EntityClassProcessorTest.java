@@ -4,7 +4,7 @@ import com.google.testing.compile.Compilation;
 import com.google.testing.compile.CompilationSubject;
 import com.google.testing.compile.JavaFileObjects;
 import net.orekyuu.moco.chou.entity.TableProcessor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.google.testing.compile.Compiler.javac;
 
