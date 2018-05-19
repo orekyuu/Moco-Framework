@@ -117,7 +117,7 @@ public final class AttributeTestEntities {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(INT_VALUE2.ast(), LONG_VALUE2.ast(), BIG_DECIMAL_VALUE.ast(), BOOLEAN_VALUE.ast(), BOOLEAN_VALUE2.ast(), STRING_VALUE.ast(), HOGE_VALUE.ast(), LOCAL_DATE_TIME_VALUE.ast()));
         insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(INT_VALUE2, entity), TableClassHelper.createBindParam(LONG_VALUE2, entity), TableClassHelper.createBindParam(BIG_DECIMAL_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE, entity), TableClassHelper.createBindParam(BOOLEAN_VALUE2, entity), TableClassHelper.createBindParam(STRING_VALUE, entity), TableClassHelper.createBindParam(HOGE_VALUE, entity, o -> ((AttributeTestEntity.Hoge)o).name()), new SqlBindParam(Timestamp.valueOf((LocalDateTime)LOCAL_DATE_TIME_VALUE.getAccessor().get(entity)), LOCAL_DATE_TIME_VALUE.bindType()))));
-        insert.executeQuery(ConnectionManager.getConnection());
+        insert.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     @Nonnull

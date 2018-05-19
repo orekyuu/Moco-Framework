@@ -55,7 +55,7 @@ public final class UniqueTestEntities {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(TEXT.ast()));
         insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(TEXT, entity))));
-        insert.executeQuery(ConnectionManager.getConnection());
+        insert.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     @Nonnull

@@ -57,7 +57,7 @@ public final class EnumEntities {
         Insert insert = new Insert(TABLE);
         insert.setAttributes(Arrays.asList(ID.ast(), LOCALE.ast()));
         insert.setValues(new SqlNodeArray(Arrays.asList(TableClassHelper.createBindParam(ID, entity), TableClassHelper.createBindParam(LOCALE, entity, o -> ((EnumEntity.Locale)o).name()))));
-        insert.executeQuery(ConnectionManager.getConnection());
+        insert.executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     @Nonnull
