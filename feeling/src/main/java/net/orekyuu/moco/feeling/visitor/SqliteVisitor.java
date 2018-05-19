@@ -1,9 +1,6 @@
 package net.orekyuu.moco.feeling.visitor;
 
-import net.orekyuu.moco.feeling.Delete;
-import net.orekyuu.moco.feeling.Insert;
-import net.orekyuu.moco.feeling.Select;
-import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.*;
 import net.orekyuu.moco.feeling.attributes.*;
 import net.orekyuu.moco.feeling.node.*;
 
@@ -199,6 +196,14 @@ public class SqliteVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(SqlColumnNameExprPair sqlColumnNameExprPair, SqlContext context) {
+        Attribute attribute = sqlColumnNameExprPair.getAttribute();
+        context.append(escape(attribute.getName())).append(" ");
+        context.append("= ");
+        sqlColumnNameExprPair.getSqlNode().accept(this, context);
+    }
+
+    @Override
     public void visit(SqlNodeArray node, SqlContext context) {
         Iterator<SqlNode> iterator = node.getNodes().iterator();
         while (iterator.hasNext()) {
@@ -251,6 +256,20 @@ public class SqliteVisitor extends SqlVisitor {
         delete.getOrderBy().ifPresent(orderBy -> orderBy.accept(this, context));
         if (delete.getLimit() != null) {
             delete.getLimit().accept(this, context);
+        }
+    }
+
+    @Override
+    public void visit(Update update, SqlContext context) {
+        context.append("update ");
+        context.append(escape(update.getTable().getTableName()) + " set ");
+
+        SqlNodeArray sqlNodeArray = new SqlNodeArray(update.getPairs());
+        sqlNodeArray.accept(this, context);
+
+        WhereClause whereClause = update.getWhereClause();
+        if (whereClause != null) {
+            whereClause.accept(this, context);
         }
     }
 

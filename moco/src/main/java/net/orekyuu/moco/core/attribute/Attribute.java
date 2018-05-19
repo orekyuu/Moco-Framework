@@ -1,5 +1,7 @@
 package net.orekyuu.moco.core.attribute;
 
+import net.orekyuu.moco.core.UpdateValuePair;
+import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlOrderigTerm;
 
 import java.util.List;
@@ -67,5 +69,10 @@ public abstract class Attribute<OWNER> {
 
     public SqlOrderigTerm desc() {
         return new SqlOrderigTerm(attribute, SqlOrderigTerm.OrderType.DESC);
+    }
+
+    @SuppressWarnings("unchecked")
+    public UpdateValuePair<OWNER> set(Object value) {
+        return UpdateValuePair.of(this, new SqlBindParam(value, bindType()));
     }
 }

@@ -1,9 +1,6 @@
 package net.orekyuu.moco.feeling.visitor;
 
-import net.orekyuu.moco.feeling.Delete;
-import net.orekyuu.moco.feeling.Insert;
-import net.orekyuu.moco.feeling.Select;
-import net.orekyuu.moco.feeling.SqlContext;
+import net.orekyuu.moco.feeling.*;
 import net.orekyuu.moco.feeling.attributes.*;
 import net.orekyuu.moco.feeling.node.*;
 
@@ -47,6 +44,7 @@ public abstract class SqlVisitor {
     public abstract void visit(SqlOffset node, SqlContext context);
     public abstract void visit(SqlOrderBy sqlOrderBy, SqlContext context);
     public abstract void visit(SqlOrderigTerm sqlOrderigTerm, SqlContext context);
+    public abstract void visit(SqlColumnNameExprPair sqlColumnNameExprPair, SqlContext context);
 
     public abstract void visit(SqlNodeArray node, SqlContext context);
 
@@ -54,4 +52,5 @@ public abstract class SqlVisitor {
     public abstract void visit(Insert insert, SqlContext context);
 
     public abstract void visit(Delete delete, SqlContext context);
+    public abstract void visit(Update update, SqlContext context);
 }
