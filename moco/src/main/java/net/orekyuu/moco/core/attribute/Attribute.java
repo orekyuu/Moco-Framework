@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Attribute<OWNER> {
+public abstract class Attribute<OWNER, V> {
     net.orekyuu.moco.feeling.attributes.Attribute attribute;
     private AttributeValueAccessor<OWNER> accessor;
 
@@ -72,7 +72,7 @@ public abstract class Attribute<OWNER> {
     }
 
     @SuppressWarnings("unchecked")
-    public UpdateValuePair<OWNER> set(Object value) {
+    public UpdateValuePair<OWNER, V> set(V value) {
         return UpdateValuePair.of(this, new SqlBindParam(value, bindType()));
     }
 }

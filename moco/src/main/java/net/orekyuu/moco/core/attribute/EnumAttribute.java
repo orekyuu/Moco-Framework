@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class EnumAttribute<OWNER, E extends Enum<E>> extends Attribute<OWNER> {
+public class EnumAttribute<OWNER, E extends Enum<E>> extends Attribute<OWNER, E> {
     public EnumAttribute(net.orekyuu.moco.feeling.attributes.StringAttribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }
@@ -38,8 +38,8 @@ public class EnumAttribute<OWNER, E extends Enum<E>> extends Attribute<OWNER> {
     }
 
     @SuppressWarnings("unchecked")
-    public UpdateValuePair<OWNER> set(Object value) {
-        E v = (E) value;
-        return UpdateValuePair.of(this, new SqlBindParam<>(v == null ? null : v.name(), String.class));
+    @Override
+    public UpdateValuePair<OWNER, E> set(E value) {
+        return UpdateValuePair.of(this, new SqlBindParam<>(value == null ? null : value.name(), String.class));
     }
 }

@@ -47,10 +47,10 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     }
 
     @SafeVarargs
-    protected final Update createUpdate(UpdateValuePair<E>... pairs) {
+    protected final Update createUpdate(UpdateValuePair<E, ?>... pairs) {
         Update update = table.update();
         whereClause.ifPresent(update::where);
-        for (UpdateValuePair<E> pair : pairs) {
+        for (UpdateValuePair<E, ?> pair : pairs) {
             update.addSetValue(pair.getAttribute().ast(), pair.getSqlNode());
         }
         return update;
@@ -108,7 +108,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     }
 
     @SafeVarargs
-    public final void update(UpdateValuePair<E>... pairs) {
+    public final void update(UpdateValuePair<E, ?>... pairs) {
         createUpdate(pairs).executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 

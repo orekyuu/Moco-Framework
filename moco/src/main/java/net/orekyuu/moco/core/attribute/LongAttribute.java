@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-public class LongAttribute<OWNER> extends Attribute<OWNER> {
+public class LongAttribute<OWNER> extends Attribute<OWNER, Long> {
     public LongAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }

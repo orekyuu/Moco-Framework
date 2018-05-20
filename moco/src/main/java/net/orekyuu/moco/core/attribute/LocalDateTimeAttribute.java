@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
+public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER, LocalDateTime> {
     public LocalDateTimeAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }
@@ -20,7 +20,7 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
     }
 
     private Timestamp convert(LocalDateTime dateTime) {
-        return Timestamp.valueOf(dateTime);
+        return dateTime == null ? null : Timestamp.valueOf(dateTime);
     }
 
     private SqlBindParam<Timestamp> param(LocalDateTime dateTime) {
@@ -61,8 +61,8 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
     }
 
     @SuppressWarnings("unchecked")
-    public UpdateValuePair<OWNER> set(Object value) {
-        LocalDateTime localDateTime = (LocalDateTime) value;
-        return UpdateValuePair.of(this, new SqlBindParam<>(convert(localDateTime), Timestamp.class));
+    @Override
+    public UpdateValuePair<OWNER, LocalDateTime> set(LocalDateTime value) {
+        return UpdateValuePair.of(this, new SqlBindParam<>(convert(value), Timestamp.class));
     }
 }
