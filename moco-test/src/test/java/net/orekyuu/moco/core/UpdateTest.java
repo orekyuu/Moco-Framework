@@ -16,11 +16,11 @@ public class UpdateTest extends DatabaseTest {
         Users.create(new User(-1, "test_user1", true, User.Gender.MALE));
         Users.create(new User(-1, "test_user2", true, User.Gender.MALE));
 
-        testUser1 = Users.all().where(Users.NAME.eq("test_user1")).toList().get(0);
-        testUser2 = Users.all().where(Users.NAME.eq("test_user2")).toList().get(0);
+        testUser1 = Users.all().where(Users.NAME.eq("test_user1")).firstOrNull();
+        testUser2 = Users.all().where(Users.NAME.eq("test_user2")).firstOrNull();
 
         Posts.create(new Post("post1", "post_content1", testUser1, null, 10));
-        post1 = Posts.all().where(Posts.TITLE.eq("post1")).toList().get(0);
+        post1 = Posts.all().where(Posts.TITLE.eq("post1")).firstOrNull();
     }
 
     @Test
@@ -56,7 +56,7 @@ public class UpdateTest extends DatabaseTest {
         PostList postList = Posts.all().where(Posts.ID.eq(post1.getId()));
         postList.update(Posts.USER_ID.set(testUser2.getId()));
 
-        Post post = postList.preload(Posts.OWNER).toList().get(0);
+        Post post = postList.preload(Posts.OWNER).firstOrNull();
         Assertions.assertEquals(post.getUser().getId(), testUser2.getId());
     }
 }
