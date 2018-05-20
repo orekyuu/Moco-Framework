@@ -67,12 +67,12 @@ public final class EnumEntities {
 
     @Nonnull
     public static Optional<EnumEntity> first() {
-        return all().limit(1).toList().stream().findFirst();
+        return all().first();
     }
 
     @Nonnull
     public static Optional<EnumEntity> first(@Nonnull Relation<EnumEntity>... relations) {
-        return all().limit(1).preload(relations).toList().stream().findFirst();
+        return all().preload(relations).first();
     }
 
     @Nullable

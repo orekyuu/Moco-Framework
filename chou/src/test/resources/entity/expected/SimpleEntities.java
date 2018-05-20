@@ -64,12 +64,12 @@ public final class SimpleEntities {
 
     @Nonnull
     public static Optional<SimpleEntity> first() {
-        return all().limit(1).toList().stream().findFirst();
+        return all().first();
     }
 
     @Nonnull
     public static Optional<SimpleEntity> first(@Nonnull Relation<SimpleEntity>... relations) {
-        return all().limit(1).preload(relations).toList().stream().findFirst();
+        return all().preload(relations).first();
     }
 
     @Nullable

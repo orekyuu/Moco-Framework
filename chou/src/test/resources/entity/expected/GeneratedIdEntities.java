@@ -64,12 +64,12 @@ public final class GeneratedIdEntities {
 
     @Nonnull
     public static Optional<GeneratedIdEntity> first() {
-        return all().limit(1).toList().stream().findFirst();
+        return all().first();
     }
 
     @Nonnull
     public static Optional<GeneratedIdEntity> first(@Nonnull Relation<GeneratedIdEntity>... relations) {
-        return all().limit(1).preload(relations).toList().stream().findFirst();
+        return all().preload(relations).first();
     }
 
     @Nullable

@@ -75,7 +75,7 @@ public class TableClassMethods {
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addAnnotation(Nonnull.class)
                 .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
-                .addStatement("return all().limit(1).toList().stream().findFirst()", entity.getEntityListClassName())
+                .addStatement("return all().first()", entity.getEntityListClassName())
                 .build();
     }
 
@@ -87,7 +87,7 @@ public class TableClassMethods {
                 .addAnnotation(Nonnull.class)
                 .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
                 .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
-                .addStatement("return all().limit(1).preload(relations).toList().stream().findFirst()", entity.getEntityListClassName())
+                .addStatement("return all().preload(relations).first()", entity.getEntityListClassName())
                 .build();
     }
 
@@ -119,7 +119,7 @@ public class TableClassMethods {
                 .addAnnotation(Nonnull.class)
                 .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
-                .addStatement("return all().where($L.eq(key)).limit(1).toList().stream().findFirst()", field.tableClassColumnName())
+                .addStatement("return all().where($L.eq(key)).first()", field.tableClassColumnName())
                 .build();
     }
 
@@ -134,7 +134,7 @@ public class TableClassMethods {
                 .returns(ParameterizedTypeName.get(ClassName.get(Optional.class), entity.getClassName()))
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
-                .addStatement("return all().where($L.eq(key)).limit(1).preload(relations).toList().stream().findFirst()", field.tableClassColumnName())
+                .addStatement("return all().where($L.eq(key)).preload(relations).first()", field.tableClassColumnName())
                 .build();
     }
 
@@ -146,7 +146,7 @@ public class TableClassMethods {
                 .addAnnotation(Nullable.class)
                 .returns(entity.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
-                .addStatement("return all().where($L.eq(key)).limit(1).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
+                .addStatement("return all().where($L.eq(key)).firstOrNull()", field.tableClassColumnName())
                 .build();
     }
 
@@ -161,7 +161,7 @@ public class TableClassMethods {
                 .returns(entity.getClassName())
                 .addParameter(ParameterSpec.builder(ClassName.get(field.getVariableElement().asType()), "key").addAnnotation(Nonnull.class).build())
                 .addParameter(ParameterSpec.builder(ArrayTypeName.of(parameterType), "relations").addAnnotation(Nonnull.class).build()).varargs()
-                .addStatement("return all().where($L.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null)", field.tableClassColumnName())
+                .addStatement("return all().where($L.eq(key)).preload(relations).firstOrNull()", field.tableClassColumnName())
                 .build();
     }
 }

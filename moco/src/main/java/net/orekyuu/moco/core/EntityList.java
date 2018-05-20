@@ -9,6 +9,8 @@ import net.orekyuu.moco.feeling.Table;
 import net.orekyuu.moco.feeling.Update;
 import net.orekyuu.moco.feeling.node.*;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -117,6 +119,17 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         Preloader<E> preloader = new Preloader<>();
         preloader.preload(records, preloadRelations);
         return records;
+    }
+
+    @Nonnull
+    public Optional<E> first() {
+        limit(1);
+        return toList().stream().findFirst();
+    }
+
+    @Nullable
+    public E firstOrNull() {
+        return first().orElse(null);
     }
 
     public Stream<E> stream() {
