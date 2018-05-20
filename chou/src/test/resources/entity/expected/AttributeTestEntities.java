@@ -4,6 +4,7 @@ import java.lang.Long;
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
+import java.lang.SafeVarargs;
 import java.lang.String;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -131,6 +132,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> first(@Nonnull Relation<AttributeTestEntity>... relations) {
         return all().limit(1).preload(relations).toList().stream().findFirst();
     }
@@ -141,6 +143,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity firstOrNull(@Nonnull Relation<AttributeTestEntity>... relations) {
         return first(relations).orElse(null);
     }
@@ -151,6 +154,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByIntValue(@Nonnull int key,
                                                                @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -162,6 +166,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByIntValue(@Nonnull int key,
                                                            @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -173,6 +178,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByIntValue2(@Nonnull Integer key,
                                                                 @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -184,6 +190,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByIntValue2(@Nonnull Integer key,
                                                             @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(INT_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -195,6 +202,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByLongValue(@Nonnull long key,
                                                                 @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -206,6 +214,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByLongValue(@Nonnull long key,
                                                             @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -217,6 +226,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByLongValue2(@Nonnull Long key,
                                                                  @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -228,6 +238,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByLongValue2(@Nonnull Long key,
                                                              @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(LONG_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -239,6 +250,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByBigDecimalValue(@Nonnull BigDecimal key,
                                                                       @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BIG_DECIMAL_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -250,6 +262,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByBigDecimalValue(@Nonnull BigDecimal key,
                                                                   @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BIG_DECIMAL_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -261,6 +274,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByBooleanValue(@Nonnull boolean key,
                                                                    @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -272,6 +286,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByBooleanValue(@Nonnull boolean key,
                                                                @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -283,6 +298,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByBooleanValue2(@Nonnull Boolean key,
                                                                     @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -294,6 +310,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByBooleanValue2(@Nonnull Boolean key,
                                                                 @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(BOOLEAN_VALUE2.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -305,6 +322,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByStringValue(@Nonnull String key,
                                                                   @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(STRING_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -316,6 +334,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByStringValue(@Nonnull String key,
                                                               @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(STRING_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -327,6 +346,7 @@ public final class AttributeTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<AttributeTestEntity> findByHogeValue(@Nonnull AttributeTestEntity.Hoge key,
                                                                 @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(HOGE_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -338,6 +358,7 @@ public final class AttributeTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static AttributeTestEntity findOrNullByHogeValue(@Nonnull AttributeTestEntity.Hoge key,
                                                             @Nonnull Relation<AttributeTestEntity>... relations) {
         return all().where(HOGE_VALUE.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);

@@ -1,6 +1,7 @@
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
+import java.lang.SafeVarargs;
 import java.lang.String;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -71,6 +72,7 @@ public final class EnumEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<EnumEntity> first(@Nonnull Relation<EnumEntity>... relations) {
         return all().limit(1).preload(relations).toList().stream().findFirst();
     }
@@ -81,6 +83,7 @@ public final class EnumEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static EnumEntity firstOrNull(@Nonnull Relation<EnumEntity>... relations) {
         return first(relations).orElse(null);
     }

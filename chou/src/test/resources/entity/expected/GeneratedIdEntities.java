@@ -1,6 +1,7 @@
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
+import java.lang.SafeVarargs;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -68,6 +69,7 @@ public final class GeneratedIdEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<GeneratedIdEntity> first(@Nonnull Relation<GeneratedIdEntity>... relations) {
         return all().limit(1).preload(relations).toList().stream().findFirst();
     }
@@ -78,6 +80,7 @@ public final class GeneratedIdEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static GeneratedIdEntity firstOrNull(@Nonnull Relation<GeneratedIdEntity>... relations) {
         return first(relations).orElse(null);
     }

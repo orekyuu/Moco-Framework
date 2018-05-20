@@ -1,6 +1,7 @@
 import java.lang.Override;
 import java.lang.ReflectiveOperationException;
 import java.lang.RuntimeException;
+import java.lang.SafeVarargs;
 import java.lang.String;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -69,6 +70,7 @@ public final class UniqueTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<UniqueTestEntity> first(@Nonnull Relation<UniqueTestEntity>... relations) {
         return all().limit(1).preload(relations).toList().stream().findFirst();
     }
@@ -79,6 +81,7 @@ public final class UniqueTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static UniqueTestEntity firstOrNull(@Nonnull Relation<UniqueTestEntity>... relations) {
         return first(relations).orElse(null);
     }
@@ -89,6 +92,7 @@ public final class UniqueTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<UniqueTestEntity> findById(@Nonnull int key,
                                                       @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(ID.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -100,6 +104,7 @@ public final class UniqueTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static UniqueTestEntity findOrNullById(@Nonnull int key,
                                                   @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(ID.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
@@ -111,6 +116,7 @@ public final class UniqueTestEntities {
     }
 
     @Nonnull
+    @SafeVarargs
     public static Optional<UniqueTestEntity> findByText(@Nonnull String key,
                                                         @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(TEXT.eq(key)).limit(1).preload(relations).toList().stream().findFirst();
@@ -122,6 +128,7 @@ public final class UniqueTestEntities {
     }
 
     @Nullable
+    @SafeVarargs
     public static UniqueTestEntity findOrNullByText(@Nonnull String key,
                                                     @Nonnull Relation<UniqueTestEntity>... relations) {
         return all().where(TEXT.eq(key)).limit(1).preload(relations).toList().stream().findFirst().orElse(null);
