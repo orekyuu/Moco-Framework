@@ -1,5 +1,6 @@
 package net.orekyuu.moco.core.attribute;
 
+import net.orekyuu.moco.core.UpdateValuePair;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeExpression;
 
@@ -57,5 +58,11 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
 
     public Predicate allDay(LocalDate date) {
         return between(date.atStartOfDay(), date.atTime(LocalTime.MAX));
+    }
+
+    @SuppressWarnings("unchecked")
+    public UpdateValuePair<OWNER> set(Object value) {
+        LocalDateTime localDateTime = (LocalDateTime) value;
+        return UpdateValuePair.of(this, new SqlBindParam<>(convert(localDateTime), Timestamp.class));
     }
 }
