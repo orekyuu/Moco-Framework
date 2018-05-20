@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BigDecimalAttribute<OWNER> extends Attribute<OWNER> {
+public class BigDecimalAttribute<OWNER> extends Attribute<OWNER, BigDecimal> {
     public BigDecimalAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }

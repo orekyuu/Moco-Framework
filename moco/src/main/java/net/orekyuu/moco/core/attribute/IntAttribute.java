@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class IntAttribute<OWNER> extends Attribute<OWNER> {
+public class IntAttribute<OWNER> extends Attribute<OWNER, Integer> {
     public IntAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }

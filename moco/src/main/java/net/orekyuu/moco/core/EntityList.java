@@ -6,6 +6,7 @@ import net.orekyuu.moco.core.relation.Relation;
 import net.orekyuu.moco.feeling.Delete;
 import net.orekyuu.moco.feeling.Select;
 import net.orekyuu.moco.feeling.Table;
+import net.orekyuu.moco.feeling.Update;
 import net.orekyuu.moco.feeling.node.*;
 
 import java.util.*;
@@ -43,6 +44,16 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         }
         delete.order(orders);
         return delete;
+    }
+
+    @SafeVarargs
+    protected final Update createUpdate(UpdateValuePair<E, ?>... pairs) {
+        Update update = table.update();
+        whereClause.ifPresent(update::where);
+        for (UpdateValuePair<E, ?> pair : pairs) {
+            update.addSetValue(pair.getAttribute().ast(), pair.getSqlNode());
+        }
+        return update;
     }
 
     public T where(Predicate... predicates) {
@@ -86,13 +97,19 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         return (T)this;
     }
 
-    public T preload(Relation<E> ... relation) {
+    @SafeVarargs
+    public final T preload(Relation<E>... relation) {
         preloadRelations.addAll(Arrays.asList(relation));
         return (T)this;
     }
 
     public void delete() {
         createDelete().executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
+    }
+
+    @SafeVarargs
+    public final void update(UpdateValuePair<E, ?>... pairs) {
+        createUpdate(pairs).executeQuery(ConnectionManager.getConnection(), ConnectionManager.createSqlVisitor());
     }
 
     public List<E> toList() {

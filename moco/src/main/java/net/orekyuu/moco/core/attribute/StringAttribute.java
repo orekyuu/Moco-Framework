@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringAttribute<OWNER> extends Attribute<OWNER> {
+public class StringAttribute<OWNER> extends Attribute<OWNER, String> {
     public StringAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }

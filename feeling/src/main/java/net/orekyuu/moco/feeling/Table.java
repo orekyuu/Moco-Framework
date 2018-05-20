@@ -45,6 +45,10 @@ public class Table implements ColumnFindable {
         return new Delete().from(this);
     }
 
+    public Update update() {
+        return new Update(this);
+    }
+
     private static class ClassColumnPair {
         private Class clazz;
         private String name;

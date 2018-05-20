@@ -1,5 +1,6 @@
 package net.orekyuu.moco.core.attribute;
 
+import net.orekyuu.moco.core.UpdateValuePair;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
 import net.orekyuu.moco.feeling.node.SqlNodeExpression;
 
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
+public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER, LocalDateTime> {
     public LocalDateTimeAttribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         super(attribute, accessor);
     }
@@ -19,7 +20,7 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
     }
 
     private Timestamp convert(LocalDateTime dateTime) {
-        return Timestamp.valueOf(dateTime);
+        return dateTime == null ? null : Timestamp.valueOf(dateTime);
     }
 
     private SqlBindParam<Timestamp> param(LocalDateTime dateTime) {
@@ -57,5 +58,11 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER> {
 
     public Predicate allDay(LocalDate date) {
         return between(date.atStartOfDay(), date.atTime(LocalTime.MAX));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public UpdateValuePair<OWNER, LocalDateTime> set(LocalDateTime value) {
+        return UpdateValuePair.of(this, new SqlBindParam<>(convert(value), Timestamp.class));
     }
 }
