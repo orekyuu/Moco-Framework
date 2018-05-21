@@ -131,6 +131,13 @@ public class SqliteVisitor extends SqlVisitor {
     }
 
     @Override
+    public void visit(SqlBetween node, SqlContext context) {
+        node.left().accept(this, context);
+        context.append("between ");
+        node.right().accept(this, context);
+    }
+
+    @Override
     public void visit(SqlOn node, SqlContext context) {
         context.append("on ");
         node.node().accept(this, context);

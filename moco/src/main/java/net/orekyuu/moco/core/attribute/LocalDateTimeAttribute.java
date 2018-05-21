@@ -1,8 +1,9 @@
 package net.orekyuu.moco.core.attribute;
 
 import net.orekyuu.moco.core.UpdateValuePair;
+import net.orekyuu.moco.feeling.node.SqlAnd;
+import net.orekyuu.moco.feeling.node.SqlBetween;
 import net.orekyuu.moco.feeling.node.SqlBindParam;
-import net.orekyuu.moco.feeling.node.SqlNodeExpression;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -52,8 +53,8 @@ public class LocalDateTimeAttribute<OWNER> extends Attribute<OWNER, LocalDateTim
     }
 
     public Predicate between(LocalDateTime before, LocalDateTime after) {
-        SqlNodeExpression expression = lteq(before).getExpression().and(gt(after).getExpression());
-        return new Predicate(expression);
+        SqlBetween between = new SqlBetween(attribute, new SqlAnd(param(before), param(after)));
+        return new Predicate(between);
     }
 
     public Predicate allDay(LocalDate date) {
