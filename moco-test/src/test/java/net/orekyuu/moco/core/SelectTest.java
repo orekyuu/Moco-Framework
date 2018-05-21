@@ -51,7 +51,7 @@ public class SelectTest extends DatabaseTest {
         Assertions.assertEquals(before.get(0).getName(), "foo");
 
         List<User> between = Users.all()
-                .where(Users.REGISTERED_AT.between(LocalDate.of(2018, 5, 20).atStartOfDay(), LocalDate.of(2018, 5, 22).atStartOfDay()))
+                .where(Users.REGISTERED_AT.between(LocalDate.of(2018, 5, 20).atStartOfDay(), LocalDate.of(2018, 5, 21).atStartOfDay()))
                 .order(Users.ID.asc())
                 .toList();
         Assertions.assertEquals(between.size(), 2);
