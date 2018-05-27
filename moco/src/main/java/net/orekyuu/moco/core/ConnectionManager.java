@@ -22,7 +22,7 @@ public class ConnectionManager {
     public static synchronized Connection getConnection() {
         try {
             Connection connection = ConnectionManager.threadLocalConnection.get();
-            if (connection == null) {
+            if (connection == null || connection.isClosed()) {
                 connection = dataSource.getConnection();
                 threadLocalConnection.set(connection);
             }
