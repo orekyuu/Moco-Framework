@@ -5,8 +5,8 @@ import net.orekyuu.moco.feeling.attributes.Attribute;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlColumnNameExprPair implements SqlNode {
-    private Attribute attribute;
-    private SqlNode sqlNode;
+    private final Attribute attribute;
+    private final SqlNode sqlNode;
 
     public SqlColumnNameExprPair(Attribute attribute, SqlNode sqlNode) {
         this.attribute = attribute;

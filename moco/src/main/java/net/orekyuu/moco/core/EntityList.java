@@ -17,12 +17,12 @@ import java.util.stream.StreamSupport;
 
 public abstract class EntityList<T extends EntityList<T, E>, E> {
 
-    protected Table table;
+    protected final Table table;
     protected Optional<WhereClause> whereClause = Optional.empty();
     protected Optional<SqlLimit> sqlLimit = Optional.empty();
     protected Optional<SqlOffset> sqlOffset = Optional.empty();
-    private List<Relation<E>> preloadRelations = new ArrayList<>();
-    private List<SqlOrderigTerm> orders = new ArrayList<>();
+    private final List<Relation<E>> preloadRelations = new ArrayList<>();
+    private final List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public EntityList(Table table) {
         this.table = table;

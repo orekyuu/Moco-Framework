@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    private static ThreadLocal<Connection> threadLocalConnection = new ThreadLocal<>();
+    private static final ThreadLocal<Connection> threadLocalConnection = new ThreadLocal<>();
     private static DataSource dataSource;
     private static DataSourceType dataSourceType;
 

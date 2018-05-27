@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class ColumnFieldVisitor extends ElementScanner8<Void, Void> {
 
-    private List<AttributeField> attrs = new ArrayList<>();
-    private RoundContext context;
+    private final List<AttributeField> attrs = new ArrayList<>();
+    private final RoundContext context;
 
     public ColumnFieldVisitor(RoundContext context) {
         this.context = context;

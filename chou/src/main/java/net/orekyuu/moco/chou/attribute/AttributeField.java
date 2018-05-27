@@ -9,7 +9,6 @@ import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.chou.entity.EntityClass;
 import net.orekyuu.moco.core.annotations.Column;
 import net.orekyuu.moco.core.internal.TableClassHelper;
-import net.orekyuu.moco.feeling.node.SqlBindParam;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;

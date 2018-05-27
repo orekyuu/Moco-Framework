@@ -2,7 +2,6 @@ package net.orekyuu.moco.feeling;
 
 import net.orekyuu.moco.feeling.attributes.Attribute;
 import net.orekyuu.moco.feeling.node.*;
-import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.sql.Connection;
@@ -20,8 +19,8 @@ public class Select {
     private WhereClause whereClause;
     private SqlLimit limit = null;
     private SqlOffset offset = null;
-    private List<Attribute> resultColumn = new ArrayList<>();
-    private List<SqlOrderigTerm> orders = new ArrayList<>();
+    private final List<Attribute> resultColumn = new ArrayList<>();
+    private final List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public Select from(Table table) {
         return from(new SqlJoinClause(table));

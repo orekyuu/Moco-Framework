@@ -17,8 +17,8 @@ public class SqlContext {
         void bind(int index, SqlBindParam param, PreparedStatement statement) throws SQLException;
     }
 
-    private StringBuilder builder = new StringBuilder();
-    private List<SqlBindParam> bindParams = new ArrayList<>();
+    private final StringBuilder builder = new StringBuilder();
+    private final List<SqlBindParam> bindParams = new ArrayList<>();
     private static final Map<Class, SqlParamSetter> paramSetters = new HashMap<>();
 
     static {

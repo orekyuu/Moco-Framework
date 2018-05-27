@@ -50,8 +50,8 @@ public class Table implements ColumnFindable {
     }
 
     private static class ClassColumnPair {
-        private Class clazz;
-        private String name;
+        private final Class clazz;
+        private final String name;
 
         ClassColumnPair(Class clazz, String name) {
             this.clazz = clazz;

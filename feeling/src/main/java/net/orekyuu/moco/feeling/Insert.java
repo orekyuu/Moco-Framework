@@ -2,7 +2,6 @@ package net.orekyuu.moco.feeling;
 
 import net.orekyuu.moco.feeling.attributes.Attribute;
 import net.orekyuu.moco.feeling.node.SqlNodeArray;
-import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Insert {
-    private Table table;
+    private final Table table;
     private List<Attribute> attributes = new ArrayList<>();
     private SqlNodeArray values;
 

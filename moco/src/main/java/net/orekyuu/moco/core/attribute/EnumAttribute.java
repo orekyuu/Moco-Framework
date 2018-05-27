@@ -25,7 +25,8 @@ public class EnumAttribute<OWNER, E extends Enum<E>> extends Attribute<OWNER, E>
         return eq(value);
     }
 
-    public Predicate in(E ... value) {
+    @SafeVarargs
+    public final Predicate in(E ... value) {
         List<SqlBindParam> paramList = Stream.of(value)
                 .distinct()
                 .map(i -> new SqlBindParam<>(i.name(), String.class))

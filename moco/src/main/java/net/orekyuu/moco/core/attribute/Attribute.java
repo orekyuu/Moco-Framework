@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Attribute<OWNER, V> {
-    net.orekyuu.moco.feeling.attributes.Attribute attribute;
-    private AttributeValueAccessor<OWNER> accessor;
+    final net.orekyuu.moco.feeling.attributes.Attribute attribute;
+    private final AttributeValueAccessor<OWNER> accessor;
 
     public Attribute(net.orekyuu.moco.feeling.attributes.Attribute attribute, AttributeValueAccessor<OWNER> accessor) {
         this.attribute = attribute;

@@ -17,7 +17,7 @@ import java.util.Optional;
 public class EntityClassScanner extends ElementScanner8<Void, Void> {
 
     private final RoundContext roundContext;
-    private EntityClass.Builder originalEntityBuilder = new EntityClass.Builder();
+    private final EntityClass.Builder originalEntityBuilder = new EntityClass.Builder();
 
     public EntityClassScanner(Table table, RoundContext roundContext) {
         originalEntityBuilder.table(table);
