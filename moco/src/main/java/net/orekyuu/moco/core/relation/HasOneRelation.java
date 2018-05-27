@@ -28,6 +28,7 @@ public class HasOneRelation<OWNER, CHILD> extends Relation<OWNER> {
         this.setter = setter;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void preload(List<OWNER> records) {
         AttributeValueAccessor accessor = ownerKeyAttribute.getAccessor();

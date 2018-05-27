@@ -84,13 +84,13 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
     }
 
     public T limit(int limit) {
-        sqlLimit = Optional.of(new SqlLimit(new SqlBindParam(limit, Integer.class)));
+        sqlLimit = Optional.of(new SqlLimit(new SqlBindParam<>(limit, Integer.class)));
         return (T)this;
     }
 
     public T limitAndOffset(int limit, int offset) {
         limit(limit);
-        sqlOffset = Optional.of(new SqlOffset(new SqlBindParam(limit, Integer.class)));
+        sqlOffset = Optional.of(new SqlOffset(new SqlBindParam<>(limit, Integer.class)));
         return (T)this;
     }
 
