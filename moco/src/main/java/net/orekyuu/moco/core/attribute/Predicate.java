@@ -4,7 +4,7 @@ import net.orekyuu.moco.feeling.node.SqlNodeExpression;
 
 public class Predicate {
 
-    private SqlNodeExpression expression;
+    private final SqlNodeExpression expression;
 
     public Predicate(SqlNodeExpression expression) {
         this.expression = expression;

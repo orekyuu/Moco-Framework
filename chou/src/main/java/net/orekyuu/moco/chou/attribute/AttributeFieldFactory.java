@@ -27,7 +27,7 @@ public final class AttributeFieldFactory {
         AttributeField create(RoundContext context, Column column, VariableElement fieldType);
     }
 
-    private List<Pair<Factory, Predicate>> predicates = new ArrayList<>();
+    private final List<Pair<Factory, Predicate>> predicates = new ArrayList<>();
 
     public AttributeFieldFactory() {
         register(IntAttributeField::new, (context, column, fieldType) -> isSupportedClass(fieldType, int.class, Integer.class));

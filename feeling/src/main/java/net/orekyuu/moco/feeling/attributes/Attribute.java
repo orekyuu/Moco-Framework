@@ -3,8 +3,8 @@ package net.orekyuu.moco.feeling.attributes;
 import net.orekyuu.moco.feeling.node.Predicatable;
 
 public abstract class Attribute implements Predicatable {
-    private String relation;
-    private String name;
+    private final String relation;
+    private final String name;
 
     public Attribute(String relation, String name) {
         this.relation = relation;

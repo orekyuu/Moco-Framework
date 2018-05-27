@@ -227,7 +227,7 @@ public class MySqlVisitor extends SqlVisitor {
         context.append("select ");
 
         Iterator<Attribute> resultColumns = select.getResultColumn().iterator();
-        appendAttributArray(context, resultColumns);
+        appendAttributeArray(context, resultColumns);
 
         select.getFromClause().accept(this, context);
 
@@ -243,7 +243,7 @@ public class MySqlVisitor extends SqlVisitor {
         context.append(insert.getTable().getTableName());
         context.append("(");
         Iterator<Attribute> attributeIterator = insert.getAttributes().iterator();
-        appendAttributArray(context, attributeIterator);
+        appendAttributeArray(context, attributeIterator);
         context.append(") ");
         context.append("values ");
 
@@ -280,7 +280,7 @@ public class MySqlVisitor extends SqlVisitor {
 
     }
 
-    private void appendAttributArray(SqlContext context, Iterator<Attribute> attributeIterator) {
+    private void appendAttributeArray(SqlContext context, Iterator<Attribute> attributeIterator) {
         while (attributeIterator.hasNext()) {
             Attribute attribute = attributeIterator.next();
             attribute.accept(this, context);

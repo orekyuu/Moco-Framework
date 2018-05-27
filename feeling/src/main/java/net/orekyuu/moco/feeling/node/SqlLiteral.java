@@ -4,7 +4,7 @@ import net.orekyuu.moco.feeling.SqlContext;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 public class SqlLiteral implements SqlNode, Predicatable {
-    private String text;
+    private final String text;
 
     public SqlLiteral(String text) {
         this.text = text;

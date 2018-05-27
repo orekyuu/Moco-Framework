@@ -6,10 +6,10 @@ import net.orekyuu.moco.feeling.Table;
 import java.util.List;
 
 public abstract class Relation<OWNER> {
-    protected Table owner;
-    protected Attribute ownerKeyAttribute;
-    protected Table child;
-    protected Attribute childKeyAttribute;
+    protected final Table owner;
+    protected final Attribute ownerKeyAttribute;
+    protected final Table child;
+    protected final Attribute childKeyAttribute;
 
     public Relation(Table owner, Attribute ownerKeyAttribute, Table child, Attribute childKeyAttribute) {
         this.owner = owner;

@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class RelationField {
-    private VariableElement fieldElement;
-    protected RoundContext context;
+    private final VariableElement fieldElement;
+    protected final RoundContext context;
 
     public RelationField(RoundContext context, VariableElement fieldElement) {
         this.context = context;

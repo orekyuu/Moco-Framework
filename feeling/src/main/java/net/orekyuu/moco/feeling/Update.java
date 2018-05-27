@@ -1,7 +1,9 @@
 package net.orekyuu.moco.feeling;
 
 import net.orekyuu.moco.feeling.attributes.Attribute;
-import net.orekyuu.moco.feeling.node.*;
+import net.orekyuu.moco.feeling.node.SqlColumnNameExprPair;
+import net.orekyuu.moco.feeling.node.SqlNode;
+import net.orekyuu.moco.feeling.node.WhereClause;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.sql.Connection;
@@ -11,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Update {
-    private Table table;
-    private List<SqlColumnNameExprPair> pairs = new ArrayList<>();
+    private final Table table;
+    private final List<SqlColumnNameExprPair> pairs = new ArrayList<>();
     private WhereClause whereClause;
 
     public Update(Table table) {

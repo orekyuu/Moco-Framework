@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class EntityClass {
-    private Table table;
-    private PackageElement packageElement;
-    private TypeElement entityType;
-    private List<AttributeField> attributeFields;
-    private List<RelationField> relationFields;
+    private final Table table;
+    private final PackageElement packageElement;
+    private final TypeElement entityType;
+    private final List<AttributeField> attributeFields;
+    private final List<RelationField> relationFields;
 
     private EntityClass(Table table, PackageElement packageElement, TypeElement entityType, List<AttributeField> attributeFields, List<RelationField> relationFields) {
         this.table = Objects.requireNonNull(table);
@@ -78,8 +78,8 @@ public class EntityClass {
         private Table table;
         private PackageElement packageElement;
         private TypeElement originalType;
-        private List<AttributeField> attributeFields = new ArrayList<>();
-        private List<RelationField> relationFields = new ArrayList<>();
+        private final List<AttributeField> attributeFields = new ArrayList<>();
+        private final List<RelationField> relationFields = new ArrayList<>();
 
         public Builder table(Table table) {
             this.table = table;

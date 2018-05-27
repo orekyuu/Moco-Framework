@@ -4,7 +4,6 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import net.orekyuu.moco.chou.RoundContext;
 import net.orekyuu.moco.core.annotations.Column;
-import net.orekyuu.moco.core.attribute.IntAttribute;
 import net.orekyuu.moco.core.attribute.LongAttribute;
 
 import javax.lang.model.element.VariableElement;

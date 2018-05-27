@@ -5,7 +5,7 @@ import net.orekyuu.moco.feeling.node.SqlNode;
 
 public class UpdateValuePair<E, V> {
     private final SqlNode sqlNode;
-    private Attribute<E, V> attribute;
+    private final Attribute<E, V> attribute;
 
     private UpdateValuePair(Attribute<E, V> attribute, SqlNode sqlNode) {
         this.attribute = attribute;

@@ -1,7 +1,6 @@
 package net.orekyuu.moco.feeling;
 
 import net.orekyuu.moco.feeling.node.*;
-import net.orekyuu.moco.feeling.visitor.MySqlVisitor;
 import net.orekyuu.moco.feeling.visitor.SqlVisitor;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ public class Delete {
     private FromClause fromClause;
     private WhereClause whereClause;
     private SqlLimit limit = null;
-    private List<SqlOrderigTerm> orders = new ArrayList<>();
+    private final List<SqlOrderigTerm> orders = new ArrayList<>();
 
     public Delete from(Table table) {
         fromClause = new FromClause(new SqlJoinClause(table));
