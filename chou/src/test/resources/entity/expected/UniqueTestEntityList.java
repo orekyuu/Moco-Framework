@@ -14,4 +14,10 @@ public final class UniqueTestEntityList extends EntityList<UniqueTestEntityList,
     public Select.QueryResultMapper<UniqueTestEntity> getMapper() {
         return UniqueTestEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final UniqueTestEntityList thisInstance() {
+        return this;
+    }
 }

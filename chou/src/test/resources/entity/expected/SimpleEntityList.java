@@ -14,4 +14,10 @@ public final class SimpleEntityList extends EntityList<SimpleEntityList, SimpleE
     public Select.QueryResultMapper<SimpleEntity> getMapper() {
         return SimpleEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final SimpleEntityList thisInstance() {
+        return this;
+    }
 }

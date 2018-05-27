@@ -28,6 +28,8 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         this.table = table;
     }
 
+    protected abstract T thisInstance();
+
     protected Select createSelect() {
         Select select = table.select();
         whereClause.ifPresent(select::where);
@@ -58,51 +60,51 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         return update;
     }
 
-    public EntityList<T, E> where(Predicate... predicates) {
+    public T where(Predicate... predicates) {
         Arrays.stream(predicates).forEach(this::where);
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> where(Predicate predicate) {
+    public T where(Predicate predicate) {
         WhereClause clause = this.whereClause.map(where -> {
             SqlNodeExpression expression = where.getExpression().and(predicate.getExpression());
             where.setExpression(expression);
             return where;
         }).orElseGet(() -> new WhereClause(predicate.getExpression()));
         this.whereClause = Optional.of(clause);
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> order(SqlOrderigTerm term) {
+    public T order(SqlOrderigTerm term) {
         orders.add(term);
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> order(SqlOrderigTerm ... term) {
+    public T order(SqlOrderigTerm ... term) {
         orders.addAll(Arrays.asList(term));
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> limit(int limit) {
+    public T limit(int limit) {
         sqlLimit = Optional.of(new SqlLimit(new SqlBindParam<>(limit, Integer.class)));
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> limitAndOffset(int limit, int offset) {
+    public T limitAndOffset(int limit, int offset) {
         limit(limit);
         sqlOffset = Optional.of(new SqlOffset(new SqlBindParam<>(limit, Integer.class)));
-        return this;
+        return thisInstance();
     }
 
-    public EntityList<T, E> preload(Relation<E> relation) {
+    public T preload(Relation<E> relation) {
         preloadRelations.add(relation);
-        return this;
+        return thisInstance();
     }
 
     @SafeVarargs
-    public final EntityList<T, E> preload(Relation<E>... relation) {
+    public final T preload(Relation<E>... relation) {
         preloadRelations.addAll(Arrays.asList(relation));
-        return this;
+        return thisInstance();
     }
 
     public void delete() {

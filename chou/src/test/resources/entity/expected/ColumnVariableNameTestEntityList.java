@@ -14,4 +14,10 @@ public final class ColumnVariableNameTestEntityList extends EntityList<ColumnVar
     public Select.QueryResultMapper<ColumnVariableNameTestEntity> getMapper() {
         return ColumnVariableNameTestEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final ColumnVariableNameTestEntityList thisInstance() {
+        return this;
+    }
 }

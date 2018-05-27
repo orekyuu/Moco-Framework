@@ -14,4 +14,10 @@ public final class AttributeTestEntityList extends EntityList<AttributeTestEntit
     public Select.QueryResultMapper<AttributeTestEntity> getMapper() {
         return AttributeTestEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final AttributeTestEntityList thisInstance() {
+        return this;
+    }
 }
