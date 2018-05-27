@@ -23,6 +23,16 @@ public class EntityListClass {
                 .addStatement("super(table)").build();
     }
 
+    public MethodSpec thisInstanceMethod() {
+        return MethodSpec.methodBuilder("thisInstance")
+                .addAnnotation(Nonnull.class)
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PROTECTED, Modifier.FINAL)
+                .addStatement("return this")
+                .returns(getClassName())
+                .build();
+    }
+
     public MethodSpec getMapperMethod(TableClass tableClass) {
         return MethodSpec.methodBuilder("getMapper")
                 .addAnnotation(Nonnull.class)
@@ -44,6 +54,7 @@ public class EntityListClass {
         classBuilder.superclass(superclass);
         CodeGenerateOperation.run(context, () -> classBuilder.addMethod(constructor()));
         CodeGenerateOperation.run(context, () -> classBuilder.addMethod(getMapperMethod(tableClass)));
+        CodeGenerateOperation.run(context, () -> classBuilder.addMethod(thisInstanceMethod()));
         return JavaFile.builder(entityClass.getPackageElement().getQualifiedName().toString(), classBuilder.build())
                 .build();
     }

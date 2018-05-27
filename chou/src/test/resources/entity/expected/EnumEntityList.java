@@ -14,4 +14,10 @@ public final class EnumEntityList extends EntityList<EnumEntityList, EnumEntity>
     public Select.QueryResultMapper<EnumEntity> getMapper() {
         return EnumEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final EnumEntityList thisInstance() {
+        return this;
+    }
 }

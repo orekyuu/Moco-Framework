@@ -28,6 +28,8 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
         this.table = table;
     }
 
+    protected abstract T thisInstance();
+
     protected Select createSelect() {
         Select select = table.select();
         whereClause.ifPresent(select::where);
@@ -60,7 +62,7 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
 
     public T where(Predicate... predicates) {
         Arrays.stream(predicates).forEach(this::where);
-        return (T) this;
+        return thisInstance();
     }
 
     public T where(Predicate predicate) {
@@ -70,39 +72,39 @@ public abstract class EntityList<T extends EntityList<T, E>, E> {
             return where;
         }).orElseGet(() -> new WhereClause(predicate.getExpression()));
         this.whereClause = Optional.of(clause);
-        return (T)this;
+        return thisInstance();
     }
 
     public T order(SqlOrderigTerm term) {
         orders.add(term);
-        return (T)this;
+        return thisInstance();
     }
 
     public T order(SqlOrderigTerm ... term) {
         orders.addAll(Arrays.asList(term));
-        return (T)this;
+        return thisInstance();
     }
 
     public T limit(int limit) {
         sqlLimit = Optional.of(new SqlLimit(new SqlBindParam<>(limit, Integer.class)));
-        return (T)this;
+        return thisInstance();
     }
 
     public T limitAndOffset(int limit, int offset) {
         limit(limit);
         sqlOffset = Optional.of(new SqlOffset(new SqlBindParam<>(limit, Integer.class)));
-        return (T)this;
+        return thisInstance();
     }
 
     public T preload(Relation<E> relation) {
         preloadRelations.add(relation);
-        return (T)this;
+        return thisInstance();
     }
 
     @SafeVarargs
     public final T preload(Relation<E>... relation) {
         preloadRelations.addAll(Arrays.asList(relation));
-        return (T)this;
+        return thisInstance();
     }
 
     public void delete() {

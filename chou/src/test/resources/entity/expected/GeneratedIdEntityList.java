@@ -14,4 +14,10 @@ public final class GeneratedIdEntityList extends EntityList<GeneratedIdEntityLis
     public Select.QueryResultMapper<GeneratedIdEntity> getMapper() {
         return GeneratedIdEntities.MAPPER;
     }
+
+    @Nonnull
+    @Override
+    protected final GeneratedIdEntityList thisInstance() {
+        return this;
+    }
 }
